@@ -21,9 +21,6 @@
     <ClCompile Include="Vulkan\Src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vulkan\Src\Vulkan.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Vulkan\Src\Core\VulkanRender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -32,16 +29,10 @@
     <ClInclude Include="Vulkan\Src\Core\Log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vulkan\Src\vkPCH.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Vulkan\Src\Core\VulkanRender.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Vulkan\Src\Vulkan.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Vulkan\include\vk_mem_alloc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="spdlog-1.8.2\include\spdlog\spdlog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
