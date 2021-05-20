@@ -116,10 +116,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Matt\Documents\Programming Learning\C++\Vulkan API\Vulkan API\Vulkan\include;C:\Users\Matt\Documents\Programming Learning\C++\Vulkan API\Vulkan API\Vulkan\Src;C:\Program Files %28x86%29\Microsoft Visual Studio\2019\Community\Libraries\glfw-3.3.2.bin.WIN64\include;C:\Program Files %28x86%29\Microsoft Visual Studio\2019\Community\Libraries\glm;C:\VulkanSDK\1.2.162.1\Include;C:\Users\Matt\Documents\Programming Learning\C++\Vulkan API\Vulkan API\spdlog-1.8.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Matt\Documents\Programming Learning\C++\Vulkan API\Vulkan API\spdlog-1.8.2\include;C:\Users\Matt\Documents\Programming Learning\C++\Vulkan API\Vulkan API\Vulkan\include;C:\Users\Matt\Documents\Programming Learning\C++\Vulkan API\Vulkan API\Vulkan\Src;C:\Program Files %28x86%29\Microsoft Visual Studio\2019\Community\Libraries\glfw-3.3.2.bin.WIN64\include;C:\Program Files %28x86%29\Microsoft Visual Studio\2019\Community\Libraries\glm;C:\VulkanSDK\1.2.162.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeaderFile>vkPCH.h</PrecompiledHeaderFile>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -152,17 +152,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Vulkan\Src\Vulkan.cpp" />
     <ClCompile Include="Vulkan\Src\main.cpp" />
     <ClCompile Include="Vulkan\Src\Core\Log.cpp" />
     <ClCompile Include="Vulkan\Src\Core\VulkanRender.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="spdlog-1.8.2\include\spdlog\spdlog.h" />
     <ClInclude Include="Vulkan\include\vk_mem_alloc.h" />
-    <ClInclude Include="Vulkan\Src\Vulkan.h" />
-    <ClInclude Include="Vulkan\Src\vkPCH.h" />
     <ClInclude Include="Vulkan\Src\Core\Log.h" />
-    <ClInclude Include="Vulkan\Src\Core\VulkanRender.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

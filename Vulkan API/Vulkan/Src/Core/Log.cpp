@@ -1,10 +1,8 @@
-#include "vkPCH.h"
 #include "Log.h"
-
 #include "spdlog/sinks/stdout_color_sinks.h"
 
-std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
 std::shared_ptr<spdlog::logger> Log::s_ClientLogger;
+std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
 
 void Log::Init()
 {
