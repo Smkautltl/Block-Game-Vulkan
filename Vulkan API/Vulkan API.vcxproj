@@ -165,6 +165,7 @@
     <ClCompile Include="src\core\swapChain.cpp" />
     <ClCompile Include="src\Block Game.cpp" />
     <ClCompile Include="src\core\window.cpp" />
+    <ClCompile Include="src\ecs\entityManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Renderer.h" />
@@ -177,6 +178,7 @@
     <ClInclude Include="src\core\swapChain.h" />
     <ClInclude Include="src\core\window.h" />
     <ClInclude Include="src\core\model.h" />
+    <ClInclude Include="src\ecs\entityManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\FieldsRefMap.cd" />
