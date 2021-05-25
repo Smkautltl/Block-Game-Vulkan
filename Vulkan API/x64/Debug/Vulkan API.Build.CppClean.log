@@ -1,16 +1,25 @@
 c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\vc142.pdb
 c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\vc142.idb
-c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\vulkanrender.obj
+c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\window.obj
+c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\entitymanager.obj
+c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\swapchain.obj
+c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\simplerendersystem.obj
+c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\pipeline.obj
+c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\model.obj
 c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\log.obj
-c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\main.obj
+c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\device.obj
+c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\app.obj
+c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\renderer.obj
+c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\block game.obj
+c:\users\matt\documents\programming learning\c++\vulkan block game\x64\debug\vulkan api.exe
+c:\users\matt\documents\programming learning\c++\vulkan block game\x64\debug\vulkan api.ilk
 c:\users\matt\documents\programming learning\c++\vulkan block game\x64\debug\vulkan api.pdb
+c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\main.obj
+c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\vulkanrender.obj
+c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\main.obj.enc
 c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\vulkan api.tlog\cl.command.1.tlog
 c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\vulkan api.tlog\cl.read.1.tlog
 c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\vulkan api.tlog\cl.write.1.tlog
-c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\vulkan api.tlog\link-cvtres.read.1.tlog
-c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\vulkan api.tlog\link-cvtres.write.1.tlog
-c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\vulkan api.tlog\link-rc.read.1.tlog
-c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\vulkan api.tlog\link-rc.write.1.tlog
 c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\vulkan api.tlog\link.command.1.tlog
 c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\vulkan api.tlog\link.read.1.tlog
 c:\users\matt\documents\programming learning\c++\vulkan block game\vulkan api\x64\debug\vulkan api.tlog\link.write.1.tlog
