@@ -45,26 +45,75 @@ namespace Vulkan
 		vkDeviceWaitIdle(device_.get_device());
 	}
 
-	void App::load_game_objects()
-	{
+	std::unique_ptr<Model> createCubeModel(Device& device, glm::vec3 offset) {
 		std::vector<Model::Vertex> vertices
 		{
 
-			{{ -0.5f,  0.5f },	{1.0f, 0.0f, 0.0f}},
-			{{  0.5f,  0.5f },	{0.0f, 1.0f, 0.0f}},
-			{{  0.0f, -0.5f },	{0.0f, 0.0f, 1.0f}}
+			// left face (white)
+			{{-.5f, -.5f, -.5f}, {.9f, .9f, .9f}},
+			{{-.5f, .5f, .5f}, {.9f, .9f, .9f}},
+			{{-.5f, -.5f, .5f}, {.9f, .9f, .9f}},
+			{{-.5f, -.5f, -.5f}, {.9f, .9f, .9f}},
+			{{-.5f, .5f, -.5f}, {.9f, .9f, .9f}},
+			{{-.5f, .5f, .5f}, {.9f, .9f, .9f}},
+
+			// right face (yellow)
+			{{.5f, -.5f, -.5f}, {.8f, .8f, .1f}},
+			{{.5f, .5f, .5f}, {.8f, .8f, .1f}},
+			{{.5f, -.5f, .5f}, {.8f, .8f, .1f}},
+			{{.5f, -.5f, -.5f}, {.8f, .8f, .1f}},
+			{{.5f, .5f, -.5f}, {.8f, .8f, .1f}},
+			{{.5f, .5f, .5f}, {.8f, .8f, .1f}},
+
+			// top face (orange)
+			{{-.5f, -.5f, -.5f}, {.9f, .6f, .1f}},
+			{{.5f, -.5f, .5f}, {.9f, .6f, .1f}},
+			{{-.5f, -.5f, .5f}, {.9f, .6f, .1f}},
+			{{-.5f, -.5f, -.5f}, {.9f, .6f, .1f}},
+			{{.5f, -.5f, -.5f}, {.9f, .6f, .1f}},
+			{{.5f, -.5f, .5f}, {.9f, .6f, .1f}},
+
+			// bottom face (red)
+			{{-.5f, .5f, -.5f}, {.8f, .1f, .1f}},
+			{{.5f, .5f, .5f}, {.8f, .1f, .1f}},
+			{{-.5f, .5f, .5f}, {.8f, .1f, .1f}},
+			{{-.5f, .5f, -.5f}, {.8f, .1f, .1f}},
+			{{.5f, .5f, -.5f}, {.8f, .1f, .1f}},
+			{{.5f, .5f, .5f}, {.8f, .1f, .1f}},
+
+			// nose face (blue)
+			{{-.5f, -.5f, 0.5f}, {.1f, .1f, .8f}},
+			{{.5f, .5f, 0.5f}, {.1f, .1f, .8f}},
+			{{-.5f, .5f, 0.5f}, {.1f, .1f, .8f}},
+			{{-.5f, -.5f, 0.5f}, {.1f, .1f, .8f}},
+			{{.5f, -.5f, 0.5f}, {.1f, .1f, .8f}},
+			{{.5f, .5f, 0.5f}, {.1f, .1f, .8f}},
+
+			// tail face (green)
+			{{-.5f, -.5f, -0.5f}, {.1f, .8f, .1f}},
+			{{.5f, .5f, -0.5f}, {.1f, .8f, .1f}},
+			{{-.5f, .5f, -0.5f}, {.1f, .8f, .1f}},
+			{{-.5f, -.5f, -0.5f}, {.1f, .8f, .1f}},
+			{{.5f, -.5f, -0.5f}, {.1f, .8f, .1f}},
+			{{.5f, .5f, -0.5f}, {.1f, .8f, .1f}},
 
 		};
-
-		auto model_ = std::make_shared<Model>(device_, vertices);
-		auto triangle = GameObject::createGameObject();
-		triangle.model = model_;
-		triangle.colour = { .1f, .8f, .1f };
-		triangle.transform_2d.translation.x = .2f;
-		triangle.transform_2d.scale = { 2.f, .5f };
-		triangle.transform_2d.rotation = .25f * glm::two_pi<float>();
-
-		game_objects_.push_back(std::move(triangle));
+		for (auto& v : vertices)
+		{
+			v.position += offset;
+		}
+		return std::make_unique<Model>(device, vertices);
 	}
 	
+	void App::load_game_objects()
+	{
+		std::shared_ptr<Model> model = createCubeModel(device_, { 0.f,0.f,0.f });
+
+		auto cube = GameObject::createGameObject();
+		cube.model = model;
+		cube.transform_.translation = { .0f, .0f, .5f };
+		cube.transform_.scale = { .5f, .5f, .5f };
+		game_objects_.push_back(std::move(cube));
+	}
+
 }

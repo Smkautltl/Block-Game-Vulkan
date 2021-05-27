@@ -7,15 +7,13 @@
 #include <glm/gtc/constants.hpp>
 
 //-=-=-=-=- STD -=-=-=-=-
-#include <array>
 #include <stdexcept>
 
 namespace Vulkan
 {
 	struct SimplePushConstantData
 	{
-		glm::mat2 transform{ 1.0f };
-		glm::vec2 offset;
+		glm::mat4 transform{ 1.0f };
 		alignas(16) glm::vec3 color;
 	};
 
@@ -54,7 +52,7 @@ namespace Vulkan
 	{
 		VK_CORE_ASSERT(pipeline_layout_ != nullptr, "Cannot create pipeline before pipeline layout!")
 
-			pipelineConfigInfo pipeline_config_info {};
+		pipelineConfigInfo pipeline_config_info {};
 		auto pipeline_config = pipeline::defaultPipelineConfigInfo(pipeline_config_info);
 		pipeline_config.render_pass = renderPass;
 		pipeline_config.pipeline_layout = pipeline_layout_;
@@ -68,12 +66,12 @@ namespace Vulkan
 
 		for (auto& obj : gameObjects)
 		{
-			obj.transform_2d.rotation = glm::mod(obj.transform_2d.rotation + 0.01f, glm::two_pi<float>());
+			obj.transform_.rotation.y = glm::mod(obj.transform_.rotation.y + 0.005f, glm::two_pi<float>());
+			obj.transform_.rotation.x = glm::mod(obj.transform_.rotation.x + 0.001f, glm::two_pi<float>());
 
 			SimplePushConstantData push{};
-			push.offset = obj.transform_2d.translation;
 			push.color = obj.colour;
-			push.transform = obj.transform_2d.mat2();
+			push.transform = obj.transform_.mat4();
 
 			vkCmdPushConstants(commandbuffer, pipeline_layout_, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SimplePushConstantData), &push);
 			obj.model->bind(commandbuffer);
