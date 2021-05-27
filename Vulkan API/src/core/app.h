@@ -28,7 +28,6 @@ namespace Vulkan
 	public:
 		static constexpr int WIDTH = 800;
 		static constexpr int HEIGHT = 600;
-		
 	
 	private:
 		Window window_{WIDTH, HEIGHT, "Block Game"};
