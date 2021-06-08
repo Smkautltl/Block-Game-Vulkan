@@ -24,6 +24,7 @@ namespace Vulkan
 
 		bool should_close() { return glfwWindowShouldClose(gl_window_); }
 		VkExtent2D get_extent() { return { static_cast<uint32_t>(WIDTH), static_cast<uint32_t>(HEIGHT) }; }
+		GLFWwindow* get_glfw_window() { return gl_window_; }
 		
 		void create_window_surface(VkInstance instance, VkSurfaceKHR* surface);
 		
@@ -33,7 +34,14 @@ namespace Vulkan
 	private:
 		void init_window();
 		static void framebuffer_resize_callback(GLFWwindow *gl_window, int width, int height);
+		static void key_callback(GLFWwindow *gl_window, int key, int scancode, int action, int mods);
 
+	public:
+		int key;
+		int scancode;
+		int action;
+		int mods;
+	
 	private:
 		int WIDTH = 800;
 		int HEIGHT = 600;

@@ -54,7 +54,7 @@ namespace Vulkan
 	void Model::create_vertex_buffers(const std::vector<Vertex>& vertices)
 	{
 		vertex_count_ = static_cast<uint32_t>(vertices.size());
-		VK_CORE_ASSERT(vertex_count_ >= 3, "Vertex count must be at least 3!");
+		VK_CORE_ASSERT(vertex_count_ >= 3, "Vertex count must be at least 3!")
 
 		VkDeviceSize bufferSize = sizeof(vertices[0]) * vertex_count_;
 

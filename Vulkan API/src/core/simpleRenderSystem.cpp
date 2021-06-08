@@ -60,18 +60,19 @@ namespace Vulkan
 	}
 
 
-	void SimpleRenderSystem::render_game_objects(VkCommandBuffer commandbuffer, std::vector<GameObject>& gameObjects)
+	void SimpleRenderSystem::render_game_objects(VkCommandBuffer commandbuffer, std::vector<GameObject>& gameObjects, camera cam)
 	{
+
 		pipeline_->bind(commandbuffer);
 
 		for (auto& obj : gameObjects)
 		{
 			obj.transform_.rotation.y = glm::mod(obj.transform_.rotation.y + 0.005f, glm::two_pi<float>());
 			obj.transform_.rotation.x = glm::mod(obj.transform_.rotation.x + 0.001f, glm::two_pi<float>());
-
+			
 			SimplePushConstantData push{};
 			push.color = obj.colour;
-			push.transform = obj.transform_.mat4();
+			push.transform = cam.UpdateModelView(obj.transform_.mat4());
 
 			vkCmdPushConstants(commandbuffer, pipeline_layout_, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SimplePushConstantData), &push);
 			obj.model->bind(commandbuffer);

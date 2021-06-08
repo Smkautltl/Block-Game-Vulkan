@@ -4,6 +4,7 @@
 #include "device.h"
 #include "Renderer.h"
 #include "game_object.h"
+#include "camera.h"
 
 //-=-=-=-=- STD -=-=-=-=-
 #include <vector>
@@ -34,5 +35,6 @@ namespace Vulkan
 		Device device_{ window_ };
 		Renderer renderer_{ window_, device_ };
 		std::vector<GameObject> game_objects_;
+		camera cam{};
 	};
 }

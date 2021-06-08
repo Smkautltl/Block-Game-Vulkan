@@ -8,6 +8,8 @@
 #include <memory>
 #include <vector>
 
+#include "camera.h"
+
 namespace Vulkan
 {
 	class SimpleRenderSystem
@@ -19,7 +21,7 @@ namespace Vulkan
 		SimpleRenderSystem(const SimpleRenderSystem&) = delete;
 		SimpleRenderSystem& operator=(const SimpleRenderSystem&) = delete;
 
-		void render_game_objects(VkCommandBuffer commandbuffer, std::vector<GameObject> &gameObjects);
+		void render_game_objects(VkCommandBuffer commandbuffer, std::vector<GameObject> &gameObjects, camera cam);
 	
 	private:
 		void create_pipeline_layout();

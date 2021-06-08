@@ -13,7 +13,7 @@
 
 namespace Vulkan
 {
-	
+
 	App::App()
 	{
 		load_game_objects();
@@ -33,16 +33,23 @@ namespace Vulkan
 			glfwPollEvents();
 			VK_CORE_INFO("-=-=-=-=-=- NEW FRAME -=-=-=-=-=-")
 
+			cam.UpdateCameraPos(window_.key, window_.scancode, window_.action, window_.mods);
+			cam.UpdateProjection(window_.get_extent());
+			
 			//Begins the rendering of the frame
 			if (auto commandbuffer = renderer_.begin_frame())
 			{
 				renderer_.begin_swap_chain_render_pass(commandbuffer);
-				simpleRenderSystem.render_game_objects(commandbuffer, game_objects_);
+				simpleRenderSystem.render_game_objects(commandbuffer, game_objects_, cam);
 				renderer_.end_swap_chain_render_pass(commandbuffer);
 				renderer_.end_frame();
 			}
 		}
 		vkDeviceWaitIdle(device_.get_device());
+		window_.key = 0;
+		window_.scancode = 0;
+		window_.action = 0;
+		window_.mods = 0;
 	}
 
 	std::unique_ptr<Model> createCubeModel(Device& device, glm::vec3 offset) {
@@ -107,13 +114,16 @@ namespace Vulkan
 	
 	void App::load_game_objects()
 	{
-		std::shared_ptr<Model> model = createCubeModel(device_, { 0.f,0.f,0.f });
+		
+		for (auto i = 0; i < 100; i++)
+		{
 
-		auto cube = GameObject::createGameObject();
-		cube.model = model;
-		cube.transform_.translation = { .0f, .0f, .5f };
-		cube.transform_.scale = { .5f, .5f, .5f };
-		game_objects_.push_back(std::move(cube));
+			std::shared_ptr<Model> model = createCubeModel(device_, { 0,0,0 });
+			auto cube = GameObject::createGameObject();
+			cube.model = model;
+			cube.transform_.translation = { (rand() % 100)-50, (rand() % 100) - 50, (rand() % 100) - 50 };
+			cube.transform_.scale = { (rand() % 5) + 0.1, (rand() % 5) + 0.1, (rand() % 5) + 0.1 };
+			game_objects_.push_back(std::move(cube));
+		}	
 	}
-
 }
