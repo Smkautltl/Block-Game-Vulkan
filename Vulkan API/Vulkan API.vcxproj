@@ -168,6 +168,7 @@
     <ClCompile Include="src\ecs\entityManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\camera.h" />
     <ClInclude Include="src\core\Renderer.h" />
     <ClInclude Include="src\core\game_object.h" />
     <ClInclude Include="src\core\App.h" />
