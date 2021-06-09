@@ -3,97 +3,134 @@
 
 namespace Vulkan
 {
-	/*
-	struct face
-	{
-		std::vector<Model::Vertex> vertices;
-	};
-	
-	class cube
+	struct Block
 	{
 	public:
-		cube()
+		Block(Device& device_, glm::vec3 colour)
 		{
-			face face1;
-			face1.vertices = 
+			model = std::make_unique<Model>(device_, 
+				std::vector<Model::Vertex>
 			{
-				{{-.5f, -.5f, -.5f}, {.9f, .9f, .9f}},
-				{{-.5f, .5f, .5f}, {.9f, .9f, .9f}},
-				{{-.5f, -.5f, .5f}, {.9f, .9f, .9f}},
-				{{-.5f, -.5f, -.5f}, {.9f, .9f, .9f}},
-				{{-.5f, .5f, -.5f}, {.9f, .9f, .9f}},
-				{{-.5f, .5f, .5f}, {.9f, .9f, .9f}}
-			};
-			faces.push_back(face1);
 
-			face face2;
-			face1.vertices =
-			{
-				{{.5f, -.5f, -.5f}, {.8f, .8f, .1f}},
-				{{.5f, .5f, .5f}, {.8f, .8f, .1f}},
-				{{.5f, -.5f, .5f}, {.8f, .8f, .1f}},
-				{{.5f, -.5f, -.5f}, {.8f, .8f, .1f}},
-				{{.5f, .5f, -.5f}, {.8f, .8f, .1f}},
-				{{.5f, .5f, .5f}, {.8f, .8f, .1f}}
-			};
-			faces.push_back(face2);
+				// left face (white)
+				{ {-.5f, -.5f, -.5f},		colour},
+				{ {-.5f, .5f, .5f},		colour },
+				{ {-.5f, -.5f, .5f},		colour },
+				{ {-.5f, -.5f, -.5f},		colour },
+				{ {-.5f, .5f, -.5f},		colour },
+				{ {-.5f, .5f, .5f},		colour },
 
-			face face3;
-			face1.vertices =
-			{
-				{{-.5f, -.5f, -.5f}, {.9f, .6f, .1f}},
-				{{.5f, -.5f, .5f}, {.9f, .6f, .1f}},
-				{{-.5f, -.5f, .5f}, {.9f, .6f, .1f}},
-				{{-.5f, -.5f, -.5f}, {.9f, .6f, .1f}},
-				{{.5f, -.5f, -.5f}, {.9f, .6f, .1f}},
-				{{.5f, -.5f, .5f}, {.9f, .6f, .1f}}
-			};
-			faces.push_back(face3);
+					// right face (yellow)
+				{ {.5f, -.5f, -.5f},		colour },
+				{ {.5f, .5f, .5f},			colour },
+				{ {.5f, -.5f, .5f},		colour },
+				{ {.5f, -.5f, -.5f},		colour },
+				{ {.5f, .5f, -.5f},		colour },
+				{ {.5f, .5f, .5f},			colour },
 
-			face face4;
-			face1.vertices =
-			{
-				{{-.5f, .5f, -.5f}, {.8f, .1f, .1f}},
-				{{.5f, .5f, .5f}, {.8f, .1f, .1f}},
-				{{-.5f, .5f, .5f}, {.8f, .1f, .1f}},
-				{{-.5f, .5f, -.5f}, {.8f, .1f, .1f}},
-				{{.5f, .5f, -.5f}, {.8f, .1f, .1f}},
-				{{.5f, .5f, .5f}, {.8f, .1f, .1f}}
-			};
-			faces.push_back(face4);
+					// top face (orange)
+				{ {-.5f, -.5f, -.5f},		colour },
+				{ {.5f, -.5f, .5f},		colour },
+				{ {-.5f, -.5f, .5f},		colour },
+				{ {-.5f, -.5f, -.5f},		colour },
+				{ {.5f, -.5f, -.5f},		colour },
+				{ {.5f, -.5f, .5f},		colour },
 
-			face face5;
-			face1.vertices =
-			{
-				{{-.5f, -.5f, 0.5f}, {.1f, .1f, .8f}},
-				{{.5f, .5f, 0.5f}, {.1f, .1f, .8f}},
-				{{-.5f, .5f, 0.5f}, {.1f, .1f, .8f}},
-				{{-.5f, -.5f, 0.5f}, {.1f, .1f, .8f}},
-				{{.5f, -.5f, 0.5f}, {.1f, .1f, .8f}},
-				{{.5f, .5f, 0.5f}, {.1f, .1f, .8f}}
-			};
-			faces.push_back(face5);
+					// bottom face (red)
+				{ {-.5f, .5f, -.5f},		colour },
+				{ {.5f, .5f, .5f},			colour },
+				{ {-.5f, .5f, .5f},		colour },
+				{ {-.5f, .5f, -.5f},		colour },
+				{ {.5f, .5f, -.5f},		colour },
+				{ {.5f, .5f, .5f},			colour },
 
-			face face6;
-			face1.vertices =
-			{
-				{{-.5f, -.5f, -0.5f}, {.1f, .8f, .1f}},
-				{{.5f, .5f, -0.5f}, {.1f, .8f, .1f}},
-				{{-.5f, .5f, -0.5f}, {.1f, .8f, .1f}},
-				{{-.5f, -.5f, -0.5f}, {.1f, .8f, .1f}},
-				{{.5f, -.5f, -0.5f}, {.1f, .8f, .1f}},
-				{{.5f, .5f, -0.5f}, {.1f, .8f, .1f}}
-			};
-			faces.push_back(face6);
-			
+					// nose face (blue)
+				{ {-.5f, -.5f, 0.5f},		colour },
+				{ {.5f, .5f, 0.5f},		colour },
+				{ {-.5f, .5f, 0.5f},		colour },
+				{ {-.5f, -.5f, 0.5f},		colour },
+				{ {.5f, -.5f, 0.5f},		colour },
+				{ {.5f, .5f, 0.5f},		colour },
+
+					// tail face (green)
+				{ {-.5f, -.5f, -0.5f},		colour },
+				{ {.5f, .5f, -0.5f},		colour },
+				{ {-.5f, .5f, -0.5f},		colour },
+				{ {-.5f, -.5f, -0.5f},		colour },
+				{ {.5f, -.5f, -0.5f},		colour },
+				{ {.5f, .5f, -0.5f},		colour },
+
+			});
+			colour_ = colour;
 		}
+
+		std::shared_ptr<Model> Get() { return model; }
 		
-		face front{};
-		face back;
-		face top;
-		face bottom;
-		face left;
-		face right;
+		std::shared_ptr<Model> GetCulled(Device& device_, std::vector<int> facesToCull)
+		{
+			std::vector<Model::Vertex> vertices;
+
+			if (facesToCull[0] == 0)
+			{
+				vertices.push_back({ {-.5f, -.5f, -.5f},	colour_ });
+				vertices.push_back({ {-.5f, .5f, .5f},		colour_ });
+				vertices.push_back({ {-.5f, -.5f, .5f},	colour_ });
+				vertices.push_back({ {-.5f, -.5f, -.5f},	colour_ });
+				vertices.push_back({ {-.5f, .5f, -.5f},	colour_ });
+				vertices.push_back({ {-.5f, .5f, .5f},		colour_ });
+			}
+			if (facesToCull[1] == 0)
+			{
+				vertices.push_back({ {.5f, -.5f, -.5f},	colour_ });
+				vertices.push_back({ {.5f, .5f, .5f},		colour_ });
+				vertices.push_back({ {.5f, -.5f, .5f},		colour_ });
+				vertices.push_back({ {.5f, -.5f, -.5f},	colour_ });
+				vertices.push_back({ {.5f, .5f, -.5f},		colour_ });
+				vertices.push_back({ {.5f, .5f, .5f},		colour_ });
+			}
+			if (facesToCull[2] == 0)
+			{
+				vertices.push_back({ {-.5f, -.5f, -.5f},	colour_ });
+				vertices.push_back({ {.5f, -.5f, .5f},		colour_ });
+				vertices.push_back({ {-.5f, -.5f, .5f},	colour_ });
+				vertices.push_back({ {-.5f, -.5f, -.5f},	colour_ });
+				vertices.push_back({ {.5f, -.5f, -.5f},	colour_ });
+				vertices.push_back({ {.5f, -.5f, .5f},		colour_ });
+			}																	
+			if (facesToCull[3] == 0)											
+			{																	
+				vertices.push_back({ {-.5f, .5f, -.5f},	colour_ });
+				vertices.push_back({ {.5f, .5f, .5f},		colour_ });
+				vertices.push_back({ {-.5f, .5f, .5f},		colour_ });
+				vertices.push_back({ {-.5f, .5f, -.5f},	colour_ });
+				vertices.push_back({ {.5f, .5f, -.5f},		colour_ });
+				vertices.push_back({ {.5f, .5f, .5f},		colour_ });
+			}																
+			if (facesToCull[4] == 0)										
+			{																
+				vertices.push_back({ {-.5f, -.5f, 0.5f},	colour_ });
+				vertices.push_back({ {.5f, .5f, 0.5f},		colour_ });
+				vertices.push_back({ {-.5f, .5f, 0.5f},	colour_ });
+				vertices.push_back({ {-.5f, -.5f, 0.5f},	colour_ });
+				vertices.push_back({ {.5f, -.5f, 0.5f},	colour_ });
+				vertices.push_back({ {.5f, .5f, 0.5f},		colour_ });
+																			
+			}																
+			if (facesToCull[5] == 0)										
+			{																
+				vertices.push_back({ {-.5f, -.5f, -0.5f},	colour_ });
+				vertices.push_back({ {.5f, .5f, -0.5f},	colour_ });
+				vertices.push_back({ {-.5f, .5f, -0.5f},	colour_ });
+				vertices.push_back({ {-.5f, -.5f, -0.5f},	colour_ });
+				vertices.push_back({ {.5f, -.5f, -0.5f},	colour_ });
+				vertices.push_back({ {.5f, .5f, -0.5f},	colour_ });
+			}
+
+			return std::make_unique<Model>(device_, vertices);
+		}
+	
+	private:
+		std::shared_ptr<Model> model;
+		glm::vec3 colour_;
 	};
-	*/
 }

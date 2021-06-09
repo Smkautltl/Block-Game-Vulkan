@@ -180,6 +180,8 @@
     <ClInclude Include="src\core\window.h" />
     <ClInclude Include="src\core\model.h" />
     <ClInclude Include="src\ecs\entityManager.h" />
+    <ClInclude Include="src\game\chunk.h" />
+    <ClInclude Include="src\game\cube.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\FieldsRefMap.cd" />
