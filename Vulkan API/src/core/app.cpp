@@ -40,7 +40,9 @@ namespace Vulkan
 			if (auto commandbuffer = renderer_.begin_frame())
 			{
 				renderer_.begin_swap_chain_render_pass(commandbuffer);
-				simpleRenderSystem.render_game_objects(commandbuffer, game_objects_, cam);
+
+				simpleRenderSystem.render_game_objects(commandbuffer, game_objects_, cam);	
+
 				renderer_.end_swap_chain_render_pass(commandbuffer);
 				renderer_.end_frame();
 			}
@@ -114,16 +116,33 @@ namespace Vulkan
 	
 	void App::load_game_objects()
 	{
-		
-		for (auto i = 0; i < 100; i++)
-		{
+		Block blocktype1{device_, {0.5f, 0.1f, 0.1f}};
+		Block blocktype2{device_, {0.2f, 0.2f, 0.2f}};
+		Block blocktype3{device_, {0.1f, 0.1f, 0.5f}};
 
-			std::shared_ptr<Model> model = createCubeModel(device_, { 0,0,0 });
-			auto cube = GameObject::createGameObject();
-			cube.model = model;
-			cube.transform_.translation = { (rand() % 100)-50, (rand() % 100) - 50, (rand() % 100) - 50 };
-			cube.transform_.scale = { (rand() % 5) + 0.1, (rand() % 5) + 0.1, (rand() % 5) + 0.1 };
-			game_objects_.push_back(std::move(cube));
-		}	
+		std::vector<Block> blockTypes;
+		blockTypes.push_back(std::move(blocktype1));
+		blockTypes.push_back(std::move(blocktype2));
+		blockTypes.push_back(std::move(blocktype3));
+
+		for (auto i = 0; i < 1; i++)
+		{
+			chunk chnk;
+			chnk.load_game_objects(device_, blockTypes, game_objects_);
+			chunks.push_back(std::move(chnk));
+		}
+
+		//std::shared_ptr<Model> model = createCubeModel(device_, { 0,0,0 });
+		//
+		//for (auto i = 0; i < 100; i++)
+		//{
+		//
+		//	
+		//	auto cube = GameObject::createGameObject();
+		//	cube.model = model;
+		//	cube.transform_.translation = { (rand() % 100)-50, (rand() % 100) - 50, (rand() % 100) - 50 };
+		//	cube.transform_.scale = { (rand() % 5) + 0.1, (rand() % 5) + 0.1, (rand() % 5) + 0.1 };
+		//	game_objects_.push_back(std::move(cube));
+		//}	
 	}
 }

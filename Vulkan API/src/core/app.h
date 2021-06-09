@@ -9,6 +9,8 @@
 //-=-=-=-=- STD -=-=-=-=-
 #include <vector>
 
+#include "../game/chunk.h"
+
 namespace Vulkan
 {
 	class App
@@ -19,22 +21,23 @@ namespace Vulkan
 
 		//Deleting copy constructors
 		App(const App&) = delete;
-		App &operator=(const App&) = delete;
-		
+		App& operator=(const App&) = delete;
+
 		void run();
-	
+
 	private:
 		void load_game_objects();
-	
+
 	public:
 		static constexpr int WIDTH = 800;
 		static constexpr int HEIGHT = 600;
-	
+
 	private:
-		Window window_{WIDTH, HEIGHT, "Block Game"};
+		Window window_{ WIDTH, HEIGHT, "Block Game" };
 		Device device_{ window_ };
 		Renderer renderer_{ window_, device_ };
 		std::vector<GameObject> game_objects_;
 		camera cam{};
+		std::vector<chunk> chunks;
 	};
 }
