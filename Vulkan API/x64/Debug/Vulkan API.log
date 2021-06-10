@@ -1,8 +1,26 @@
-﻿  Block Game.cpp
+﻿  App.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Libraries\glfw-3.3.2.bin.WIN64\include\GLFW\glfw3.h(123): message : see previous definition of 'APIENTRY'
-  App.cpp
+C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\core\App.cpp(119,1): error C2440: 'initializing': cannot convert from 'initializer list' to 'Vulkan::Block'
+C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\core\App.cpp(119,1): message : No constructor could take the source type, or constructor overload resolution was ambiguous
+C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\core\App.cpp(120,1): error C2440: 'initializing': cannot convert from 'initializer list' to 'Vulkan::Block'
+C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\core\App.cpp(120,1): message : No constructor could take the source type, or constructor overload resolution was ambiguous
+C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\core\App.cpp(121,1): error C2440: 'initializing': cannot convert from 'initializer list' to 'Vulkan::Block'
+C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\core\App.cpp(121,1): message : No constructor could take the source type, or constructor overload resolution was ambiguous
+C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\core\App.cpp(130,10): error C2512: 'Vulkan::Chunk': no appropriate default constructor available
+C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\chunk.hpp(8,8): message : see declaration of 'Vulkan::Chunk'
+C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\core\App.cpp(131,1): error C2660: 'Vulkan::Chunk::load_game_objects': function does not take 3 arguments
+C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\chunk.hpp(27,8): message : see declaration of 'Vulkan::Chunk::load_game_objects'
+  device.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Libraries\glfw-3.3.2.bin.WIN64\include\GLFW\glfw3.h(123): message : see previous definition of 'APIENTRY'
+  simpleRenderSystem.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Libraries\glfw-3.3.2.bin.WIN64\include\GLFW\glfw3.h(123): message : see previous definition of 'APIENTRY'
+  Block Game.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Libraries\glfw-3.3.2.bin.WIN64\include\GLFW\glfw3.h(123): message : see previous definition of 'APIENTRY'
+  world.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Libraries\glfw-3.3.2.bin.WIN64\include\GLFW\glfw3.h(123): message : see previous definition of 'APIENTRY'
   Generating Code...
-  Vulkan API.vcxproj -> C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\x64\Debug\Vulkan API.exe

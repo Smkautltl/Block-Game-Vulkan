@@ -48,6 +48,9 @@
     <ClCompile Include="src\ecs\entityManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\world.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\App.h">
@@ -86,10 +89,13 @@
     <ClInclude Include="src\core\camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\game\cube.h">
+    <ClInclude Include="src\game\block.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\game\chunk.h">
+    <ClInclude Include="src\game\chunk.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\world.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

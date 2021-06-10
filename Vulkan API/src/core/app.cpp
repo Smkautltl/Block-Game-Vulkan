@@ -127,7 +127,7 @@ namespace Vulkan
 
 		for (auto i = 0; i < 1; i++)
 		{
-			chunk chnk;
+			Chunk chnk;
 			chnk.load_game_objects(device_, blockTypes, game_objects_);
 			chunks.push_back(std::move(chnk));
 		}
