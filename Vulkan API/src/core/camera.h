@@ -10,25 +10,43 @@ namespace Vulkan
 	public:
 		void UpdateCameraPos(int key, int scancode, int action, int mods)
 		{
-	
-			if (key == GLFW_KEY_W && action == GLFW_PRESS)
+
+			if (key == GLFW_KEY_W && action == GLFW_PRESS || keysUnreleased->at(GLFW_KEY_W) == true)
 			{
 				pos[2] += 0.1f;
+				keysUnreleased->at(GLFW_KEY_W) = true;
 			}
-
-			if (key == GLFW_KEY_S && action == GLFW_PRESS)
+			if (key == GLFW_KEY_S && action == GLFW_PRESS || keysUnreleased->at(GLFW_KEY_S) == true)
 			{
 				pos[2] -= 0.1f;
+				keysUnreleased->at(GLFW_KEY_S) = true;
 			}
-
-			if (key == GLFW_KEY_A && action == GLFW_PRESS)
+			if (key == GLFW_KEY_A && action == GLFW_PRESS || keysUnreleased->at(GLFW_KEY_A) == true)
 			{
 				pos[0] += 0.1f;
+				keysUnreleased->at(GLFW_KEY_A) = true;
 			}
-
-			if (key == GLFW_KEY_D && action == GLFW_PRESS)
+			if (key == GLFW_KEY_D && action == GLFW_PRESS || keysUnreleased->at(GLFW_KEY_D) == true)
 			{
 				pos[0] -= 0.1f;
+				keysUnreleased->at(GLFW_KEY_D) = true;
+			}
+
+			if (key == GLFW_KEY_W && action == GLFW_RELEASE)
+			{
+				keysUnreleased->at(GLFW_KEY_W) = false;
+			}
+			if (key == GLFW_KEY_S && action == GLFW_RELEASE)
+			{
+				keysUnreleased->at(GLFW_KEY_S) = false;
+			}
+			if (key == GLFW_KEY_A && action == GLFW_RELEASE)
+			{
+				keysUnreleased->at(GLFW_KEY_A) = false;
+			}
+			if (key == GLFW_KEY_D && action == GLFW_RELEASE)
+			{
+				keysUnreleased->at(GLFW_KEY_D) = false;
 			}
 	
 		}
@@ -51,5 +69,7 @@ namespace Vulkan
 		glm::mat4 model;
 		glm::mat4 view = glm::translate(glm::mat4(1.f), pos);
 		glm::mat4 proj = glm::perspective(glm::radians(70.f), 800.f/600.f, 0.1f, 200.f);
+
+		std::vector<bool> keysUnreleased[349]{};
 	};
 }

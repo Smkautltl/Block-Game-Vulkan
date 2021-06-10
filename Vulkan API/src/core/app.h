@@ -9,7 +9,7 @@
 //-=-=-=-=- STD -=-=-=-=-
 #include <vector>
 
-#include "../game/chunk.h"
+#include "../game/chunk.hpp"
 
 namespace Vulkan
 {
@@ -38,6 +38,6 @@ namespace Vulkan
 		Renderer renderer_{ window_, device_ };
 		std::vector<GameObject> game_objects_;
 		camera cam{};
-		std::vector<chunk> chunks;
+		std::vector<Chunk> chunks;
 	};
 }
