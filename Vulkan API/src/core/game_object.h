@@ -11,6 +11,7 @@
 
 namespace Vulkan
 {
+	/*
 	struct TransformComponent
 	{
 		glm::vec3 translation{};
@@ -50,6 +51,7 @@ namespace Vulkan
 			};
 		}
 	};
+	*/
 	
 	class GameObject
 	{
@@ -60,7 +62,7 @@ namespace Vulkan
 		std::shared_ptr<Model> model{};
 		glm::vec3 colour{};
 
-		TransformComponent transform_{};
+		//TransformComponent transform_{};
 	private:
 		id_t id;
 

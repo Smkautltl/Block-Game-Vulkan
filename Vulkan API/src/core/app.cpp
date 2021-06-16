@@ -9,6 +9,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 
+#include "../game/world.h"
+
 //-=-=-=-=- STD -=-=-=-=-
 
 namespace Vulkan
@@ -26,7 +28,7 @@ namespace Vulkan
 	void App::run()
 	{
 		SimpleRenderSystem simpleRenderSystem{ device_, renderer_.get_swap_chain_render_pass() };
-
+		
 		//Keeps the window open until we need it to close
 		while(!window_.should_close())
 		{
@@ -41,7 +43,7 @@ namespace Vulkan
 			{
 				renderer_.begin_swap_chain_render_pass(commandbuffer);
 
-				simpleRenderSystem.render_game_objects(commandbuffer, game_objects_, cam);	
+				simpleRenderSystem.render_game_objects(commandbuffer, cam);	
 
 				renderer_.end_swap_chain_render_pass(commandbuffer);
 				renderer_.end_frame();
@@ -116,21 +118,21 @@ namespace Vulkan
 	
 	void App::load_game_objects()
 	{
-		Block blocktype1{device_, {0.5f, 0.1f, 0.1f}};
-		Block blocktype2{device_, {0.2f, 0.2f, 0.2f}};
-		Block blocktype3{device_, {0.1f, 0.1f, 0.5f}};
-
-		std::vector<Block> blockTypes;
-		blockTypes.push_back(std::move(blocktype1));
-		blockTypes.push_back(std::move(blocktype2));
-		blockTypes.push_back(std::move(blocktype3));
-
-		for (auto i = 0; i < 1; i++)
-		{
-			Chunk chnk;
-			chnk.load_game_objects(device_, blockTypes, game_objects_);
-			chunks.push_back(std::move(chnk));
-		}
+		//Block blocktype1{device_, {0.5f, 0.1f, 0.1f}};
+		//Block blocktype2{device_, {0.2f, 0.2f, 0.2f}};
+		//Block blocktype3{device_, {0.1f, 0.1f, 0.5f}};
+		//
+		//std::vector<Block> blockTypes;
+		//blockTypes.push_back(std::move(blocktype1));
+		//blockTypes.push_back(std::move(blocktype2));
+		//blockTypes.push_back(std::move(blocktype3));
+		//
+		//for (auto i = 0; i < 1; i++)
+		//{
+		//	Chunk chnk;
+		//	chnk.load_game_objects(device_, blockTypes, game_objects_);
+		//	chunks.push_back(std::move(chnk));
+		//}
 
 		//std::shared_ptr<Model> model = createCubeModel(device_, { 0,0,0 });
 		//
