@@ -8,20 +8,25 @@
 
 namespace Vulkan
 {
+	struct SimplePushConstantData
+	{
+		glm::mat4 transform{ 1.0f };
+		alignas(16) glm::vec3 color;
+	};
+	
 	class world
 	{
 	public:
-		world();
+		world(Device& device_);
 
 		void add_chunk();
 		void remove_chunk();
 		
-		void render(VkCommandBuffer commandBuffer, camera cam);
+		void render(VkCommandBuffer commandBuffer, camera& cam, VkPipelineLayout& pipeline_layout_);
 		void update();
 
 	private:
 		std::vector<Chunk> chunks_;
-		std::vector<Block*> blocks_to_render_;
 
 	};
 }

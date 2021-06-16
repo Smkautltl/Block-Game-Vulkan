@@ -67,6 +67,5 @@ namespace Vulkan
 		vkMapMemory(device_.get_device(), vertex_buffer_memory_, 0, bufferSize, 0, &data);
 		memcpy(data, vertices.data(), static_cast<size_t>(bufferSize));
 		vkUnmapMemory(device_.get_device(), vertex_buffer_memory_);
-		
 	}
 }

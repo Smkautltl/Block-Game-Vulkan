@@ -11,16 +11,17 @@
 
 namespace Vulkan
 {
-	struct SimplePushConstantData
-	{
-		glm::mat4 transform{ 1.0f };
-		alignas(16) glm::vec3 color;
-	};
+	//struct SimplePushConstantData
+	//{
+	//	glm::mat4 transform{ 1.0f };
+	//	alignas(16) glm::vec3 color;
+	//};
 
 	SimpleRenderSystem::SimpleRenderSystem(Device& device, VkRenderPass renderPass) : device_(device)
 	{
 		create_pipeline_layout();
 		create_pipeline(renderPass);
+		world_ = new world{device};
 	}
 
 	SimpleRenderSystem::~SimpleRenderSystem()
@@ -59,25 +60,12 @@ namespace Vulkan
 		pipeline_ = std::make_unique<pipeline>(device_, "Shaders/vert.spv", "Shaders/frag.spv", pipeline_config);
 	}
 
-
-	void SimpleRenderSystem::render_game_objects(VkCommandBuffer commandbuffer, std::vector<GameObject>& gameObjects, camera cam)
+	void SimpleRenderSystem::render_game_objects(VkCommandBuffer commandbuffer, camera& cam)
 	{
 
 		pipeline_->bind(commandbuffer);
 
-		for (auto& obj : gameObjects)
-		{
-			//obj.transform_.rotation.y = glm::mod(obj.transform_.rotation.y + 0.005f, glm::two_pi<float>());
-			//obj.transform_.rotation.x = glm::mod(obj.transform_.rotation.x + 0.001f, glm::two_pi<float>());
-			
-			SimplePushConstantData push{};
-			push.color = obj.colour;
-			push.transform = cam.UpdateModelView(obj.transform_.mat4());
-		
-			vkCmdPushConstants(commandbuffer, pipeline_layout_, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SimplePushConstantData), &push);
-			obj.model->bind(commandbuffer);
-			obj.model->draw(commandbuffer);
-		}
+		world_->render(commandbuffer, cam, pipeline_layout_);
 	}
 
 }
