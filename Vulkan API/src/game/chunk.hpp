@@ -53,7 +53,7 @@ namespace Vulkan
 
 		Chunk(uint16_t id, int32_t x, int32_t z) : id_(id), x_(x), z_(z)
 		{
-			transform_.translation = {(x*16), 0, (z*16)};
+			transform_.translation = {(x*16)+1, 0, (z*16)+1};
 			generate();
 		}
 
@@ -62,7 +62,7 @@ namespace Vulkan
 		std::shared_ptr<Model> get() { return model; }
 	
 		void generate()
-		{
+		{	
 			unsigned int xcounter = 0;
 			unsigned int ycounter = 0;
 			unsigned int zcounter = 0;
@@ -93,12 +93,7 @@ namespace Vulkan
 					blocktype = 0;
 				}
 
-				glm::vec3 position;
-				position.x = xcounter;
-				position.y = ycounter;
-				position.z = zcounter;
-				Block newBlock{ id, blocktype, position};
-
+				Block newBlock{ id, blocktype, {xcounter, ycounter, zcounter}};
 				blocks_.push_back(std::move(newBlock));
 				
 				if (xcounter == 15)
@@ -120,81 +115,42 @@ namespace Vulkan
 		
 		void load_game_objects(Device& device)
 		{
-			std::chrono::time_point<std::chrono::system_clock> start, end;
-			start = std::chrono::system_clock::now();
 			
 			std::vector<Model::Vertex> vertices;
 			int32_t counter = 0;
 			unsigned int xcounter = 0;
 			unsigned int ycounter = 0;
 			unsigned int zcounter = 0;
-			std::vector<bool> faces;
 
 			//Checks all blocks to see what faces need to be rendered
 			for (auto block : blocks_)
 			{
-				
 				//Left Face
-				if (xcounter == 0 || blocks_[(counter % 16) - 1].get_block_type_() == 0)
-				{
-					faces.push_back(true);
-				}
-				else
-				{
-					faces.push_back(false);
-				}
+				if (xcounter == 0 || blocks_[(counter % 16) - 1].block_type_ == 0)
+					block.faces[0] = true;
 				
 				//Right Face
-				if(xcounter == 15 || blocks_[(counter % 16) + 1].get_block_type_() == 0)
-				{
-					faces.push_back(true);
-				}
-				else
-				{
-					faces.push_back(false);
-				}
+				if(xcounter == 15 || blocks_[(counter % 16) + 1].block_type_ == 0)
+					block.faces[1] = true;
 				
 				//Top Face
-				if(ycounter >= 254 || blocks_[counter + (16 * 16)].get_block_type_() == 0)
-				{
-					faces.push_back(true);
-				}
-				else
-				{
-					faces.push_back(false);
-				}
+				if(ycounter >= 254 || blocks_[counter + (16 * 16)].block_type_ == 0)
+					block.faces[3] = true;
 				
 				//Bottom Face
-				if (ycounter == 0 || blocks_[counter - (16 * 16)].get_block_type_() == 0)
-				{
-					faces.push_back(true);
-				}
-				else
-				{
-					faces.push_back(false);
-				}
+				if (ycounter == 0 || blocks_[counter - (16 * 16)].block_type_ == 0)
+					block.faces[2] = true;
 				
 				//Front Face
-				if(zcounter == 0 || blocks_[counter - 16].get_block_type_() == 0)
-				{
-					faces.push_back(true);
-				}
-				else
-				{
-					faces.push_back(false);
-				}
-				
+				if(zcounter == 0 || blocks_[counter - 16].block_type_ == 0)
+					block.faces[5] = true;
+			
 				//Back Face
-				if (zcounter >= 15 || blocks_[counter + 16].get_block_type_() == 0)
-				{
-					faces.push_back(true);
-				}
-				else
-				{
-					faces.push_back(false);
-				}
+				if (zcounter >= 15 || blocks_[counter + 16].block_type_ == 0)
+					block.faces[4] = true;
 				
-				auto blockVerts = block.regenerate_model(faces);
+
+				auto blockVerts = block.regenerate_model();
 				
 				if (!blockVerts.empty())
 				{
@@ -218,14 +174,9 @@ namespace Vulkan
 				counter++;
 				
 				blockVerts.clear();
-				faces.clear();
 			}
 
 			model = std::make_unique<Model>(device ,vertices);
-
-			end = std::chrono::system_clock::now();
-			std::chrono::duration<double> elapsed_seconds = end - start;
-			VK_CORE_INFO("Chunk: {0}-{1} -- Mesh created in {2}s", x_, z_, std::to_string(elapsed_seconds.count()))
 		}
 		
 		TransformComponent transform_;
