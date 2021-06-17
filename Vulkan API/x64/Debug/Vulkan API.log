@@ -1,74 +1,14 @@
 ﻿  Block Game.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Libraries\glfw-3.3.2.bin.WIN64\include\GLFW\glfw3.h(123): message : see previous definition of 'APIENTRY'
-C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\chunk.hpp(97,18): warning C4244: '=': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\chunk.hpp(98,18): warning C4244: '=': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\chunk.hpp(99,18): warning C4244: '=': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
   App.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Libraries\glfw-3.3.2.bin.WIN64\include\GLFW\glfw3.h(123): message : see previous definition of 'APIENTRY'
-C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\chunk.hpp(97,18): warning C4244: '=': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\chunk.hpp(98,18): warning C4244: '=': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\chunk.hpp(99,18): warning C4244: '=': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
   simpleRenderSystem.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Libraries\glfw-3.3.2.bin.WIN64\include\GLFW\glfw3.h(123): message : see previous definition of 'APIENTRY'
-C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\chunk.hpp(97,18): warning C4244: '=': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\chunk.hpp(98,18): warning C4244: '=': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\chunk.hpp(99,18): warning C4244: '=': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
   world.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Libraries\glfw-3.3.2.bin.WIN64\include\GLFW\glfw3.h(123): message : see previous definition of 'APIENTRY'
-C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\chunk.hpp(97,18): warning C4244: '=': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\chunk.hpp(98,18): warning C4244: '=': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\chunk.hpp(99,18): warning C4244: '=': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
   Generating Code...
   Vulkan API.vcxproj -> C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\x64\Debug\Vulkan API.exe

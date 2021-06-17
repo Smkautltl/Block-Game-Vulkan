@@ -6,9 +6,16 @@ Vulkan::world::world(Device& device_)
 	{
 		for (auto j = 0; j < 1; j++)
 		{
-			Chunk chnk{0, i,j};
+			std::chrono::time_point<std::chrono::system_clock> start, end;
+			start = std::chrono::system_clock::now();
+
+			Chunk chnk {0, i, j};
 			chnk.load_game_objects(device_);
 			chunks_.push_back(std::move(chnk));
+
+			end = std::chrono::system_clock::now();
+			std::chrono::duration<double> elapsed_seconds = end - start;
+			VK_CORE_INFO("Chunk: {0}-{1} created in {2}ms", i, j, std::to_string(elapsed_seconds.count()*1000))
 		}
 	}
 }
