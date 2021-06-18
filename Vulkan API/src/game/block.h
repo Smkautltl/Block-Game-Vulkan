@@ -6,7 +6,7 @@ namespace Vulkan
 	struct cube
 	{
 		//Red
-		inline static std::vector<Model::Vertex> LeftFace
+		inline static std::vector<Vertex> LeftFace
 		{
 			{ {-1.f, -1.f, -1.f},	{1.0f, 0.0f, 0.0f} },
 			{ {-1.f,  1.f,  1.f},	{1.0f, 0.0f, 0.0f} },
@@ -17,7 +17,7 @@ namespace Vulkan
 		};
 
 		//Green
-		inline static std::vector<Model::Vertex> RightFace
+		inline static std::vector<Vertex> RightFace
 		{
 			{ {1.f, -1.f, -1.f},		{0.0f, 1.0f, 0.0f} },
 			{ {1.f,  1.f,  1.f},		{0.0f, 1.0f, 0.0f} },
@@ -28,7 +28,7 @@ namespace Vulkan
 		};
 
 		//Blue
-		inline static std::vector<Model::Vertex> TopFace
+		inline static std::vector<Vertex> TopFace
 		{
 			{ {-1.f, -1.f, -1.f},	{0.0f, 0.0f, 1.0f} },
 			{ { 1.f, -1.f,  1.f},	{0.0f, 0.0f, 1.0f} },
@@ -39,7 +39,7 @@ namespace Vulkan
 		};
 
 		//Yellow
-		inline static std::vector<Model::Vertex> BottomFace
+		inline static std::vector<Vertex> BottomFace
 		{
 			{ {-1.f, 1.f, -1.f},		{1.0f, 1.0f, 0.0f} },
 			{ { 1.f, 1.f,  1.f},		{1.0f, 1.0f, 0.0f} },
@@ -50,7 +50,7 @@ namespace Vulkan
 		};
 
 		//Turquoise
-		inline static std::vector<Model::Vertex> FrontFace
+		inline static std::vector<Vertex> FrontFace
 		{
 			{ {-1.f, -1.f, 1.f},	{0.0f, 1.0f, 1.0f} },
 			{ { 1.f,  1.f, 1.f},	{0.0f, 1.0f, 1.0f} },
@@ -61,7 +61,7 @@ namespace Vulkan
 		};
 
 		//White
-		inline static std::vector<Model::Vertex> BackFace
+		inline static std::vector<Vertex> BackFace
 		{
 			{ {-1.f, -1.f, -1.f},	{1.0f, 1.0f, 1.0f} },
 			{ { 1.f,  1.f, -1.f},	{1.0f, 1.0f, 1.0f} },
@@ -79,9 +79,9 @@ namespace Vulkan
 		Block();
 		Block(uint32_t id, uint32_t blockType, glm::vec3 Chnkpos) : chunk_position_(Chnkpos), id_(id), block_type_(blockType){}
 
-		std::vector<Model::Vertex> regenerate_model()
+		std::vector<Vertex> regenerate_model()
 		{			
-			std::vector<Model::Vertex> vertices;
+			std::vector<Vertex> vertices;
 		
 			if (faces.at(0) == false && faces.at(1) == false && faces.at(2) == false && faces.at(3) == false && faces.at(4) == false && faces.at(5) == false)
 				return vertices;

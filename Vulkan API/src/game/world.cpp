@@ -4,13 +4,13 @@ Vulkan::world::world(Device& device_)
 {
 	for (auto i = 0; i < 5; i++)
 	{
-		for (auto j = 0; j < 1; j++)
+		for (auto j = 0; j < 5; j++)
 		{
 			std::chrono::time_point<std::chrono::system_clock> start, end;
 			start = std::chrono::system_clock::now();
 
 			Chunk chnk {0, i, j};
-			chnk.load_game_objects(device_);
+			chnk.load_block_faces(device_);
 			chunks_.push_back(std::move(chnk));
 
 			end = std::chrono::system_clock::now();

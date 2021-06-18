@@ -2,7 +2,7 @@
 
 namespace Vulkan
 {
-	std::vector<VkVertexInputBindingDescription> Model::Vertex::getBindingDescriptions()
+	std::vector<VkVertexInputBindingDescription> Vertex::getBindingDescriptions()
 	{
 		std::vector<VkVertexInputBindingDescription> binding_descriptions(1 );
 		binding_descriptions[0].binding = 0;
@@ -12,7 +12,7 @@ namespace Vulkan
 		return binding_descriptions;
 	}
 
-	std::vector<VkVertexInputAttributeDescription> Model::Vertex::getAttributeDescriptions()
+	std::vector<VkVertexInputAttributeDescription> Vertex::getAttributeDescriptions()
 	{
 		std::vector<VkVertexInputAttributeDescription> attribute_descriptions(2 );
 		attribute_descriptions[0].binding = 0;
@@ -35,13 +35,13 @@ namespace Vulkan
 	
 	Model::~Model()
 	{
-		vkDestroyBuffer(device_.get_device(), vertex_buffer_, nullptr);
+		device_.destroy_buffer(vertex_buffer_.buffer_);
 		vkFreeMemory(device_.get_device(), vertex_buffer_memory_, nullptr);
 	}
 
 	void Model::bind(VkCommandBuffer commandBuffer)
 	{
-		VkBuffer buffers[] = { vertex_buffer_ };
+		VkBuffer buffers[] = { vertex_buffer_.buffer_ };
 		VkDeviceSize offset[] = { 0 };
 		vkCmdBindVertexBuffers(commandBuffer, 0, 1, buffers, offset);
 	}
@@ -62,10 +62,8 @@ namespace Vulkan
 								VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, 
 								VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
 								vertex_buffer_,
-								vertex_buffer_memory_);
-		void* data;
-		vkMapMemory(device_.get_device(), vertex_buffer_memory_, 0, bufferSize, 0, &data);
-		memcpy(data, vertices.data(), static_cast<size_t>(bufferSize));
-		vkUnmapMemory(device_.get_device(), vertex_buffer_memory_);
+								vertex_buffer_memory_,
+								vertices);
+		
 	}
 }

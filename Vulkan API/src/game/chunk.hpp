@@ -1,7 +1,5 @@
 #pragma once
 #include "block.h"
-//#include "../core/game_object.h"
-#include <fstream>
 
 #include "../core/model.h"
 
@@ -46,7 +44,7 @@ namespace Vulkan
 			};
 		}
 	};
-
+	
 	class Chunk
 	{
 	public:
@@ -113,15 +111,26 @@ namespace Vulkan
 			}
 		}
 		
-		void load_game_objects(Device& device)
+		void load_block_faces(Device& device)
 		{
 			
-			std::vector<Model::Vertex> vertices;
+			std::vector<Vertex> vertices;
 			int32_t counter = 0;
 			unsigned int xcounter = 0;
 			unsigned int ycounter = 0;
 			unsigned int zcounter = 0;
 
+			for (auto y = 0; y < 255; y++)
+			{
+				for (auto z = 0; z < 16; z++)
+				{
+					for (auto x = 0; x < 16; x++)
+					{
+						
+					}
+				}
+			}
+			
 			//Checks all blocks to see what faces need to be rendered
 			for (auto block : blocks_)
 			{
