@@ -57,7 +57,7 @@ namespace Vulkan
 	}
 
 	std::unique_ptr<Model> createCubeModel(Device& device, glm::vec3 offset) {
-		std::vector<Model::Vertex> vertices
+		std::vector<Vertex> vertices
 		{
 
 			// left face (white)

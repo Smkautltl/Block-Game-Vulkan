@@ -1,14 +1,30 @@
 #pragma once
-
+//-=-=-=-=- CORE -=-=-=-=-
 #include "Window.h"
+
+//-=-=-=-=- VMA -=-=-=-=-
+#include "vk_mem_alloc.h"
 
 //-=-=-=-=- STD -=-=-=-=-
 #include <vector>
 
+//-=-=-=-=- GLM -=-=-=-=-
+#define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#include <glm/glm.hpp>
+
 namespace Vulkan
 {
+    struct Vertex
+    {
+        glm::vec3 position;
+        glm::vec3 colour;
 
-    struct SwapChainSupportDetails
+        static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();
+        static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();
+    };
+
+	struct SwapChainSupportDetails
 	{
       VkSurfaceCapabilitiesKHR capabilities;
       std::vector<VkSurfaceFormatKHR> formats;
@@ -23,7 +39,13 @@ namespace Vulkan
       bool presentFamilyHasValue = false;
       bool isComplete() { return graphicsFamilyHasValue && presentFamilyHasValue; }
     };
-    
+
+    struct AllocatedBuffer
+    {
+        VkBuffer buffer_;
+        VmaAllocation allocation_;
+    };
+
     class Device
 	{
     public:
@@ -42,11 +64,12 @@ namespace Vulkan
         Device(Device&&) = delete;
         Device &operator=(Device&&) = delete;
     
-        VkCommandPool get_command_pool() { return command_pool_; }
-        VkDevice get_device() { return device_; }
-        VkSurfaceKHR get_surface() { return surface_; }
-        VkQueue graphics_queue() { return graphics_queue_; }
-        VkQueue present_queue() { return present_queue_; }
+        VkCommandPool get_command_pool() const { return command_pool_; }
+        VkDevice get_device() const { return device_; }
+        VkSurfaceKHR get_surface() const { return surface_; }
+        VkQueue graphics_queue() const { return graphics_queue_; }
+        VkQueue present_queue() const { return present_queue_; }
+        VmaAllocator get_allocator() const { return allocator; }
     
         SwapChainSupportDetails get_swap_chain_support() { return query_swap_chain_support(physical_device_); }
         uint32_t find_memory_type(uint32_t typeFilter, VkMemoryPropertyFlags properties);
@@ -54,7 +77,8 @@ namespace Vulkan
         VkFormat find_supported_format(const std::vector<VkFormat> &candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
     
         // Buffer Helper Functions
-        void create_buffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer &buffer, VkDeviceMemory &bufferMemory);
+        void create_buffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, AllocatedBuffer&buffer, VkDeviceMemory &bufferMemory, const std::vector<Vertex>& vertices);
+        void destroy_buffer(VkBuffer buffer);
         VkCommandBuffer begin_single_time_commands();
         void end_single_time_commands(VkCommandBuffer commandBuffer);
         void copy_buffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
@@ -69,8 +93,10 @@ namespace Vulkan
         void pick_physical_device();
         void create_logical_device();
         void create_command_pool();
-    
-        // helper functions
+        void setup_vma_allocator();
+
+    	
+        // Helper Functions
         bool is_device_suitable(VkPhysicalDevice device);
         std::vector<const char *> get_required_extensions();
         bool check_validation_layer_support();
@@ -83,6 +109,7 @@ namespace Vulkan
     //-=-=-=-=-=-=-=-=- Variables -=-=-=-=-=-=-=-=-
     public:
         VkPhysicalDeviceProperties properties{};
+        VmaAllocator allocator;
     
     private:
         VkInstance instance_{};

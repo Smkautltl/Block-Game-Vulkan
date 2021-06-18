@@ -1,3 +1,4 @@
+#define VMA_IMPLEMENTATION
 #include "device.h"
 
 //-=-=-=-=- STD -=-=-=-=-
@@ -7,7 +8,7 @@
 
 namespace Vulkan
 {
-    static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback( VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData)
+	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback( VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData)
 	{
 		switch (messageSeverity)
 		{
@@ -56,7 +57,6 @@ namespace Vulkan
         }
     }
 
-	
     Device::Device(Window &window) : window_{window}
 	{
         create_instance();
@@ -65,9 +65,11 @@ namespace Vulkan
         pick_physical_device();
         create_logical_device();
         create_command_pool();
+        setup_vma_allocator();
 	}   
     Device::~Device()
 	{
+        vmaDestroyAllocator(allocator);
         vkDestroyCommandPool(device_, command_pool_, nullptr);
         vkDestroyDevice(device_, nullptr);
 
@@ -96,7 +98,7 @@ namespace Vulkan
         appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
         appInfo.pEngineName = "No Engine";
         appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-        appInfo.apiVersion = VK_API_VERSION_1_0;
+        appInfo.apiVersion = VK_API_VERSION_1_2;
 
     	//Tells vulkan what extensions and validation layers we what to use
         VkInstanceCreateInfo createInfo = {};
@@ -445,7 +447,21 @@ namespace Vulkan
 			VK_CORE_RUNTIME("Failed to create command pool!")
         }
 	}
-	
+
+    void Device::setup_vma_allocator()
+    {
+        VmaAllocatorCreateInfo allocinfo{};
+        allocinfo.physicalDevice = physical_device_;
+        allocinfo.device = device_;
+        allocinfo.instance = instance_;
+        vmaCreateAllocator(&allocinfo, &allocator);
+    }
+
+    void Device::destroy_buffer(VkBuffer buffer)
+    {
+        vmaDestroyBuffer(allocator, buffer, nullptr);
+    }
+
     VkFormat Device::find_supported_format(const std::vector<VkFormat> &candidates, VkImageTiling tiling, VkFormatFeatureFlags features)
 	{
         for (VkFormat format : candidates) {
@@ -479,33 +495,41 @@ namespace Vulkan
         VK_CORE_RUNTIME("Failed to find suitable memory type!");
 	}
     
-    void Device::create_buffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer &buffer, VkDeviceMemory &bufferMemory)
+    void Device::create_buffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, AllocatedBuffer &buffer, VkDeviceMemory &bufferMemory, const std::vector<Vertex>& vertices)
 	{
         VkBufferCreateInfo bufferInfo{};
         bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
         bufferInfo.size = size;
         bufferInfo.usage = usage;
-        bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+        //bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-        if (vkCreateBuffer(device_, &bufferInfo, nullptr, &buffer) != VK_SUCCESS) 
+        VmaAllocationCreateInfo vmaallocInfo{};
+        vmaallocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
+    	
+        if (vmaCreateBuffer(allocator, &bufferInfo, &vmaallocInfo, &buffer.buffer_, &buffer.allocation_, nullptr) != VK_SUCCESS) 
         {
-			VK_CORE_RUNTIME("Failed to create vertex buffer!");
+			VK_CORE_RUNTIME("Failed to create vertex buffer!")
         }
 
-        VkMemoryRequirements memRequirements;
-        vkGetBufferMemoryRequirements(device_, buffer, &memRequirements);
+        void* data;
+        vmaMapMemory(allocator, buffer.allocation_, &data);
+        memcpy(data, vertices.data(), static_cast<size_t>(size));
+        vmaUnmapMemory(allocator, buffer.allocation_);
 
-        VkMemoryAllocateInfo allocInfo{};
-        allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-        allocInfo.allocationSize = memRequirements.size;
-        allocInfo.memoryTypeIndex = find_memory_type(memRequirements.memoryTypeBits, properties);
-
-        if (vkAllocateMemory(device_, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS) 
-        {
-			VK_CORE_RUNTIME("Failed to allocate vertex buffer memory!");
-        }
-
-        vkBindBufferMemory(device_, buffer, bufferMemory, 0);
+        //VkMemoryRequirements memRequirements;
+        //vkGetBufferMemoryRequirements(device_, buffer, &memRequirements);
+        //
+        //VkMemoryAllocateInfo allocInfo{};
+        //allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        //allocInfo.allocationSize = memRequirements.size;
+        //allocInfo.memoryTypeIndex = find_memory_type(memRequirements.memoryTypeBits, properties);
+        //
+        //if (vkAllocateMemory(device_, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS) 
+        //{
+		//	VK_CORE_RUNTIME("Failed to allocate vertex buffer memory!");
+        //}
+        //
+        //vkBindBufferMemory(device_, buffer, bufferMemory, 0);
 	}
     
     VkCommandBuffer Device::begin_single_time_commands()
