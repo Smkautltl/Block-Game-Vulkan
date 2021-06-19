@@ -2,7 +2,7 @@
 //-=-=-=-=- CORE -=-=-=-=-
 #include "device.h"
 #include "window.h"
-#include "Renderer.h"
+#include "renderer.h"
 #include "game_object.h"
 
 //Must be below device and window headers 
@@ -37,6 +37,6 @@ namespace Vulkan
 		Device device_{ window_ };
 		Renderer renderer_{ window_, device_ };
 		std::vector<GameObject> game_objects_;
-		camera cam{};
+		Camera cam{70.f, WIDTH, HEIGHT, 0.1f, 300.f};
 	};
 }
