@@ -48,6 +48,7 @@ namespace Vulkan
 		{
 			VK_CORE_RUNTIME("Failed to create pipeline layout!");
 		}
+		VK_CORE_INFO("Pipeline Layout Created!")
 	}
 	void SimpleRenderSystem::create_pipeline(VkRenderPass renderPass)
 	{

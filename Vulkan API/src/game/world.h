@@ -1,6 +1,6 @@
 #pragma once
 
-#include "chunk.hpp"
+#include "chunk.h"
 #include "../core/camera.h"
 
 #include <vector>
@@ -26,7 +26,9 @@ namespace Vulkan
 		void update();
 
 	private:
-		std::vector<Chunk> chunks_;
-
+		std::vector<std::vector<Chunk>> chunks_;
+		Chunk BlankChunk{ UINT32_MAX, 0,0 };
+		int ChunkXDistance = 5;
+		int ChunkZDistance = 1;
 	};
 }

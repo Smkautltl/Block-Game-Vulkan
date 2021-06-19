@@ -184,18 +184,20 @@ namespace Vulkan
 		{
 			VK_CORE_RUNTIME("Failed to create graphics pipelines!");
 		}
+		VK_CORE_INFO("Graphics Pipeline Created!")
 	}
 
 	void pipeline::create_Shader_Module(const std::vector<char>& code, VkShaderModule* shaderModule)
 	{
 		VkShaderModuleCreateInfo createInfo{};
-		createInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
 		createInfo.codeSize = code.size();
 		createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
 		if(vkCreateShaderModule(device_.get_device(), &createInfo, nullptr, shaderModule) != VK_SUCCESS)
 		{
-			VK_CORE_RUNTIME("Failed to create shader module!");
+			VK_CORE_RUNTIME("Failed to create shader module!")
 		}
+		VK_CORE_INFO("Shader Module Created!")
 	}
 }

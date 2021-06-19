@@ -8,27 +8,13 @@ public:
 	static void Init();
 
 	static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return s_CoreLogger; }
+	static std::shared_ptr<spdlog::logger>& GetVMALogger() { return s_VMALogger; }
 	static std::shared_ptr<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
-	//static int StartTimePoint(std::string msg)
-	//{
-	//	std::chrono::time_point<std::chrono::system_clock> start;
-	//	start = std::chrono::system_clock::now();
-	//	time_points_.emplace_back(start, msg);
-	//	return time_points_.size() - 1;
-	//}
-	//static void EndTimePoint(int id)
-	//{
-	//	auto& point = time_points_[id];
-	//	std::chrono::duration<double> elapsed_seconds = std::chrono::system_clock::now() - point.first;
-	//
-	//	GetCoreLogger()->info(point.second + " completed in " + std::to_string(elapsed_seconds.count()) + "s");
-	//}
 
 private:
 	static std::shared_ptr<spdlog::logger> s_CoreLogger;
+	static std::shared_ptr<spdlog::logger> s_VMALogger;
 	static std::shared_ptr<spdlog::logger> s_ClientLogger;
-
-	//static std::vector<std::pair<std::chrono::time_point<std::chrono::system_clock>, std::string>> time_points_;
 	
 };
 
@@ -55,10 +41,10 @@ private:
 #define VK_CORE_WARN(...)  ::Log::GetCoreLogger()->warn(__VA_ARGS__);
 #define VK_CORE_ERROR(...) ::Log::GetCoreLogger()->error(__VA_ARGS__);
 #define VK_CORE_CRITICAL(...) ::Log::GetCoreLogger()->critical(__VA_ARGS__);
-#define VK_CORE_RUNTIME(x) VK_CORE_CRITICAL(x) throw std::runtime_error("");
 
-//#define VK_CORE_BENCH_START(msg) ::Log::StartTimePoint(msg);
-//#define VK_CORE_BENCH_END(id) ::Log::EndTimePoint(id);
+//#define VMA_DEBUG_LOG(...) ::Log::GetVMALogger()->warn(__VA_ARGS__)
+
+#define VK_CORE_RUNTIME(x) VK_CORE_CRITICAL(x) throw std::runtime_error("");
 #endif
 
 //Client log macros

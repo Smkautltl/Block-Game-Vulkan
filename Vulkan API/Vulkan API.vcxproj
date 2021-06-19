@@ -166,6 +166,7 @@
     <ClCompile Include="src\Block Game.cpp" />
     <ClCompile Include="src\core\window.cpp" />
     <ClCompile Include="src\ecs\entityManager.cpp" />
+    <ClCompile Include="src\game\chunk.cpp" />
     <ClCompile Include="src\game\world.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -181,7 +182,7 @@
     <ClInclude Include="src\core\window.h" />
     <ClInclude Include="src\core\model.h" />
     <ClInclude Include="src\ecs\entityManager.h" />
-    <ClInclude Include="src\game\chunk.hpp" />
+    <ClInclude Include="src\game\chunk.h" />
     <ClInclude Include="src\game\block.h" />
     <ClInclude Include="src\game\world.h" />
   </ItemGroup>

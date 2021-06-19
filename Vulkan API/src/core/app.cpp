@@ -18,7 +18,7 @@ namespace Vulkan
 
 	App::App()
 	{
-		load_game_objects();
+		//load_game_objects();
 	}
 
 	App::~App()
@@ -36,6 +36,8 @@ namespace Vulkan
 			VK_CORE_INFO("-=-=-=-=-=- NEW FRAME -=-=-=-=-=-")
 
 			cam.UpdateCameraPos(window_.key, window_.scancode, window_.action, window_.mods);
+			cam.UpdateCameraRot(window_.xpos, window_.ypos);
+			window_.recentre_mouse();
 			cam.UpdateProjection(window_.get_extent());
 			
 			//Begins the rendering of the frame

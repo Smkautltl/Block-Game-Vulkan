@@ -30,17 +30,21 @@ namespace Vulkan
 		
 		bool was_window_resized() { return frame_buffer_resized; }
 		void reset_window_resize_flag() { frame_buffer_resized = false; }
+
+		void recentre_mouse();
 	
 	private:
 		void init_window();
 		static void framebuffer_resize_callback(GLFWwindow *gl_window, int width, int height);
 		static void key_callback(GLFWwindow *gl_window, int key, int scancode, int action, int mods);
+		static void mouse_callback(GLFWwindow* gl_window, double xpos, double ypos);
 
 	public:
 		int key;
 		int scancode;
 		int action;
 		int mods;
+		double xpos, ypos;
 	
 	private:
 		int WIDTH = 800;

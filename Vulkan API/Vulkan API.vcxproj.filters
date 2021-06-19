@@ -51,6 +51,9 @@
     <ClCompile Include="src\game\world.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\chunk.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\App.h">
@@ -92,7 +95,7 @@
     <ClInclude Include="src\game\block.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\game\chunk.hpp">
+    <ClInclude Include="src\game\chunk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\game\world.h">

@@ -1,15 +1,15 @@
 #pragma once
 //-=-=-=-=- CORE -=-=-=-=-
-#include "window.h"
 #include "device.h"
+#include "window.h"
 #include "Renderer.h"
 #include "game_object.h"
+
+//Must be below device and window headers 
 #include "camera.h"
 
 //-=-=-=-=- STD -=-=-=-=-
 #include <vector>
-
-#include "../game/chunk.hpp"
 
 namespace Vulkan
 {
@@ -38,6 +38,5 @@ namespace Vulkan
 		Renderer renderer_{ window_, device_ };
 		std::vector<GameObject> game_objects_;
 		camera cam{};
-		std::vector<Chunk> chunks;
 	};
 }

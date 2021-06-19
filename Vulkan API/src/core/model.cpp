@@ -30,13 +30,15 @@ namespace Vulkan
 
 	Model::Model(Device& device, const std::vector<Vertex>& vertices) : device_(device)
 	{
+		VK_CORE_INFO("New Model Created!")
 		create_vertex_buffers(vertices);
 	}
 	
 	Model::~Model()
 	{
+		vertex_buffer_.allocation_ = nullptr;
 		device_.destroy_buffer(vertex_buffer_.buffer_);
-		vkFreeMemory(device_.get_device(), vertex_buffer_memory_, nullptr);
+		//vkFreeMemory(device_.get_device(), vertex_buffer_memory_, nullptr);
 	}
 
 	void Model::bind(VkCommandBuffer commandBuffer)
