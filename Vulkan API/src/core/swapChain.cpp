@@ -117,7 +117,8 @@ namespace Vulkan
         {
             VK_CORE_RUNTIME("Failed to create swap chain!");
         }
-
+        VK_CORE_INFO("SwapchainKHR Created!")
+		
         // we only specified a minimum number of images in the swap chain, so the implementation is
         // allowed to create a swap chain with more. That's why we'll first query the final number of
         // images with vkGetSwapchainImagesKHR, then resize the container and finally call it again to
@@ -200,6 +201,7 @@ namespace Vulkan
             {
                 VK_CORE_RUNTIME("Failed to create texture image view!");
             }
+            VK_CORE_INFO("Swap chain image View Created!")
         }
     }
 
@@ -261,6 +263,7 @@ namespace Vulkan
         {
             VK_CORE_RUNTIME("Failed to create render pass!");
         }
+        VK_CORE_INFO("Render Pass Created!")
     }
 	
     VkFormat SwapChain::find_depth_format()
@@ -320,6 +323,7 @@ namespace Vulkan
             {
                 VK_CORE_RUNTIME("Failed to create texture image view!");
             }
+            VK_CORE_INFO("Depth Image Created!")
         }
     }
 
@@ -344,6 +348,7 @@ namespace Vulkan
             {
                 VK_CORE_RUNTIME("Failed to create framebuffer!");
             }
+            VK_CORE_INFO("Framebuffer Created!")
         }
     }
 
@@ -369,6 +374,7 @@ namespace Vulkan
             {
                 VK_CORE_RUNTIME("Failed to create synchronization objects for a frame!");
             }
+            VK_CORE_INFO("2 Seamaphores & a fence Created!")
         }
     }
 	

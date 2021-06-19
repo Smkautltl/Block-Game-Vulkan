@@ -72,7 +72,7 @@ namespace Vulkan
         vmaDestroyAllocator(allocator);
         vkDestroyCommandPool(device_, command_pool_, nullptr);
         vkDestroyDevice(device_, nullptr);
-
+        
         if (enableValidationLayers) 
         {
 			DestroyDebugUtilsMessengerEXT(instance_, debug_messenger_, nullptr);
@@ -131,6 +131,7 @@ namespace Vulkan
 			VK_CORE_RUNTIME("Failed to create instance!");
         }
 
+        VK_CORE_INFO("Instance Created!")
         has_gflw_required_instance_extensions();
 }
     bool Device::check_validation_layer_support()
@@ -231,6 +232,7 @@ namespace Vulkan
         {
             VK_CORE_RUNTIME("Failed to set up debug messenger!");
         }
+        VK_CORE_INFO("Setup Debug Messenger!")
     }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -426,6 +428,8 @@ namespace Vulkan
 			VK_CORE_RUNTIME("Failed to create logical Device!");
         }
 
+        VK_CORE_INFO("Logical Device Created!")
+
     	//Stores the graphics and present queue handles for use later
         vkGetDeviceQueue(device_, indices.graphicsFamily, 0, &graphics_queue_);
         vkGetDeviceQueue(device_, indices.presentFamily, 0, &present_queue_);
@@ -446,6 +450,7 @@ namespace Vulkan
         {
 			VK_CORE_RUNTIME("Failed to create command pool!")
         }
+        VK_CORE_INFO("Command Pool Created!")
 	}
 
     void Device::setup_vma_allocator()
@@ -497,9 +502,11 @@ namespace Vulkan
     
     void Device::create_buffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, AllocatedBuffer &buffer, VkDeviceMemory &bufferMemory, const std::vector<Vertex>& vertices)
 	{
+        VK_CORE_WARN("Create Buffer - Size = {0}, Vertices Count = {1}", std::to_string(size), std::to_string(vertices.size()))
+		
         VkBufferCreateInfo bufferInfo{};
         bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-        bufferInfo.size = size;
+        bufferInfo.size = size;	
         bufferInfo.usage = usage;
         //bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
@@ -603,7 +610,8 @@ namespace Vulkan
         {
 			VK_CORE_RUNTIME("Failed to create image!");
         }
-
+        VK_CORE_INFO("vkImage Created!")
+		
         VkMemoryRequirements memRequirements;
         vkGetImageMemoryRequirements(device_, image, &memRequirements);
 
