@@ -1,4 +1,4 @@
-#include "App.h"
+#include "app.h"
 
 //-=-=-=-=- CORE -=-=-=-=-
 #include "simpleRenderSystem.h"
@@ -23,6 +23,8 @@ namespace Vulkan
 
 	App::~App()
 	{
+		VK_CORE_WARN("App destructor called!");
+		game_objects_.clear();
 	}
 
 	void App::run()
@@ -30,32 +32,30 @@ namespace Vulkan
 		SimpleRenderSystem simpleRenderSystem{ device_, renderer_.get_swap_chain_render_pass() };
 		
 		//Keeps the window open until we need it to close
-		while(!window_.should_close())
+		while (!window_.should_close())
 		{
 			glfwPollEvents();
 			VK_CORE_INFO("-=-=-=-=-=- NEW FRAME -=-=-=-=-=-")
 
-			cam.UpdateCameraPos(window_.key, window_.scancode, window_.action, window_.mods);
-			cam.UpdateCameraRot(window_.xpos, window_.ypos);
-			window_.recentre_mouse();
-			cam.UpdateProjection(window_.get_extent());
-			
+				cam.update_camera_pos(window_.key, window_.scancode, window_.action, window_.mods);
+			cam.update_camera_rot(window_.xpos, window_.ypos);
+
+			//window_.recentre_mouse();
+			cam.recalculate_proj_matrix(70.f, window_.get_extent().width, window_.get_extent().height);
+
 			//Begins the rendering of the frame
 			if (auto commandbuffer = renderer_.begin_frame())
 			{
 				renderer_.begin_swap_chain_render_pass(commandbuffer);
 
-				simpleRenderSystem.render_game_objects(commandbuffer, cam);	
+				simpleRenderSystem.render_game_objects(commandbuffer, cam);
 
 				renderer_.end_swap_chain_render_pass(commandbuffer);
 				renderer_.end_frame();
 			}
 		}
-		vkDeviceWaitIdle(device_.get_device());
-		window_.key = 0;
-		window_.scancode = 0;
-		window_.action = 0;
-		window_.mods = 0;
+		
+		vkDeviceWaitIdle(device_.get_device());		
 	}
 
 	std::unique_ptr<Model> createCubeModel(Device& device, glm::vec3 offset) {
@@ -115,7 +115,7 @@ namespace Vulkan
 		{
 			v.position += offset;
 		}
-		return std::make_unique<Model>(device, vertices);
+		return std::make_unique<Model>(186367385, device, vertices);
 	}
 	
 	void App::load_game_objects()

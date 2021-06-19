@@ -1,126 +1,61 @@
 #pragma once
-#define GLM_FORCE_RADIANS
-#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#define GLFORCE_RADIANS
+#define GLFORCE_DEPTH_ZERO_TO_ONE
+#include <vector>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Vulkan
 {
-	class camera
+	class Camera
 	{
 	public:
-		camera()
-		{
-			VK_CORE_INFO("Camera Created!")
-			for (auto i = 0; i < 350; i++)
-			{
-				keysUnreleased.push_back(false);
-			}
-		}
+		Camera(float FOV, float width, float height, float nearValue, float farValue);
 		
-		void UpdateCameraPos(int key, int scancode, int action, int mods)
-		{
-			up = rot * glm::vec4{ 0.f, 1.f, 0.f, 0.f };
-			
-			glm::vec3 forward_rot = rot * glm::vec4{ 0.f, 0.f, -1.f, 0.f };
-
-			glm::vec3 right_rot = rot * glm::vec4{ 1.f, 0.f, 0.f, 0.f };
-
-			if (key == GLFW_KEY_W && action == GLFW_PRESS || keysUnreleased[GLFW_KEY_W] == true)
-			{
-				pos += forward_rot;
-				keysUnreleased.at(GLFW_KEY_W) = true;
-			}
-			if (key == GLFW_KEY_S && action == GLFW_PRESS || keysUnreleased[GLFW_KEY_S] == true)
-			{
-				pos -= forward_rot;
-				keysUnreleased.at(GLFW_KEY_S) = true;
-			}
-			if (key == GLFW_KEY_A && action == GLFW_PRESS || keysUnreleased[GLFW_KEY_A] == true)
-			{
-				pos -= right_rot;
-				keysUnreleased.at(GLFW_KEY_A) = true;
-			}
-			if (key == GLFW_KEY_D && action == GLFW_PRESS || keysUnreleased[GLFW_KEY_D] == true)
-			{
-				pos += right_rot;
-				keysUnreleased.at(GLFW_KEY_D) = true;
-			}
-
-			if (key == GLFW_KEY_W && action == GLFW_RELEASE)
-			{
-				keysUnreleased.at(GLFW_KEY_W) = false;
-			}
-			if (key == GLFW_KEY_S && action == GLFW_RELEASE)
-			{
-				keysUnreleased.at(GLFW_KEY_S) = false;
-			}
-			if (key == GLFW_KEY_A && action == GLFW_RELEASE)
-			{
-				keysUnreleased.at(GLFW_KEY_A) = false;
-			}
-			if (key == GLFW_KEY_D && action == GLFW_RELEASE)
-			{
-				keysUnreleased.at(GLFW_KEY_D) = false;
-			}
-	
-		}
-
-		void UpdateCameraRot(float xpos, float ypos)
-		{
-			float SPEED_X = 0.00001f;
-			float SPEED_Y = 0.00001f;
-			
-			float pos_x_delta = oldXpos - xpos;
-			float pos_y_delta = oldYpos - ypos;
-
-			if(pos_x_delta != 0.f)
-			{
-				y_Rot += glm::radians(pos_x_delta * SPEED_X);
-				rot = glm::rotate(rot, y_Rot, glm::vec3(0.f, 1.f, 0.f));
-			}
-			if (pos_y_delta != 0.f)
-			{
-				x_Rot += glm::radians(pos_y_delta * SPEED_Y);
-				rot = glm::rotate(rot, x_Rot, glm::vec3(1.f, 0.f, 0.f));
-			}
-
-			oldXpos = xpos;
-			oldYpos = ypos;
-		}
-
-		void UpdateProjection(VkExtent2D WidthHeight)
-		{
-			auto aspect = (float)WidthHeight.width / (float)WidthHeight.height;
-			proj = glm::perspective(glm::radians(70.f), aspect, 0.1f, 1000.f);
-			proj[1][1] *= -1;
-		}
-
-		glm::mat4 UpdateModelView(glm::mat4 ObjectTransform)
-		{
-			glm::vec4 forward_rotated = rot * glm::vec4{ 0.f, 0.f, -1.f, 0.f};
-			glm::vec3 forward_rot_3{forward_rotated.x, forward_rotated.y, forward_rotated.z};
-			target = pos += glm::normalize(forward_rot_3);
-
-			view = glm::lookAt(pos, target, up);
-			
-			//view = glm::translate(glm::mat4(1.f), pos);
-			model = ObjectTransform;
-			return proj * view * model;
-		}
+		void update_camera_pos(int key, int scancode, int action, int mods);
 		
-		glm::vec3 pos{ 0.f, 80.f, -5.f};
-		glm::mat4 rot = glm::mat4(1.f);
-		glm::vec3 up{ 0.f, 1.f, 0.f };
-		glm::vec3 target = pos + glm::vec3{ 0.f, 0.f, -1.f};
+		void update_camera_rot(float xpos, float ypos);
 
-		float oldXpos, oldYpos;
-		float y_Rot, x_Rot;
+		const glm::mat4& get_proj_matrix() const { return proj_matrix_; }
+		const glm::mat4& get_view_matrix() const { return view_matrix_; }
+		const glm::mat4& get_model_matrix() const { return model_matrix_; }
+
+		const void set_proj_matrix(const glm::mat4& matrix) { proj_matrix_= matrix; }
+		const void set_view_matrix(const glm::mat4& matrix) { view_matrix_= matrix; }
+		const void set_model_matrix(const glm::mat4& matrix){ model_matrix_= matrix; }
+
+		const glm::vec3& get_camera_front() const { return cam_front_; }
+		const glm::vec3& get_camera_up() const { return cam_up_; }
+		const glm::vec3& get_camera_pos() const { return cam_pos_; }
 		
-		glm::mat4 model;
-		glm::mat4 view = glm::lookAt(pos, target, up);
-		glm::mat4 proj = glm::perspective(glm::radians(70.f), 800.f/600.f, 0.1f, 1000.f);
 
-		std::vector<bool> keysUnreleased;
+		void recalculate_view_matrix();
+		void recalculate_proj_matrix(float FOV, float width, float height, float nearValue = 0.1f, float farValue = 100.0f);
+		void recalculate_camera_rotation();
+
+		void set_position(const glm::vec3& cameraposition) {cam_pos_ = cameraposition; recalculate_view_matrix(); }
+		void set_yaw(const float& yaw) {yaw_ += yaw * sensitvity_; recalculate_camera_rotation(); }
+		void set_pitch(const float& pitch) {pitch_ += pitch * sensitvity_; recalculate_camera_rotation(); }
+		
+	private:
+		glm::mat4 proj_matrix_{};
+		glm::mat4 view_matrix_{};
+		glm::mat4 model_matrix_{};
+										    
+		glm::vec3 cam_pos_{};
+		glm::vec3 cam_up_{};
+		glm::vec3 cam_front_{};
+		
+		glm::vec3 cam_rotation_ =	{ 0.0f, 0.0f, 0.0f };
+		glm::vec3 camera_target_ =	{ 0.0f, 0.0f, 0.0f };
+		
+		float yaw_ = -90.0f;
+		float pitch_ = 0.0f;
+		float sensitvity_ = 0.05f;
+		float cam_speed_ = 0.1f;
+
+		float old_x_pos_{}, old_y_pos_{};
+
+		std::vector<bool> keysUnreleased{};
 	};
 }
