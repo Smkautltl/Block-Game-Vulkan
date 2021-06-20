@@ -21,6 +21,7 @@ namespace Vulkan
 
 	Window::~Window()
 	{
+		VK_CORE_WARN("Window destructor called!");
 		glfwDestroyWindow(gl_window_);
 		glfwTerminate();
 	}
@@ -56,6 +57,8 @@ namespace Vulkan
 		
 		//Sets up callback for when window is resized
 		glfwSetWindowUserPointer(gl_window_, this);
+		glfwSetInputMode(gl_window_, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+		
 		glfwSetFramebufferSizeCallback(gl_window_, framebuffer_resize_callback);
 		
 		glfwSetKeyCallback(gl_window_, key_callback);
@@ -76,23 +79,24 @@ namespace Vulkan
 	{	
 		//Gets the current window and assigns a new width and height
 		auto window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(gl_window));
-
-		if (key == GLFW_KEY_ESCAPE)
-		{
-			CloseHandle(gl_window);
-		}
 		
 		window->key = key;
 		window->scancode = scancode;
 		window->action = action;
 		window->mods = mods;
+
+		if (key == GLFW_KEY_ESCAPE)
+		{
+			glfwSetWindowShouldClose(gl_window, true);
+		}
+		//glfwSetWindowMonitor(gl_window_, ,0,0,)
 	}
 	
 	void Window::mouse_callback(GLFWwindow* gl_window, double xpos, double ypos)
 	{
 		//Gets the current window and assigns a new width and height
 		auto window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(gl_window));
-		window->xpos = xpos;
-		window->ypos = ypos;
+		window->xpos = (float)xpos;
+		window->ypos = (float)ypos;
 	}
 }

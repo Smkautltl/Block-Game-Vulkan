@@ -19,6 +19,8 @@ namespace Vulkan
 
 	SwapChain::~SwapChain()
 	{
+        VK_CORE_WARN("Swapchain destructor called!");
+		
         for (auto imageView : swap_chain_image_views_) 
         {
 			vkDestroyImageView(device_.get_device(), imageView, nullptr);

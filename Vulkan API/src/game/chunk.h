@@ -119,6 +119,15 @@ namespace Vulkan
 	public:
 
 		Chunk(uint32_t id, int32_t x, int32_t z);
+		~Chunk()
+		{
+			VK_CORE_WARN("Chunk ID:{0} | Destructor called!", id_)
+			if (model != nullptr)
+			{
+				model->destroy();
+			}
+			
+		}
 
 		uint32_t id() { return id_; }
 		std::pair<int32_t, int32_t> xz_Coords() { return std::make_pair(x_, z_); }

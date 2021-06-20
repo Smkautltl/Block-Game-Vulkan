@@ -28,17 +28,15 @@ namespace Vulkan
 		return attribute_descriptions;
 	}
 
-	Model::Model(Device& device, const std::vector<Vertex>& vertices) : device_(device)
+	Model::Model(uint32_t id, Device& device, const std::vector<Vertex>& vertices) : id_(id), device_(device)
 	{
-		VK_CORE_INFO("New Model Created!")
+		VK_CORE_WARN("Model ID:{0} | Created!", id)
 		create_vertex_buffers(vertices);
 	}
 	
 	Model::~Model()
 	{
-		vertex_buffer_.allocation_ = nullptr;
-		device_.destroy_buffer(vertex_buffer_.buffer_);
-		//vkFreeMemory(device_.get_device(), vertex_buffer_memory_, nullptr);
+		
 	}
 
 	void Model::bind(VkCommandBuffer commandBuffer)
@@ -53,8 +51,19 @@ namespace Vulkan
 		vkCmdDraw(commandBuffer, vertex_count_, 1,  0,  0);
 	}
 
+	void Model::destroy()
+	{
+		VK_CORE_WARN("Model ID:{0} | Destructor called!", id_)
+		if (vertex_buffer_.buffer_ != nullptr)
+		{
+			device_.destroy_buffer(vertex_buffer_);
+		}
+		
+	}
+
 	void Model::create_vertex_buffers(const std::vector<Vertex>& vertices)
 	{
+		
 		vertex_count_ = static_cast<uint32_t>(vertices.size());
 		VK_CORE_ASSERT(vertex_count_ >= 3, "Vertex count must be at least 3!")
 
@@ -62,10 +71,8 @@ namespace Vulkan
 
 		device_.create_buffer(	bufferSize, 
 								VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, 
-								VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
 								vertex_buffer_,
-								vertex_buffer_memory_,
 								vertices);
-		
+		VK_CORE_WARN("Model ID:{0} | Vertex Buffer Created!", id_)
 	}
 }

@@ -9,7 +9,7 @@ namespace Vulkan
 	{
 	public:
 		
-		Model(Device &device, const std::vector<Vertex>& vertices);
+		Model(uint32_t id_, Device &device, const std::vector<Vertex>& vertices);
 		~Model();
 
 		//Deleting copy constructors
@@ -18,6 +18,7 @@ namespace Vulkan
 
 		void bind(VkCommandBuffer commandBuffer);
 		void draw(VkCommandBuffer commandBuffer);
+		void destroy();
 
 	private:
 		void create_vertex_buffers(const std::vector<Vertex>& vertices);
@@ -25,9 +26,9 @@ namespace Vulkan
 	public:
 	
 	private:
+		uint32_t id_;
 		Device &device_;
 		AllocatedBuffer vertex_buffer_;
-		VkDeviceMemory vertex_buffer_memory_;
 		uint32_t vertex_count_;
 	};
 }

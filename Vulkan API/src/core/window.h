@@ -44,7 +44,7 @@ namespace Vulkan
 		int scancode;
 		int action;
 		int mods;
-		double xpos, ypos;
+		float xpos, ypos;
 	
 	private:
 		int WIDTH = 800;

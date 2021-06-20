@@ -16,6 +16,8 @@ namespace Vulkan
 	}
 	pipeline::~pipeline()
 	{
+		VK_CORE_WARN("Pipeline destructor called!");
+		
 		vkDestroyShaderModule(device_.get_device(), vert_shader_, nullptr);
 		vkDestroyShaderModule(device_.get_device(), frag_shader_, nullptr);
 		

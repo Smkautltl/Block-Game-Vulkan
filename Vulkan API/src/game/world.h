@@ -18,17 +18,18 @@ namespace Vulkan
 	{
 	public:
 		world(Device& device_);
+		~world();
 
 		void add_chunk();
-		void remove_chunk();
+		void remove_chunk(int id);
 		
-		void render(VkCommandBuffer commandBuffer, camera& cam, VkPipelineLayout& pipeline_layout_);
+		void render(VkCommandBuffer commandBuffer, Camera& cam, VkPipelineLayout& pipeline_layout_);
 		void update();
 
 	private:
 		std::vector<std::vector<Chunk>> chunks_;
 		Chunk BlankChunk{ UINT32_MAX, 0,0 };
-		int ChunkXDistance = 5;
-		int ChunkZDistance = 1;
+		int ChunkXDistance = 2;
+		int ChunkZDistance = 2;
 	};
 }

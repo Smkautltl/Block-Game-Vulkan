@@ -15,6 +15,7 @@ namespace Vulkan
 
 	Renderer::~Renderer()
 	{
+		VK_CORE_WARN("Rnderer destructor called!");
 		free_command_buffers();
 	}
 

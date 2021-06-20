@@ -6,10 +6,10 @@ Vulkan::world::world(Device& device_)
 	std::chrono::duration<double> elapsed_seconds = end - start;
 	uint32_t id = 0;
 	
-	for (auto z = 0; z < ChunkZDistance; z++)
+	for (auto z = -ChunkZDistance; z < ChunkZDistance; z++)
 	{
 		std::vector<Chunk> chunkRow;
-		for (auto x = 0; x < ChunkXDistance; x++)
+		for (auto x = -ChunkXDistance; x < ChunkXDistance; x++)
 		{			
 			start = std::chrono::system_clock::now();
 			
@@ -19,7 +19,7 @@ Vulkan::world::world(Device& device_)
 			id++;
 			end = std::chrono::system_clock::now();
 			elapsed_seconds = end - start;
-			VK_CORE_INFO("Chunk: {0}-{1} created in {2}ms", z, x, std::to_string(elapsed_seconds.count()*1000))
+			VK_CORE_INFO("Chunk ID:{3} | ({0})-({1}) | Created in {2}ms", z, x, std::to_string(elapsed_seconds.count()*1000), id)
 		}
 		chunks_.push_back(std::move(chunkRow));
 	}
@@ -32,10 +32,10 @@ Vulkan::world::world(Device& device_)
 		{
 			start = std::chrono::system_clock::now();
 
-			auto left = BlankChunk;
-			auto right = BlankChunk;
-			auto front = BlankChunk;
-			auto back = BlankChunk;
+			auto& left = BlankChunk;
+			auto& right = BlankChunk;
+			auto& front = BlankChunk;
+			auto& back = BlankChunk;
 			
 			if (x - 1 >= 0)
 				left = chunks_[z][x-1];
@@ -50,14 +50,20 @@ Vulkan::world::world(Device& device_)
 			
 			end = std::chrono::system_clock::now();
 			elapsed_seconds = end - start;
-			VK_CORE_INFO("Chunk: {0}-{1} faces culled in {2}ms", chunk.xz_Coords().first, chunk.xz_Coords().second, std::to_string(elapsed_seconds.count() * 1000))
+			VK_CORE_INFO("Chunk ID:{3} | ({0})-({1}) | Faces culled in {2}ms", chunk.xz_Coords().first, chunk.xz_Coords().second, std::to_string(elapsed_seconds.count() * 1000), chunk.id())
 			x++;
 		}
 		z++;
 	}
 }
 
-void Vulkan::world::render(VkCommandBuffer commandBuffer, camera& cam, VkPipelineLayout& pipeline_layout_)
+Vulkan::world::~world()
+{
+	VK_CORE_WARN("World destructor called!")
+	chunks_.clear();
+}
+
+void Vulkan::world::render(VkCommandBuffer commandBuffer, Camera& cam, VkPipelineLayout& pipeline_layout_)
 {
 	for (auto& chunkrow : chunks_)
 	{
@@ -65,7 +71,8 @@ void Vulkan::world::render(VkCommandBuffer commandBuffer, camera& cam, VkPipelin
 		{
 			SimplePushConstantData push;
 			push.color = glm::vec3{ 0.5f, 0.5f, 0.5f };
-			push.transform = cam.UpdateModelView(chunk.transform_.mat4());
+			cam.set_model_matrix(chunk.transform_.mat4());
+			push.transform = cam.get_proj_matrix() * cam.get_view_matrix()  * cam.get_model_matrix() ;
 
 			vkCmdPushConstants(commandBuffer, pipeline_layout_, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SimplePushConstantData), &push);
 			chunk.get()->bind(commandBuffer);
