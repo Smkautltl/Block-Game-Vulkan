@@ -69,6 +69,7 @@ namespace Vulkan
 	}   
     Device::~Device()
 	{
+        VK_CORE_WARN("Device destructor called!")
         vmaDestroyAllocator(allocator);
         vkDestroyCommandPool(device_, command_pool_, nullptr);
         vkDestroyDevice(device_, nullptr);
@@ -462,9 +463,9 @@ namespace Vulkan
         vmaCreateAllocator(&allocinfo, &allocator);
     }
 
-    void Device::destroy_buffer(VkBuffer buffer)
+    void Device::destroy_buffer(AllocatedBuffer buffer)
     {
-        vmaDestroyBuffer(allocator, buffer, nullptr);
+            vmaDestroyBuffer(allocator, buffer.buffer_, buffer.allocation_); 
     }
 
     VkFormat Device::find_supported_format(const std::vector<VkFormat> &candidates, VkImageTiling tiling, VkFormatFeatureFlags features)
@@ -500,10 +501,8 @@ namespace Vulkan
         VK_CORE_RUNTIME("Failed to find suitable memory type!");
 	}
     
-    void Device::create_buffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, AllocatedBuffer &buffer, VkDeviceMemory &bufferMemory, const std::vector<Vertex>& vertices)
+    void Device::create_buffer(VkDeviceSize size, VkBufferUsageFlags usage, AllocatedBuffer &buffer, const std::vector<Vertex>& vertices)
 	{
-        VK_CORE_WARN("Create Buffer - Size = {0}, Vertices Count = {1}", std::to_string(size), std::to_string(vertices.size()))
-		
         VkBufferCreateInfo bufferInfo{};
         bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
         bufferInfo.size = size;	

@@ -21,11 +21,11 @@ namespace Vulkan
 	{
 		create_pipeline_layout();
 		create_pipeline(renderPass);
-		world_ = new world{device};
 	}
 
 	SimpleRenderSystem::~SimpleRenderSystem()
 	{
+		VK_CORE_WARN("Simple Render System destructor called!");
 		vkDestroyPipelineLayout(device_.get_device(), pipeline_layout_, nullptr);
 	}
 
@@ -61,12 +61,12 @@ namespace Vulkan
 		pipeline_ = std::make_unique<pipeline>(device_, "Shaders/vert.spv", "Shaders/frag.spv", pipeline_config);
 	}
 
-	void SimpleRenderSystem::render_game_objects(VkCommandBuffer commandbuffer, camera& cam)
+	void SimpleRenderSystem::render_game_objects(VkCommandBuffer commandbuffer, Camera& cam)
 	{
 
 		pipeline_->bind(commandbuffer);
 
-		world_->render(commandbuffer, cam, pipeline_layout_);
+		world_.render(commandbuffer, cam, pipeline_layout_);
 	}
 
 }

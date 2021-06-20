@@ -15,7 +15,7 @@ namespace Vulkan
 		std::vector<std::vector<Block>> z_blocks;
 		
 		uint16_t id = 0;
-		unsigned int blocktype;
+		unsigned int blocktype = 0;
 		
 		for (uint32_t y = 0; y < 255; y++)
 		{
@@ -27,18 +27,15 @@ namespace Vulkan
 					{
 						blocktype = 3;
 					}
-					else if (y < 74)
+					else if (70 < y && y < 74)
 					{
 						blocktype = 2;
 					}
-					else if (y < 75)
+					else if (y == 75)
 					{
 						blocktype = 1;
 					}
-					else
-					{
-						blocktype = 0;
-					}
+
 
 					Block newBlock{ id, blocktype };
 					x_blocks.push_back(std::move(newBlock));
@@ -81,7 +78,7 @@ namespace Vulkan
 						facevertices.insert(facevertices.end(), cube::RightFace.begin(), cube::RightFace.end());
 					
 					//Top Face
-					if (y >= 254 || blocks_[y+1][z][x].block_type_ == 0)
+					if (y == 254 || blocks_[y+1][z][x].block_type_ == 0)
 						facevertices.insert(facevertices.end(), cube::TopFace.begin(), cube::TopFace.end());
 
 					//Bottom Face
@@ -126,7 +123,7 @@ namespace Vulkan
 			}
 		}
 		
-		model = std::make_unique<Model>(device, vertices);
+		model = std::make_unique<Model>(id_, device, vertices);
 	}
 
 	

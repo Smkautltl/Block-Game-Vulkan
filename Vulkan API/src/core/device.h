@@ -77,8 +77,8 @@ namespace Vulkan
         VkFormat find_supported_format(const std::vector<VkFormat> &candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
     
         // Buffer Helper Functions
-        void create_buffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, AllocatedBuffer&buffer, VkDeviceMemory &bufferMemory, const std::vector<Vertex>& vertices);
-        void destroy_buffer(VkBuffer buffer);
+        void create_buffer(VkDeviceSize size, VkBufferUsageFlags usage, AllocatedBuffer& buffer, const std::vector<Vertex>& vertices);
+        void destroy_buffer(AllocatedBuffer buffer);
         VkCommandBuffer begin_single_time_commands();
         void end_single_time_commands(VkCommandBuffer commandBuffer);
         void copy_buffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
