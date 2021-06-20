@@ -1,6 +1,6 @@
 #include "world.h"
 
-Vulkan::world::world(Device& device_)
+Vulkan::world::world(Device& device) : device_(device)
 {
 	std::chrono::time_point<std::chrono::system_clock> start, end;
 	std::chrono::duration<double> elapsed_seconds = end - start;
@@ -32,27 +32,32 @@ Vulkan::world::world(Device& device_)
 		{
 			start = std::chrono::system_clock::now();
 
-			auto& left = BlankChunk;
-			auto& right = BlankChunk;
-			auto& front = BlankChunk;
-			auto& back = BlankChunk;
-			
+			Chunk* left = &BlankChunk;
+			Chunk* right = &BlankChunk;
+			Chunk* front = &BlankChunk;
+			Chunk* back = &BlankChunk;
+
 			if (x - 1 >= 0)
-				left = chunks_[z][x-1];
+				left = &chunks_[z][x - 1];
+				
 			if (x + 1 < ChunkXDistance)
-				right = chunks_[z][x + 1];
+				right = &chunks_[z][x + 1];
+				
 			if (z - 1 >= 0)
-				front = chunks_[z - 1][x];
+				front = &chunks_[z - 1][x];
+				
 			if (z + 1 < ChunkZDistance)
-				back = chunks_[z + 1][x];
-			
+				back = &chunks_[z + 1][x];
+				
+
+			//VK_CORE_TRACE("Left:{0} | Right{1} | front:{2} | back:{3} | x:{4},z:{5}", left->id(), right->id(), front->id(), back->id(), x, z)
 			chunk.load_block_faces(device_, left, right, front, back);
-			
+
 			end = std::chrono::system_clock::now();
 			elapsed_seconds = end - start;
-			VK_CORE_INFO("Chunk ID:{3} | ({0})-({1}) | Faces culled in {2}ms", chunk.xz_Coords().first, chunk.xz_Coords().second, std::to_string(elapsed_seconds.count() * 1000), chunk.id())
+			VK_CORE_INFO("Chunk ID:{3} |\t({0})-({1}) |\tFaces culled in {2}ms", chunk.xz_Coords().first, chunk.xz_Coords().second, std::to_string(elapsed_seconds.count() * 1000), chunk.id())
 			x++;
-		}
+		}		
 		z++;
 	}
 }
@@ -60,8 +65,34 @@ Vulkan::world::world(Device& device_)
 Vulkan::world::~world()
 {
 	VK_CORE_WARN("World destructor called!")
-	chunks_.clear();
 }
+
+//void Vulkan::world::cull_chunk(Chunk& chunk, int x, int z)
+//{
+//	std::chrono::time_point<std::chrono::system_clock> start, end;
+//	std::chrono::duration<double> elapsed_seconds = end - start;
+//	start = std::chrono::system_clock::now();
+//
+//	auto& left = BlankChunk;
+//	auto& right = BlankChunk;
+//	auto& front = BlankChunk;
+//	auto& back = BlankChunk;
+//
+//	if (x - 1 >= 0)
+//		left = chunks_[z][x - 1];
+//	if (x + 1 < ChunkXDistance)
+//		right = chunks_[z][x + 1];
+//	if (z - 1 >= 0)
+//		front = chunks_[z - 1][x];
+//	if (z + 1 < ChunkZDistance)
+//		back = chunks_[z + 1][x];
+//
+//	chunk.load_block_faces(device_, left, right, front, back);
+//
+//	end = std::chrono::system_clock::now();
+//	elapsed_seconds = end - start;
+//	VK_CORE_INFO("Chunk ID:{3} | ({0})-({1}) | Faces culled in {2}ms", chunk.xz_Coords().first, chunk.xz_Coords().second, std::to_string(elapsed_seconds.count() * 1000), chunk.id())	
+//}
 
 void Vulkan::world::render(VkCommandBuffer commandBuffer, Camera& cam, VkPipelineLayout& pipeline_layout_)
 {
@@ -71,8 +102,7 @@ void Vulkan::world::render(VkCommandBuffer commandBuffer, Camera& cam, VkPipelin
 		{
 			SimplePushConstantData push;
 			push.color = glm::vec3{ 0.5f, 0.5f, 0.5f };
-			cam.set_model_matrix(chunk.transform_.mat4());
-			push.transform = cam.get_proj_matrix() * cam.get_view_matrix()  * cam.get_model_matrix() ;
+			push.transform = cam.get_proj_matrix() * cam.get_view_matrix()  * chunk.transform_.mat4();
 
 			vkCmdPushConstants(commandBuffer, pipeline_layout_, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SimplePushConstantData), &push);
 			chunk.get()->bind(commandBuffer);

@@ -120,10 +120,10 @@ namespace Vulkan
 
 		Chunk(uint32_t id, int32_t x, int32_t z);
 		~Chunk()
-		{
-			VK_CORE_WARN("Chunk ID:{0} | Destructor called!", id_)
+		{			
 			if (model != nullptr)
 			{
+				VK_CORE_WARN("Chunk ID:{0} | Destructor called!", id_)
 				model->destroy();
 			}
 			
@@ -135,14 +135,14 @@ namespace Vulkan
 	
 		void generate();
 		
-		void load_block_faces(Device& device, Chunk& Left, Chunk& Right, Chunk& Up, Chunk& Down);
+		void load_block_faces(Device& device, Chunk* Left, Chunk* Right, Chunk* Front, Chunk* Back);
 		
 		TransformComponent transform_;
 	
 	private:
 		uint8_t chunk_length_ = 16;
-		uint8_t chunk_size_ = 16;
-		uint16_t chunk_volume_ = chunk_size_ * chunk_size_* 255;
+		uint8_t chunk_size_ = chunk_length_;
+		uint16_t chunk_volume_ = chunk_size_ * chunk_length_  * 255;
 		std::vector<std::vector<std::vector<Block>>> blocks_;	
 		std::shared_ptr<Model> model = nullptr;
 		

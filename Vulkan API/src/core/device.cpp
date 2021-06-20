@@ -465,7 +465,7 @@ namespace Vulkan
 
     void Device::destroy_buffer(AllocatedBuffer buffer)
     {
-            vmaDestroyBuffer(allocator, buffer.buffer_, buffer.allocation_); 
+		vmaDestroyBuffer(allocator, buffer.buffer_, buffer.allocation_); 
     }
 
     VkFormat Device::find_supported_format(const std::vector<VkFormat> &candidates, VkImageTiling tiling, VkFormatFeatureFlags features)

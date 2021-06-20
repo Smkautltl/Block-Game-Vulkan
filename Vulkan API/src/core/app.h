@@ -37,6 +37,6 @@ namespace Vulkan
 		Device device_{ window_ };
 		Renderer renderer_{ window_, device_ };
 		std::vector<GameObject> game_objects_;
-		Camera cam{70.f, WIDTH, HEIGHT, 0.1f, 300.f};
+		Camera cam{70.f, WIDTH, HEIGHT, 0.1f, 1000.f};
 	};
 }

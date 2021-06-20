@@ -37,7 +37,7 @@ namespace Vulkan
 			glfwPollEvents();
 			VK_CORE_INFO("-=-=-=-=-=- NEW FRAME -=-=-=-=-=-")
 
-				cam.update_camera_pos(window_.key, window_.scancode, window_.action, window_.mods);
+			cam.update_camera_pos(window_.key, window_.scancode, window_.action, window_.mods);
 			cam.update_camera_rot(window_.xpos, window_.ypos);
 
 			//window_.recentre_mouse();
