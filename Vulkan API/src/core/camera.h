@@ -30,7 +30,7 @@ namespace Vulkan
 		
 
 		void recalculate_view_matrix();
-		void recalculate_proj_matrix(float FOV, float width, float height, float nearValue = 0.1f, float farValue = 100.0f);
+		void recalculate_proj_matrix(float FOV, float width, float height, float nearValue = 0.1f, float farValue = 1000.0f);
 		void recalculate_camera_rotation();
 
 		void set_position(const glm::vec3& cameraposition) {cam_pos_ = cameraposition; recalculate_view_matrix(); }

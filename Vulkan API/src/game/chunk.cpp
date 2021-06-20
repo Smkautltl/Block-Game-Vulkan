@@ -48,7 +48,7 @@ namespace Vulkan
 		}
 	}
 
-	void Chunk::load_block_faces(Device& device, Chunk& Left, Chunk& Right, Chunk& Front, Chunk& Back)
+	void Chunk::load_block_faces(Device& device, Chunk* Left, Chunk* Right, Chunk* Front, Chunk* Back)
 	{
 		std::vector<Vertex> vertices;
 		std::vector<Vertex> facevertices;
@@ -62,7 +62,7 @@ namespace Vulkan
 					//Left Face
 					if (x == 0)
 					{
-						if (Left.id() == UINT32_MAX || Left.blocks_[y][z][15].block_type_ == 0)
+						if (Left->id() == UINT32_MAX || Left->blocks_[y][z][15].block_type_ == 0)
 							facevertices.insert(facevertices.end(), cube::LeftFace.begin(), cube::LeftFace.end());	
 					}
 					else if(blocks_[y][z][x - 1].block_type_ == 0)
@@ -71,7 +71,7 @@ namespace Vulkan
 					//Right Face
 					if (x == 15)
 					{
-						if (Right.id() == UINT32_MAX || Right.blocks_[y][z][0].block_type_ == 0)
+						if (Right->id() == UINT32_MAX || Right->blocks_[y][z][0].block_type_ == 0)
 							facevertices.insert(facevertices.end(), cube::RightFace.begin(), cube::RightFace.end());
 					}
 					else if (blocks_[y][z][x + 1].block_type_ == 0)
@@ -88,7 +88,7 @@ namespace Vulkan
 					//Front Face
 					if (z == 0)
 					{
-						if (Front.id() == UINT32_MAX || Front.blocks_[y][15][x].block_type_ == 0)
+						if (Front->id() == UINT32_MAX || Front->blocks_[y][15][x].block_type_ == 0)
 							facevertices.insert(facevertices.end(), cube::FrontFace.begin(), cube::FrontFace.end());
 					}
 					else if (blocks_[y][z-1][x].block_type_ == 0)
@@ -97,7 +97,7 @@ namespace Vulkan
 					//Back Face
 					if (z == 15)
 					{
-						if (Back.id() == UINT32_MAX || Back.blocks_[y][0][x].block_type_ == 0)
+						if (Back->id() == UINT32_MAX || Back->blocks_[y][0][x].block_type_ == 0)
 							facevertices.insert(facevertices.end(), cube::BackFace.begin(), cube::BackFace.end());
 					}
 					else if (blocks_[y][z + 1][x].block_type_ == 0)
