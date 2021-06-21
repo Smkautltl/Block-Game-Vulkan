@@ -1,7 +1,10 @@
 #pragma once
+//-=-=-=-=- CORE -=-=-=-=-
+#include "../core/model.h"
+
+//-=-=-=-=- GAME -=-=-=-=-
 #include "block.h"
 
-#include "../core/model.h"
 
 namespace Vulkan
 {
@@ -69,7 +72,7 @@ namespace Vulkan
 		};
 
 		//Blue
-		inline static std::vector<Vertex> TopFace
+		inline static std::vector<Vertex> BottomFace
 		{
 			{ {-1.f, -1.f, -1.f},	{0.0f, 0.0f, 1.0f} },
 			{ { 1.f, -1.f,  1.f},	{0.0f, 0.0f, 1.0f} },
@@ -80,7 +83,7 @@ namespace Vulkan
 		};
 
 		//Yellow
-		inline static std::vector<Vertex> BottomFace
+		inline static std::vector<Vertex> TopFace
 		{
 			{ {-1.f, 1.f, -1.f},		{1.0f, 1.0f, 0.0f} },
 			{ { 1.f, 1.f,  1.f},		{1.0f, 1.0f, 0.0f} },
@@ -113,6 +116,10 @@ namespace Vulkan
 		};
 
 	};
+
+	typedef std::vector<Block> blocks;
+	typedef std::vector<blocks> rows;
+	typedef std::vector<rows> layers;
 	
 	class Chunk
 	{
@@ -132,7 +139,8 @@ namespace Vulkan
 		uint32_t id() { return id_; }
 		std::pair<int32_t, int32_t> xz_Coords() { return std::make_pair(x_, z_); }
 		std::shared_ptr<Model> get() { return model; }
-	
+		bool is_model_valid() { return model != nullptr; }
+		
 		void generate();
 		
 		void load_block_faces(Device& device, Chunk* Left, Chunk* Right, Chunk* Front, Chunk* Back);
@@ -140,10 +148,10 @@ namespace Vulkan
 		TransformComponent transform_;
 	
 	private:
-		uint8_t chunk_length_ = 16;
-		uint8_t chunk_size_ = chunk_length_;
-		uint16_t chunk_volume_ = chunk_size_ * chunk_length_  * 255;
-		std::vector<std::vector<std::vector<Block>>> blocks_;	
+		const uint8_t chunk_length_ = 16;
+		const uint8_t chunk_height_ = 255;
+		const uint16_t chunk_volume_ = chunk_length_ * chunk_length_  * chunk_height_;
+		layers blocks_;
 		std::shared_ptr<Model> model = nullptr;
 		
 		uint32_t id_;

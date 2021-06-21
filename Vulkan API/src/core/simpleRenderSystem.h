@@ -2,13 +2,12 @@
 //-=-=-=-=- CORE -=-=-=-=-
 #include "pipeline.h"
 #include "device.h"
-//#include "game_object.h"
+#include "camera.h"
 
 //-=-=-=-=- STD -=-=-=-=-
 #include <memory>
-//#include <vector>
 
-#include "camera.h"
+//-=-=-=-=- GAME -=-=-=-=-
 #include "../game/world.h"
 
 namespace Vulkan

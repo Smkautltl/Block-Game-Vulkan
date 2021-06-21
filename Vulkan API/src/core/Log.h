@@ -42,6 +42,20 @@ private:
 #define VK_CORE_ERROR(...) ::Log::GetCoreLogger()->error(__VA_ARGS__);
 #define VK_CORE_CRITICAL(...) ::Log::GetCoreLogger()->critical(__VA_ARGS__);
 
+struct VK_CORE_BENCH
+{
+	std::chrono::time_point<std::chrono::high_resolution_clock> start;
+	std::string name_;
+	VK_CORE_BENCH(std::string name) : name_(name)
+	{
+		start = std::chrono::high_resolution_clock::now();
+	}
+	~VK_CORE_BENCH()
+	{
+		std::chrono::duration<double> elapsed_seconds = std::chrono::high_resolution_clock::now() - start;
+		VK_CORE_INFO("{0} took {1}ms", name_, elapsed_seconds.count() * 1000)
+	}
+};
 //#define VMA_DEBUG_LOG(...) ::Log::GetVMALogger()->warn(__VA_ARGS__)
 
 #define VK_CORE_RUNTIME(x) VK_CORE_CRITICAL(x) throw std::runtime_error("");

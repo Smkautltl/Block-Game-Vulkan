@@ -43,11 +43,15 @@ namespace Vulkan
             return (swapChain.swap_chain_depth_format_ == swap_chain_depth_format_) && 
 					(swapChain.swap_chain_image_format_ == swap_chain_image_format_);
         }
+
+        VkImageView create_image_view(VkImage image, VkFormat format);
+        void create_texture_image_view(VkImageView& imageView, VkImage textureImage);
     
     private:
         void init();
         void create_swap_chain();
         void create_image_views();
+
         void create_depth_resources();
         void create_render_pass();
         void create_framebuffers();

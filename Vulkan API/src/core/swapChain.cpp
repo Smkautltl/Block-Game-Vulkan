@@ -188,25 +188,37 @@ namespace Vulkan
         swap_chain_image_views_.resize(swap_chain_images_.size());
         for (size_t i = 0; i < swap_chain_images_.size(); i++)
         {
-            VkImageViewCreateInfo viewInfo{};
-            viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-            viewInfo.image = swap_chain_images_[i];
-            viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-            viewInfo.format = swap_chain_image_format_;
-            viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            viewInfo.subresourceRange.baseMipLevel = 0;
-            viewInfo.subresourceRange.levelCount = 1;
-            viewInfo.subresourceRange.baseArrayLayer = 0;
-            viewInfo.subresourceRange.layerCount = 1;
-
-            if (vkCreateImageView(device_.get_device(), &viewInfo, nullptr, &swap_chain_image_views_[i]) != VK_SUCCESS)
-            {
-                VK_CORE_RUNTIME("Failed to create texture image view!");
-            }
-            VK_CORE_INFO("Swap chain image View Created!")
+            swap_chain_image_views_[i] = create_image_view(swap_chain_images_[i], swap_chain_image_format_);
         }
     }
 
+    VkImageView SwapChain::create_image_view(VkImage image, VkFormat format)
+    {
+        VkImageViewCreateInfo viewInfo{};
+        viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        viewInfo.image = image;
+        viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        viewInfo.format = format;
+        viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        viewInfo.subresourceRange.baseMipLevel = 0;
+        viewInfo.subresourceRange.levelCount = 1;
+        viewInfo.subresourceRange.baseArrayLayer = 0;
+        viewInfo.subresourceRange.layerCount = 1;
+
+        VkImageView imageView;
+        if (vkCreateImageView(device_.get_device(), &viewInfo, nullptr, &imageView) != VK_SUCCESS) 
+        {
+            VK_CORE_RUNTIME("failed to create texture image view!");
+        }
+
+        return imageView;
+    }
+
+    void SwapChain::create_texture_image_view(VkImageView& imageView, VkImage textureImage)
+    {
+        imageView = create_image_view(textureImage, VK_FORMAT_R8G8B8A8_SRGB);
+    }
+	
     void SwapChain::create_render_pass()
     {
         VkAttachmentDescription depthAttachment{};

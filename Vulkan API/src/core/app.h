@@ -2,11 +2,9 @@
 //-=-=-=-=- CORE -=-=-=-=-
 #include "device.h"
 #include "window.h"
+#include "camera.h" //Must be below device and window headers 
 #include "renderer.h"
 #include "game_object.h"
-
-//Must be below device and window headers 
-#include "camera.h"
 
 //-=-=-=-=- STD -=-=-=-=-
 #include <vector>
