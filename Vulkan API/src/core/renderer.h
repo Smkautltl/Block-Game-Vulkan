@@ -9,6 +9,8 @@
 #include <memory>
 #include <vector>
 
+#include "texture.h"
+
 namespace Vulkan
 {
 	class Renderer
@@ -55,6 +57,7 @@ namespace Vulkan
 		Device& device_;
 		std::unique_ptr<SwapChain> swap_chain_;
 		std::vector<VkCommandBuffer> command_buffers_;
+		Texture textTexture{ device_, *swap_chain_ };
 
 		uint32_t current_image_index_;
 		int current_frame_index_{ 0 };

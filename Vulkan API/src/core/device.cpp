@@ -467,6 +467,10 @@ namespace Vulkan
     {
 		vmaDestroyBuffer(allocator, buffer.buffer_, buffer.allocation_); 
     }
+    void Device::destroy_image(AllocatedImage image)
+    {
+        vmaDestroyImage(allocator, image._image, image._allocation);
+    }
 
     VkFormat Device::find_supported_format(const std::vector<VkFormat> &candidates, VkImageTiling tiling, VkFormatFeatureFlags features)
 	{
@@ -484,8 +488,7 @@ namespace Vulkan
           }
         }
         VK_CORE_RUNTIME("Failed to find supported format!");
-}
-          
+}        
     uint32_t Device::find_memory_type(uint32_t typeFilter, VkMemoryPropertyFlags properties)
 	{
         VkPhysicalDeviceMemoryProperties memProperties;
@@ -521,21 +524,30 @@ namespace Vulkan
         vmaMapMemory(allocator, buffer.allocation_, &data);
         memcpy(data, vertices.data(), static_cast<size_t>(size));
         vmaUnmapMemory(allocator, buffer.allocation_);
+	}
+	AllocatedBuffer Device::create_buffer(size_t allocSize, VkBufferUsageFlags usage, VmaMemoryUsage memUsage, VkDeviceSize imageSize, void* pixels)
+	{
+        VkBufferCreateInfo bufferInfo{};
+        bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        bufferInfo.size = allocSize;
+        bufferInfo.usage = usage;
 
-        //VkMemoryRequirements memRequirements;
-        //vkGetBufferMemoryRequirements(device_, buffer, &memRequirements);
-        //
-        //VkMemoryAllocateInfo allocInfo{};
-        //allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-        //allocInfo.allocationSize = memRequirements.size;
-        //allocInfo.memoryTypeIndex = find_memory_type(memRequirements.memoryTypeBits, properties);
-        //
-        //if (vkAllocateMemory(device_, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS) 
-        //{
-		//	VK_CORE_RUNTIME("Failed to allocate vertex buffer memory!");
-        //}
-        //
-        //vkBindBufferMemory(device_, buffer, bufferMemory, 0);
+        VmaAllocationCreateInfo vmaallocInfo{};
+        vmaallocInfo.usage = memUsage;
+
+        AllocatedBuffer newBuffer;
+		
+        if (vmaCreateBuffer(allocator, &bufferInfo, &vmaallocInfo, &newBuffer.buffer_, &newBuffer.allocation_, nullptr) != VK_SUCCESS)
+        {
+            VK_CORE_RUNTIME("Failed to create vertex buffer!")
+        }
+
+        void* data;
+        vmaMapMemory(allocator, newBuffer.allocation_, &data);
+        memcpy(data, pixels, static_cast<size_t>(imageSize));
+        vmaUnmapMemory(allocator, newBuffer.allocation_);
+		
+        return newBuffer;
 	}
     
     VkCommandBuffer Device::begin_single_time_commands()
@@ -629,5 +641,59 @@ namespace Vulkan
 			VK_CORE_RUNTIME("Failed to bind image memory!");
         }
 	}
+
+	void Device::create_image(VkImageCreateInfo& imgInfo, VmaMemoryUsage memUsage, AllocatedImage& imageAlloc)
+	{
+        VmaAllocationCreateInfo dimgAllocInfo{};
+        dimgAllocInfo.usage = memUsage;
+
+        vmaCreateImage(allocator, &imgInfo, &dimgAllocInfo, &imageAlloc._image, &imageAlloc._allocation, nullptr);
+        vmaBindImageMemory(allocator, imageAlloc._allocation, imageAlloc._image);
+	}
+    void Device::transition_image_layout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout)
+	{
+        VkCommandBuffer commandBuffer = begin_single_time_commands();
+		
+        VkImageMemoryBarrier barrier{};
+        barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+        barrier.oldLayout = oldLayout;
+        barrier.newLayout = newLayout;
+        barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        barrier.image = image;
+        barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        barrier.subresourceRange.baseMipLevel = 0;
+        barrier.subresourceRange.levelCount = 1;
+        barrier.subresourceRange.baseArrayLayer = 0;
+        barrier.subresourceRange.layerCount = 1;
+
+        VkPipelineStageFlags sourceStage;
+        VkPipelineStageFlags destinationStage;
+
+        if (oldLayout == VK_IMAGE_LAYOUT_UNDEFINED && newLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL) 
+        {
+            barrier.srcAccessMask = 0;
+            barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+
+            sourceStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+            destinationStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+        }
+        else if (oldLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL && newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL) 
+        {
+            barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+            barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+
+            sourceStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+            destinationStage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+        }
+        else 
+        {
+            VK_CORE_RUNTIME("unsupported layout transition!");
+        }
+
+        vkCmdPipelineBarrier(commandBuffer,sourceStage, destinationStage,0,0, nullptr,0, nullptr,1, &barrier);
+
+		end_single_time_commands(commandBuffer);
+    }
     
 }

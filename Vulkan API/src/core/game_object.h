@@ -3,9 +3,6 @@
 //-=-=-=-=- CORE -=-=-=-=-=-
 #include "model.h"
 
-//-=-=-=-=- GLFW -=-=-=-=-=-
-#include <glm/gtc/matrix_transform.hpp>
-
 //-=-=-=-=- STD -=-=-=-=-=-
 #include <memory>
 

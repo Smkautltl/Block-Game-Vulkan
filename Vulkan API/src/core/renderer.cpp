@@ -10,12 +10,13 @@ namespace Vulkan
 	Renderer::Renderer(Window& window, Device& device) : window_(window), device_(device)
 	{
 		recreate_swap_chain();
+		textTexture.load_image_from_file("Textures/UK-national-flag.png");
 		create_command_buffers();
 	}
 
 	Renderer::~Renderer()
 	{
-		VK_CORE_WARN("Rnderer destructor called!");
+		VK_CORE_WARN("Rnderer destructor called!")
 		free_command_buffers();
 	}
 
@@ -61,7 +62,7 @@ namespace Vulkan
 
 		if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
 		{
-			VK_CORE_RUNTIME("Failed to acquire swap chain image!");
+			VK_CORE_RUNTIME("Failed to acquire swap chain image!")
 		}
 
 		is_frame_started_ = true;
@@ -72,7 +73,7 @@ namespace Vulkan
 
 		if (vkBeginCommandBuffer(commandBuffer, &begin_info) != VK_SUCCESS)
 		{
-			VK_CORE_RUNTIME("Failed to begin command buffer!");
+			VK_CORE_RUNTIME("Failed to begin command buffer!")
 		}
 
 		return commandBuffer;

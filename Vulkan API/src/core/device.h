@@ -45,6 +45,10 @@ namespace Vulkan
         VkBuffer buffer_;
         VmaAllocation allocation_;
     };
+    struct AllocatedImage {
+        VkImage _image;
+        VmaAllocation _allocation;
+    };
 
     class Device
 	{
@@ -78,6 +82,7 @@ namespace Vulkan
     
         // Buffer Helper Functions
         void create_buffer(VkDeviceSize size, VkBufferUsageFlags usage, AllocatedBuffer& buffer, const std::vector<Vertex>& vertices);
+        AllocatedBuffer create_buffer(size_t allocSize, VkBufferUsageFlags usage, VmaMemoryUsage memUsage, VkDeviceSize imageSize, void* pixels);
         void destroy_buffer(AllocatedBuffer buffer);
         VkCommandBuffer begin_single_time_commands();
         void end_single_time_commands(VkCommandBuffer commandBuffer);
@@ -85,6 +90,10 @@ namespace Vulkan
         void copy_buffer_to_image(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount);
     
         void create_image_with_info(const VkImageCreateInfo &imageInfo, VkMemoryPropertyFlags properties, VkImage &image, VkDeviceMemory &imageMemory);
+    	void create_image(VkImageCreateInfo& imgInfo, VmaMemoryUsage memUsage, AllocatedImage& imageAlloc);
+        void destroy_image(AllocatedImage image);
+        void transition_image_layout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
+    	
     
     private:
         void create_instance();

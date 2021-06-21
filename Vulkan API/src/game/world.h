@@ -1,9 +1,15 @@
 #pragma once
 
+//-=-=-=-=- GAME -=-=-=-=-
 #include "chunk.h"
+
+//-=-=-=-=- CORE -=-=-=-=-
 #include "../core/camera.h"
 
+//-=-=-=-=- STD -=-=-=-=-
 #include <vector>
+
+//-=-=-=-=- VULKAN -=-=-=-=-
 #include <vulkan/vulkan_core.h>
 
 namespace Vulkan

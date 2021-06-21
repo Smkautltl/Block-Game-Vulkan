@@ -1,7 +1,11 @@
 #pragma once
+
+//-=-=-=-=- STD -=-=-=-=-
+#include <vector>
+
+//-=-=-=-=- GLFW -=-=-=-=-
 #define GLFORCE_RADIANS
 #define GLFORCE_DEPTH_ZERO_TO_ONE
-#include <vector>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -42,7 +46,7 @@ namespace Vulkan
 		glm::mat4 view_matrix_{};
 		glm::mat4 model_matrix_{};
 										    
-		glm::vec3 cam_pos_{};
+		glm::vec3 cam_pos_{8.f, 75.f, 8.f};
 		glm::vec3 cam_up_{};
 		glm::vec3 cam_front_{};
 		
