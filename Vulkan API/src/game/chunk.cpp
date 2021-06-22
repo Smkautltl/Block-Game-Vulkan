@@ -8,29 +8,30 @@ namespace Vulkan
 	Chunk::Chunk(uint32_t id, int32_t x, int32_t z) : id_(id), x_(x), z_(z)
 	{
 		blocks_ = layers(255, rows(chunk_length_, blocks(chunk_length_, Block{})));
-		transform_.translation = { (x * 16) + 1, 0, (z * 16) + 1 };
+		//transform_.translation = { (x * chunk_length_) + 1, 0, (z * chunk_length_) + 1 };
 	}
 
 	void Chunk::generate()
 	{
 		uint16_t id = 0;
-		unsigned int blocktype = 0;
+		uint8_t blocktype = 0;
 		
-		for (uint32_t y = 0; y < chunk_height_; y++)
+		for (uint32_t z = 0; z < chunk_length_; z++)
 		{
-			for (uint32_t z = 0; z < chunk_length_; z++)
+			for (uint32_t x = 0; x < chunk_length_; x++)
 			{
-				for (uint32_t x = 0; x < chunk_length_; x++, id++)
+				uint32_t height = rand() % 10 + 75; 
+				for (uint32_t y = 0; y < chunk_height_; y++, id++, blocktype = 0)
 				{
 					if (y < 70)
 					{
 						blocktype = 3;
 					}
-					else if (70 < y && y < 74)
+					else if (70 < y && y <= height-3)
 					{
 						blocktype = 2;
 					}
-					else if (y == 75)
+					else if (y <= height)
 					{
 						blocktype = 1;
 					}
@@ -54,6 +55,7 @@ namespace Vulkan
 				for (uint8_t x = 0; x < chunk_length_; x++)
 				{
 					//Add faces that need to be rendered
+					if(blocks_[y][z][x].block_type_ != 0)
 					{
 						//Left Face
 						if (x == 0 && (Left->id() == UINT32_MAX || Left->blocks_[y][z][15].block_type_ == 0))
@@ -72,7 +74,9 @@ namespace Vulkan
 							facevertices.insert(facevertices.end(), cube::RightFace.begin(), cube::RightFace.end());
 
 						//Top Face
-						if (y == 254 || blocks_[y + 1][z][x].block_type_ == 0)
+						if (y + 1 == 255)
+							nan = 0;
+						else if (blocks_[y + 1][z][x].block_type_ == 0)
 							facevertices.insert(facevertices.end(), cube::TopFace.begin(), cube::TopFace.end());
 
 						//Bottom Face
@@ -94,26 +98,45 @@ namespace Vulkan
 							nan = 0;
 						else if (blocks_[y][z + 1][x].block_type_ == 0)
 							facevertices.insert(facevertices.end(), cube::BackFace.begin(), cube::BackFace.end());
-					}
 
-					//Move faces to correct location
-					if (!facevertices.empty())
-					{
-						int count = 0;
-						for (auto vertex : facevertices)
+						//Move faces to correct location
+						if (!facevertices.empty())
 						{
-							auto modifiedVert = vertex;
-							modifiedVert.position.x += x;
-							modifiedVert.position.y += y;
-							modifiedVert.position.z += z;
-							facevertices[count] = modifiedVert;
-							count++;
-						}
+							int count = 0;
+							for (auto& vertex : facevertices)
+							{
+								vertex.position.x += static_cast<float>(x + (x_ * chunk_length_));
+								vertex.position.y += static_cast<float>(y);
+								vertex.position.z += static_cast<float>(z + (z_ * chunk_length_));
 
-						vertices.insert(vertices.end(), facevertices.begin(), facevertices.end());
-						facevertices.clear();
-					}
-					
+								switch (blocks_[y][z][x].block_type_)
+								{
+								case 1:
+									vertex.colour.x = 0.45f;
+									vertex.colour.y = 0.9f;
+									vertex.colour.z = 0.0f;
+									break;
+								case 2:
+									vertex.colour.x = 0.6f;
+									vertex.colour.y = 0.3f;
+									vertex.colour.z = 0.0f;
+									break;
+								case 3:
+									vertex.colour.x = 0.7f;
+									vertex.colour.y = 0.75f;
+									vertex.colour.z = 1.0f;
+									break;
+								}
+								
+								vertices.push_back(vertex);
+								count++;
+								
+							}
+
+							facevertices.clear();
+						}
+						
+					}//Is block Air?
 				}//X
 			}//Z
 		}//Y

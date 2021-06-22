@@ -46,14 +46,14 @@ namespace Vulkan
 		glm::mat4 view_matrix_{};
 		glm::mat4 model_matrix_{};
 										    
-		glm::vec3 cam_pos_{8.f, 75.f, 8.f};
+		glm::vec3 cam_pos_{0.f, 100.f, 0.f};
 		glm::vec3 cam_up_{};
 		glm::vec3 cam_front_{};
 		
 		glm::vec3 cam_rotation_ =	{ 0.0f, 0.0f, 0.0f };
 		glm::vec3 camera_target_ =	{ 0.0f, 0.0f, 0.0f };
 		
-		float yaw_ = -90.0f;
+		float yaw_ = 0.0f;
 		float pitch_ = 0.0f;
 		float sensitvity_ = 0.05f;
 		float cam_speed_ = 0.1f;

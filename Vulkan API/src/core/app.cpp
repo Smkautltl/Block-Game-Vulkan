@@ -11,6 +11,9 @@
 //-=-=-=-=- GAME -=-=-=-=-
 #include "../game/world.h"
 
+//-=-=-=-=- STD -=-=-=-=-
+#include <thread>
+
 namespace Vulkan
 {
 
@@ -28,18 +31,14 @@ namespace Vulkan
 	void App::run()
 	{
 		SimpleRenderSystem simpleRenderSystem{ device_, renderer_.get_swap_chain_render_pass() };
+		auto func = [this] { realtime_functions(); };
+		std::thread realTimeThread (func);
 		
 		//Keeps the window open until we need it to close
 		while (!window_.should_close())
 		{
 			glfwPollEvents();
 			VK_CORE_INFO("-=-=-=-=-=- NEW FRAME -=-=-=-=-=-")
-
-			cam.update_camera_pos(window_.key, window_.scancode, window_.action, window_.mods);
-			cam.update_camera_rot(window_.xpos, window_.ypos);
-
-			//window_.recentre_mouse();
-			cam.recalculate_proj_matrix(70.f, window_.get_extent().width, window_.get_extent().height);
 
 			//Begins the rendering of the frame
 			if (auto commandbuffer = renderer_.begin_frame())
@@ -52,99 +51,34 @@ namespace Vulkan
 				renderer_.end_frame();
 			}
 		}
-		
+
+		realTimeThread.join();
 		vkDeviceWaitIdle(device_.get_device());		
 	}
 
-	std::unique_ptr<Model> createCubeModel(Device& device, glm::vec3 offset) {
-		std::vector<Vertex> vertices
-		{
 
-			// left face (white)
-			{{-.5f, -.5f, -.5f}, {.9f, .9f, .9f}},
-			{{-.5f, .5f, .5f}, {.9f, .9f, .9f}},
-			{{-.5f, -.5f, .5f}, {.9f, .9f, .9f}},
-			{{-.5f, -.5f, -.5f}, {.9f, .9f, .9f}},
-			{{-.5f, .5f, -.5f}, {.9f, .9f, .9f}},
-			{{-.5f, .5f, .5f}, {.9f, .9f, .9f}},
-
-			// right face (yellow)
-			{{.5f, -.5f, -.5f}, {.8f, .8f, .1f}},
-			{{.5f, .5f, .5f}, {.8f, .8f, .1f}},
-			{{.5f, -.5f, .5f}, {.8f, .8f, .1f}},
-			{{.5f, -.5f, -.5f}, {.8f, .8f, .1f}},
-			{{.5f, .5f, -.5f}, {.8f, .8f, .1f}},
-			{{.5f, .5f, .5f}, {.8f, .8f, .1f}},
-
-			// top face (orange)
-			{{-.5f, -.5f, -.5f}, {.9f, .6f, .1f}},
-			{{.5f, -.5f, .5f}, {.9f, .6f, .1f}},
-			{{-.5f, -.5f, .5f}, {.9f, .6f, .1f}},
-			{{-.5f, -.5f, -.5f}, {.9f, .6f, .1f}},
-			{{.5f, -.5f, -.5f}, {.9f, .6f, .1f}},
-			{{.5f, -.5f, .5f}, {.9f, .6f, .1f}},
-
-			// bottom face (red)
-			{{-.5f, .5f, -.5f}, {.8f, .1f, .1f}},
-			{{.5f, .5f, .5f}, {.8f, .1f, .1f}},
-			{{-.5f, .5f, .5f}, {.8f, .1f, .1f}},
-			{{-.5f, .5f, -.5f}, {.8f, .1f, .1f}},
-			{{.5f, .5f, -.5f}, {.8f, .1f, .1f}},
-			{{.5f, .5f, .5f}, {.8f, .1f, .1f}},
-
-			// nose face (blue)
-			{{-.5f, -.5f, 0.5f}, {.1f, .1f, .8f}},
-			{{.5f, .5f, 0.5f}, {.1f, .1f, .8f}},
-			{{-.5f, .5f, 0.5f}, {.1f, .1f, .8f}},
-			{{-.5f, -.5f, 0.5f}, {.1f, .1f, .8f}},
-			{{.5f, -.5f, 0.5f}, {.1f, .1f, .8f}},
-			{{.5f, .5f, 0.5f}, {.1f, .1f, .8f}},
-
-			// tail face (green)
-			{{-.5f, -.5f, -0.5f}, {.1f, .8f, .1f}},
-			{{.5f, .5f, -0.5f}, {.1f, .8f, .1f}},
-			{{-.5f, .5f, -0.5f}, {.1f, .8f, .1f}},
-			{{-.5f, -.5f, -0.5f}, {.1f, .8f, .1f}},
-			{{.5f, -.5f, -0.5f}, {.1f, .8f, .1f}},
-			{{.5f, .5f, -0.5f}, {.1f, .8f, .1f}},
-
-		};
-		for (auto& v : vertices)
-		{
-			v.position += offset;
-		}
-		return std::make_unique<Model>(186367385, device, vertices);
-	}
 	
 	void App::load_game_objects()
 	{
-		//Block blocktype1{device_, {0.5f, 0.1f, 0.1f}};
-		//Block blocktype2{device_, {0.2f, 0.2f, 0.2f}};
-		//Block blocktype3{device_, {0.1f, 0.1f, 0.5f}};
-		//
-		//std::vector<Block> blockTypes;
-		//blockTypes.push_back(std::move(blocktype1));
-		//blockTypes.push_back(std::move(blocktype2));
-		//blockTypes.push_back(std::move(blocktype3));
-		//
-		//for (auto i = 0; i < 1; i++)
-		//{
-		//	Chunk chnk;
-		//	chnk.load_game_objects(device_, blockTypes, game_objects_);
-		//	chunks.push_back(std::move(chnk));
-		//}
+		
+	}
 
-		//std::shared_ptr<Model> model = createCubeModel(device_, { 0,0,0 });
-		//
-		//for (auto i = 0; i < 100; i++)
-		//{
-		//
-		//	
-		//	auto cube = GameObject::createGameObject();
-		//	cube.model = model;
-		//	cube.transform_.translation = { (rand() % 100)-50, (rand() % 100) - 50, (rand() % 100) - 50 };
-		//	cube.transform_.scale = { (rand() % 5) + 0.1, (rand() % 5) + 0.1, (rand() % 5) + 0.1 };
-		//	game_objects_.push_back(std::move(cube));
-		//}	
+	void App::realtime_functions()
+	{
+		std::chrono::time_point<std::chrono::high_resolution_clock> lasttime = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> elapsed_ms = std::chrono::high_resolution_clock::now() - lasttime;
+		
+		while (!window_.should_close())
+		{
+			elapsed_ms = std::chrono::high_resolution_clock::now() - lasttime;
+			if ((elapsed_ms.count() * 1000) >= 1.0)
+			{
+				glfwPollEvents();
+				cam.update_camera_pos(window_.key, window_.scancode, window_.action, window_.mods);
+				cam.update_camera_rot(window_.xpos, window_.ypos);
+				cam.recalculate_proj_matrix(70.f, window_.get_extent().width, window_.get_extent().height);
+				lasttime = std::chrono::high_resolution_clock::now();
+			}	
+		}
 	}
 }

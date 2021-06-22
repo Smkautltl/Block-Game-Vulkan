@@ -12,8 +12,8 @@ namespace Vulkan
 			proj_matrix_ = glm::perspective(glm::radians(FOV), width / height, nearValue, farValue) * glm::mat4(-1.0f);
 			view_matrix_ = glm::mat4(1.0f);
 
-			cam_pos_ = glm::vec3(0.0f, 0.0f, 3.0f);
-			cam_up_ = glm::vec3(0.0f, 1.0f, 0.0f);
+			cam_pos_ = glm::vec3(0.0f, 100.0f, 0.0f);
+			cam_up_ = glm::vec3(0.0f, -1.0f, 0.0f);
 			cam_front_ = glm::vec3(0.0f, 0.0f, -1.0f);
 
 			for (auto i = 0; i < 350; i++)
@@ -73,17 +73,17 @@ namespace Vulkan
 
 	void Camera::update_camera_rot(float xpos, float ypos)
 	{
-		if (keysUnreleased[GLFW_KEY_LEFT_ALT] == true)
-		{
-			set_yaw(xpos - old_x_pos_);
+		//if (keysUnreleased[GLFW_KEY_LEFT_ALT] == true)
+		//{
+			set_yaw(old_x_pos_ - xpos);
 			set_pitch(old_y_pos_ - ypos);
 			recalculate_camera_rotation();
 
-		}
+		//}
 
 		old_x_pos_ = xpos;
 		old_y_pos_ = ypos;
-		
+
 	}
 
 	void Camera::recalculate_proj_matrix(float FOV, float width, float height, float nearValue, float farValue)

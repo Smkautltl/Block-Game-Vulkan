@@ -22,10 +22,12 @@ namespace Vulkan
 		App& operator=(const App&) = delete;
 
 		void run();
+		void realtime_functions();
 
+	
 	private:
 		void load_game_objects();
-
+		
 	public:
 		static constexpr int WIDTH = 800;
 		static constexpr int HEIGHT = 600;
