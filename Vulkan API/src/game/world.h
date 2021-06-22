@@ -36,8 +36,8 @@ namespace Vulkan
 	private:
 		Device& device_;
 
-		int ChunkXDistance = 10;
-		int ChunkZDistance = 10;
+		int ChunkXDistance = 20;
+		int ChunkZDistance = 20;
 		std::vector<std::vector<Chunk>> chunks_;
 		Chunk BlankChunk{ UINT32_MAX, 0,0 };	
 	};

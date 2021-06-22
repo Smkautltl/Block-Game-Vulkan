@@ -57,11 +57,14 @@ namespace Vulkan
 		
 		//Sets up callback for when window is resized
 		glfwSetWindowUserPointer(gl_window_, this);
-		glfwSetInputMode(gl_window_, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+		glfwSetInputMode(gl_window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		
 		glfwSetFramebufferSizeCallback(gl_window_, framebuffer_resize_callback);
 		
 		glfwSetKeyCallback(gl_window_, key_callback);
+		
+		if (glfwRawMouseMotionSupported())
+			glfwSetInputMode(gl_window_, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);	
 		glfwSetCursorPosCallback(gl_window_, mouse_callback);
 		VK_CORE_INFO("Setup Window Callbacks!")
 	}
@@ -96,7 +99,8 @@ namespace Vulkan
 	{
 		//Gets the current window and assigns a new width and height
 		auto window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(gl_window));
-		window->xpos = (float)xpos;
-		window->ypos = (float)ypos;
+		window->xpos = (float)xpos;// - (window->WIDTH / 2);
+		window->ypos = (float)ypos;// - (window->HEIGHT / 2);
+
 	}
 }
