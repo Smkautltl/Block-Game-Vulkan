@@ -32,6 +32,7 @@ namespace Vulkan
 		{
 			VK_CORE_RUNTIME("Failed to create window surface");
 		}
+		
 		VK_CORE_INFO("Window Surface Created!")
 	}
 
@@ -58,6 +59,9 @@ namespace Vulkan
 		//Sets up callback for when window is resized
 		glfwSetWindowUserPointer(gl_window_, this);
 		glfwSetInputMode(gl_window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+		gl_monitor = glfwGetPrimaryMonitor();
+		gl_vidmode = glfwGetVideoMode(gl_monitor);
 		
 		glfwSetFramebufferSizeCallback(gl_window_, framebuffer_resize_callback);
 		
@@ -66,10 +70,11 @@ namespace Vulkan
 		if (glfwRawMouseMotionSupported())
 			glfwSetInputMode(gl_window_, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);	
 		glfwSetCursorPosCallback(gl_window_, mouse_callback);
+
 		VK_CORE_INFO("Setup Window Callbacks!")
 	}
 
-	void Window::framebuffer_resize_callback(GLFWwindow *gl_window, int width, int height)
+	void Window::framebuffer_resize_callback(GLFWwindow* gl_window, int width, int height)
 	{
 		//Gets the current window and assigns a new width and height
 		auto window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(gl_window));
@@ -80,7 +85,7 @@ namespace Vulkan
 
 	void Window::key_callback(GLFWwindow* gl_window, int key, int scancode, int action, int mods)
 	{	
-		//Gets the current window and assigns a new width and height
+		//Takes the variables and saves them to be used
 		auto window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(gl_window));
 		
 		window->key = key;
@@ -88,11 +93,28 @@ namespace Vulkan
 		window->action = action;
 		window->mods = mods;
 
-		if (key == GLFW_KEY_ESCAPE)
+		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		{
 			glfwSetWindowShouldClose(gl_window, true);
 		}
-		//glfwSetWindowMonitor(gl_window_, ,0,0,)
+		if(key == GLFW_KEY_F11 && action == GLFW_PRESS)
+		{
+			if (!window->fullscreen)
+			{
+				glfwGetWindowPos(gl_window, window->windowedX, window->windowedY);
+				
+				window->WindowedHeight = window->HEIGHT;
+				window->WindowedWidth = window->WIDTH;
+				
+				glfwSetWindowMonitor(gl_window, window->gl_monitor, 0, 0, window->gl_vidmode->width, window->gl_vidmode->height, window->gl_vidmode->refreshRate);
+				window->fullscreen = true;
+			}
+			else
+			{
+				glfwSetWindowMonitor(gl_window, window->gl_monitor, *(window->windowedX), *(window->windowedY), window->WindowedWidth, window->WindowedHeight, 0);
+				window->fullscreen = false;
+			}
+		}
 	}
 	
 	void Window::mouse_callback(GLFWwindow* gl_window, double xpos, double ypos)

@@ -48,8 +48,14 @@ namespace Vulkan
 		int WIDTH = 800;
 		int HEIGHT = 600;
 		bool frame_buffer_resized = false;
+		bool fullscreen;
+		int* windowedX;
+		int* windowedY;
+		int WindowedWidth, WindowedHeight;
 		
 		std::string window_name_ = "Vulkan";
-		GLFWwindow *gl_window_{};
+		GLFWwindow* gl_window_{};
+		GLFWmonitor* gl_monitor;
+		const GLFWvidmode* gl_vidmode;
 	};
 }
