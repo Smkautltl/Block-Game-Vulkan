@@ -4,6 +4,7 @@
 
 //-=-=-=-=- GAME -=-=-=-=-
 #include "block.h"
+#include "TerrainGeneration/TerrainGenerator.h"
 
 
 namespace Vulkan
@@ -125,6 +126,7 @@ namespace Vulkan
 	{
 	public:
 
+		Chunk();
 		Chunk(uint32_t id, int32_t x, int32_t z);
 		~Chunk()
 		{			
@@ -136,12 +138,20 @@ namespace Vulkan
 			
 		}
 
+		void update_chunkdata(int id, int x, int z)
+		{
+			VK_CORE_BENCH bench{ "Setup - Chunk" };
+			blocks_ = layers(chunk_height_, rows(chunk_length_, blocks(chunk_length_, Block{})));
+			id_ = id;
+			x_ = x;
+			z_ = z;
+		}
 		uint32_t id() { return id_; }
-		std::pair<int32_t, int32_t> xz_Coords() { return std::make_pair(x_, z_); }
+		//std::pair<int32_t, int32_t> xz_Coords() { return std::make_pair(x_, z_); }
 		std::shared_ptr<Model> get() { return model; }
 		bool is_model_valid() { return model != nullptr; }
 		
-		void generate();
+		void generate(ChunkNoise& heightValues);
 		
 		void load_block_faces(Device& device, Chunk* Left, Chunk* Right, Chunk* Front, Chunk* Back);
 		
@@ -151,6 +161,7 @@ namespace Vulkan
 		const uint8_t chunk_length_ = 16;
 		const uint8_t chunk_height_ = 255;
 		const uint16_t chunk_volume_ = chunk_length_ * chunk_length_  * chunk_height_;
+		
 		layers blocks_;
 		std::shared_ptr<Model> model = nullptr;
 		

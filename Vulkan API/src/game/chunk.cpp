@@ -5,14 +5,11 @@
 
 namespace Vulkan
 {
-	Chunk::Chunk(uint32_t id, int32_t x, int32_t z) : id_(id), x_(x), z_(z)
-	{
-		blocks_ = layers(255, rows(chunk_length_, blocks(chunk_length_, Block{})));
-		//transform_.translation = { (x * chunk_length_) + 1, 0, (z * chunk_length_) + 1 };
-	}
+	Chunk::Chunk() {}
+	Chunk::Chunk(uint32_t id, int32_t x, int32_t z) : id_(id), x_(x), z_(z){}
 
-	void Chunk::generate()
-	{
+	void Chunk::generate(ChunkNoise& heightValues)
+	{	
 		uint16_t id = 0;
 		uint8_t blocktype = 0;
 		
@@ -20,22 +17,27 @@ namespace Vulkan
 		{
 			for (uint32_t x = 0; x < chunk_length_; x++)
 			{
-				uint32_t height = rand() % 10 + 75; 
+				uint32_t terrianHeight = (30 * heightValues[z * 16 + x]) + 50;
 				for (uint32_t y = 0; y < chunk_height_; y++, id++, blocktype = 0)
-				{
-					if (y < 70)
+				{	
+					if (y < terrianHeight-10)
 					{
 						blocktype = 3;
 					}
-					else if (70 < y && y <= height-3)
+					else if (terrianHeight-10 < y && y <= terrianHeight-3)
 					{
 						blocktype = 2;
 					}
-					else if (y <= height)
+					else if (y <= terrianHeight)
 					{
 						blocktype = 1;
 					}
 
+					if(y < 60 && (blocktype == 0 || blocktype == 1))
+					{
+						blocktype = 4;
+					}
+					
 					blocks_[y][z][x] = Block{ id, blocktype };
 				}
 			}
@@ -124,6 +126,11 @@ namespace Vulkan
 								case 3:
 									vertex.colour.x = 0.7f;
 									vertex.colour.y = 0.75f;
+									vertex.colour.z = 1.0f;
+									break;
+								case 4:
+									vertex.colour.x = 0.f;
+									vertex.colour.y = 0.84f;
 									vertex.colour.z = 1.0f;
 									break;
 								}
