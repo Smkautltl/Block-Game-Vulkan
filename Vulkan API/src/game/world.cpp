@@ -13,10 +13,8 @@ Vulkan::world::world(Device& device) : device_(device)
 	{
 		for (auto x = -ChunkXDistance; x < ChunkXDistance; x++)
 		{
-			VK_CORE_BENCH bench{ "Generation - Chunk ID:" + std::to_string(id) };
 			chunks_[z + ChunkZDistance][x + ChunkXDistance].update_chunkdata(id, x, z);
-			auto noise = generator_.get_noise(x, z);
-			chunks_[z + ChunkZDistance][x + ChunkXDistance].generate(noise);
+			chunks_[z + ChunkZDistance][x + ChunkXDistance].generate(generator_);
 			id++;
 
 		}
@@ -25,16 +23,11 @@ Vulkan::world::world(Device& device) : device_(device)
 	id = 0;
 	int z = 0;	
 	for (auto& chunkrow : chunks_)
-	{
-		std::vector<std::thread> cullThreads(chunkrow.size());
-		
+	{		
 		int x = 0;
 		for (auto& chunk : chunkrow)
 		{
-			//cullThreads[x] = std::thread([=]()
-			//{
-				cull_chunk(chunks_[z][x], x, z);
-			//});
+			cull_chunk(chunks_[z][x], x, z);
 			x++;
 			id++;
 		}
@@ -50,8 +43,6 @@ Vulkan::world::~world()
 
 void Vulkan::world::cull_chunk(Chunk& chunk, int x, int z)
 {
-	VK_CORE_BENCH bench{ "Face Culling & Model Creation - Chunk ID:" + std::to_string(chunk.id()) };
-
 	Chunk* left = &BlankChunk;
 	Chunk* right = &BlankChunk;
 	Chunk* front = &BlankChunk;
