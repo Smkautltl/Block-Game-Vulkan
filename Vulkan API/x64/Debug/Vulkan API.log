@@ -1,17 +1,5 @@
 ﻿  chunk.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Libraries\glfw-3.3.2.bin.WIN64\include\GLFW\glfw3.h(123): message : see previous definition of 'APIENTRY'
-C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\TerrainGeneration\TerrainGenerator.h(19,72): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\TerrainGeneration\TerrainGenerator.h(19,88): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\chunk.cpp(21,17): warning C4244: 'initializing': conversion from 'int32_t' to 'float', possible loss of data
-C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\chunk.cpp(22,17): warning C4244: 'initializing': conversion from 'int32_t' to 'float', possible loss of data
-C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\chunk.cpp(26,28): warning C4244: 'initializing': conversion from 'float' to 'uint32_t', possible loss of data
+C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\Vulkan API\src\game\chunk.cpp(21,28): warning C4244: 'initializing': conversion from 'float' to 'uint32_t', possible loss of data
   Vulkan API.vcxproj -> C:\Users\Matt\Documents\Programming Learning\C++\Vulkan Block Game\x64\Debug\Vulkan API.exe

@@ -13,24 +13,19 @@ namespace Vulkan
 		uint16_t id = 0;
 		uint8_t blocktype = 0;
 
-		for (uint32_t x = 0; x < chunk_length_; x++)
+		srand(x_ * z_ + z_);
+		for (uint32_t z = 0; z < chunk_length_; z++)
 		{
-			for (uint32_t z = 0; z < chunk_length_; z++)
+			for (uint32_t x = 0; x < chunk_length_; x++)
 			{
-				//This is seperated out like this because (x+x_)/1000 kept giving a number like 4643929740
-				float x_Cal = x_;
-				float z_Cal = z_;
-				float xCal = (float)x / 10.f;
-				float zCal = (float)z / 10.f;
-				//auto random = generator.random_gradient(xCal, zCal);
-				uint32_t terrianHeight = (20 * generator.getnoise(x_Cal+xCal, z_Cal + zCal)) + 50;
+				uint32_t terrianHeight = (10 * ((float)rand()/RAND_MAX)) + 50;
 				for (uint32_t y = 0; y < chunk_height_; y++, id++, blocktype = 0)
 				{	
-					if (y < terrianHeight-10)
+					if (y < terrianHeight-7)
 					{
 						blocktype = 3;
 					}
-					else if (terrianHeight-10 <= y && y <= terrianHeight-3)
+					else if (terrianHeight-7 <= y && y <= terrianHeight-3)
 					{
 						blocktype = 2;
 					}

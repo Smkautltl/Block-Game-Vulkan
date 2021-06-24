@@ -8,7 +8,7 @@ Vulkan::world::world(Device& device) : device_(device)
 	
 	uint16_t id = 0;
 	unsigned int blocktype = 0;
-
+	
 	for (auto z = -ChunkZDistance; z < ChunkZDistance; z++)
 	{
 		for (auto x = -ChunkXDistance; x < ChunkXDistance; x++)

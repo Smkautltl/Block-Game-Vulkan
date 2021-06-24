@@ -121,6 +121,11 @@ namespace Vulkan
 	typedef std::vector<Block> blocks;
 	typedef std::vector<blocks> rows;
 	typedef std::vector<rows> layers;
+
+	inline float lerp(float a, float b, float t)
+	{
+		return (1 - t) * a + t * b;
+	}
 	
 	class Chunk
 	{
