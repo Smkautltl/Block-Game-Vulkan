@@ -151,7 +151,7 @@ namespace Vulkan
 		std::shared_ptr<Model> get() { return model; }
 		bool is_model_valid() { return model != nullptr; }
 		
-		void generate(ChunkNoise& heightValues);
+		void generate(TerrainGenerator& generator);
 		
 		void load_block_faces(Device& device, Chunk* Left, Chunk* Right, Chunk* Front, Chunk* Back);
 		
