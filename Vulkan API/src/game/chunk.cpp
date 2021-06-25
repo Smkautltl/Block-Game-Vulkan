@@ -17,7 +17,7 @@ namespace Vulkan
 		{
 			for (uint32_t x = 0; x < chunk_length_; x++)
 			{
-				uint32_t terrianHeight = (uint32_t)(20 * blockHeights[z][x]) + 60;
+				uint32_t terrianHeight = (uint32_t)(40 * blockHeights[z][x]) + 70;
 				for (uint32_t y = 0; y < chunk_height_; y++, id++, blocktype = 0)
 				{	
 					if (y < terrianHeight-7)
@@ -37,7 +37,7 @@ namespace Vulkan
 					{
 						blocktype = 4;
 					}
-					if (y < 60 && blocktype == 1)
+					if (y < 59 && blocktype == 1)
 					{
 						blocktype = 2;
 					}

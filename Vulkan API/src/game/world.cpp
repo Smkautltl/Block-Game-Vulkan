@@ -76,6 +76,7 @@ void Vulkan::world::render(VkCommandBuffer commandBuffer, Camera& cam, VkPipelin
 				SimplePushConstantData push;
 				push.color = glm::vec3{ 0.5f, 0.5f, 0.5f };
 				push.transform = projView * chunk.transform_.mat4();
+				push.normal = glm::transpose(glm::inverse(cam.get_model_matrix()));
 
 				vkCmdPushConstants(commandBuffer, pipeline_layout_, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SimplePushConstantData), &push);
 				chunk.get()->bind(commandBuffer);

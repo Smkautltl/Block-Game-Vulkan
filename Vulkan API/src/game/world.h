@@ -17,6 +17,7 @@ namespace Vulkan
 	struct SimplePushConstantData
 	{
 		glm::mat4 transform{ 1.0f };
+		glm::mat3 normal;
 		alignas(16) glm::vec3 color;
 	};
 	
@@ -36,9 +37,9 @@ namespace Vulkan
 	private:
 		Device& device_;
 
-		int ChunkXDistance = 20;
-		int ChunkZDistance = 20;
-		TerrainGenerator generator_{};
+		int ChunkXDistance = 24;
+		int ChunkZDistance = 24;
+		TerrainGenerator generator_{8};
 		
 		typedef std::vector<Chunk> ChunkRow;
 		typedef std::vector<ChunkRow> ChunkPlane;
