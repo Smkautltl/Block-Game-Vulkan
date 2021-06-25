@@ -118,14 +118,9 @@ namespace Vulkan
 
 	};
 
-	typedef std::vector<Block> blocks;
+	typedef std::vector<uint8_t> blocks;
 	typedef std::vector<blocks> rows;
 	typedef std::vector<rows> layers;
-
-	inline float lerp(float a, float b, float t)
-	{
-		return (1 - t) * a + t * b;
-	}
 	
 	class Chunk
 	{
@@ -146,7 +141,7 @@ namespace Vulkan
 		void update_chunkdata(int id, int x, int z)
 		{
 			VK_CORE_BENCH bench{ "Setup - Chunk" };
-			blocks_ = layers(chunk_height_, rows(chunk_length_, blocks(chunk_length_, Block{})));
+			blocks_ = layers(chunk_height_, rows(chunk_length_, blocks(chunk_length_,0)));
 			id_ = id;
 			x_ = x;
 			z_ = z;
@@ -156,7 +151,7 @@ namespace Vulkan
 		std::shared_ptr<Model> get() { return model; }
 		bool is_model_valid() { return model != nullptr; }
 		
-		void generate(TerrainGenerator& generator);
+		void generate(std::vector<std::vector<float>> blockHeights);
 		
 		void load_block_faces(Device& device, Chunk* Left, Chunk* Right, Chunk* Front, Chunk* Back);
 		
@@ -165,7 +160,7 @@ namespace Vulkan
 	private:
 		const uint8_t chunk_length_ = 16;
 		const uint8_t chunk_height_ = 255;
-		const uint16_t chunk_volume_ = chunk_length_ * chunk_length_  * chunk_height_;
+		//const uint16_t chunk_volume_ = chunk_length_ * chunk_length_  * chunk_height_;
 		
 		layers blocks_;
 		std::shared_ptr<Model> model = nullptr;

@@ -12,15 +12,13 @@ namespace Vulkan
 
 	public:
 		TerrainGenerator();
+		std::vector<std::vector<float>> getnoise(float x, float z);
 
-		glm::vec2 random_gradient(int ix, int iy);
-		float getnoise(float x, float z);
-	
 	private:
-
-		float dotGradient(int ix, int iy, float x, float y);
+		glm::vec2 random_gradient(int ix, int iy);
 		float interpolate(float a0, float a1, float w);
 		
-		
+		std::vector<std::pair<glm::vec2, glm::vec2>> RandomChunkBorderGradients;
+		int seed;
 	};
 }

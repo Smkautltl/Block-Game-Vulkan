@@ -26,12 +26,12 @@ namespace Vulkan
 		world(Device& device_);
 		~world();
 
-		void add_chunk();
+		//void add_chunk();
 		void cull_chunk(Chunk& chunk, int x, int z);
-		void remove_chunk(int id);
+		//void remove_chunk(int id);
 
 		void render(VkCommandBuffer commandBuffer, Camera& cam, VkPipelineLayout& pipeline_layout_);
-		void update();
+		//void update();
 
 	private:
 		Device& device_;

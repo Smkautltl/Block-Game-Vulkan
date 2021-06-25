@@ -14,7 +14,7 @@ Vulkan::world::world(Device& device) : device_(device)
 		for (auto x = -ChunkXDistance; x < ChunkXDistance; x++)
 		{
 			chunks_[z + ChunkZDistance][x + ChunkXDistance].update_chunkdata(id, x, z);
-			chunks_[z + ChunkZDistance][x + ChunkXDistance].generate(generator_);
+			chunks_[z + ChunkZDistance][x + ChunkXDistance].generate(generator_.getnoise(x,z));
 			id++;
 
 		}
