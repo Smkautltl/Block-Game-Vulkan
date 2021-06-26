@@ -14,7 +14,7 @@ namespace Vulkan
 
 	std::vector<VkVertexInputAttributeDescription> Vertex::getAttributeDescriptions()
 	{
-		std::vector<VkVertexInputAttributeDescription> attribute_descriptions(2 );
+		std::vector<VkVertexInputAttributeDescription> attribute_descriptions(3 );
 		attribute_descriptions[0].binding = 0;
 		attribute_descriptions[0].location = 0;
 		attribute_descriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
@@ -24,13 +24,17 @@ namespace Vulkan
 		attribute_descriptions[1].location = 1;
 		attribute_descriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
 		attribute_descriptions[1].offset = offsetof(Vertex, colour);
+
+		attribute_descriptions[2].binding = 0;
+		attribute_descriptions[2].location = 2;
+		attribute_descriptions[2].format = VK_FORMAT_R32G32B32_SFLOAT;
+		attribute_descriptions[2].offset = offsetof(Vertex, normal);
 		
 		return attribute_descriptions;
 	}
 
 	Model::Model(uint32_t id, Device& device, const std::vector<Vertex>& vertices) : id_(id), device_(device)
 	{
-		VK_CORE_WARN("Model ID:{0} | Created!", id)
 		create_vertex_buffers(vertices);
 	}
 	
@@ -53,7 +57,6 @@ namespace Vulkan
 
 	void Model::destroy()
 	{
-		VK_CORE_WARN("Model ID:{0} | Destructor called!", id_)
 		if (vertex_buffer_.buffer_ != nullptr)
 		{
 			device_.destroy_buffer(vertex_buffer_);
@@ -73,6 +76,5 @@ namespace Vulkan
 								VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, 
 								vertex_buffer_,
 								vertices);
-		VK_CORE_WARN("Model ID:{0} | Vertex Buffer Created!", id_)
 	}
 }

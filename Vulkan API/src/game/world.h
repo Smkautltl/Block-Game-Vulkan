@@ -9,6 +9,8 @@
 #include "../core/camera.h"
 
 //-=-=-=-=- GAME -=-=-=-=-
+#include <map>
+
 #include "chunk.h"
 #include "TerrainGeneration/TerrainGenerator.h"
 
@@ -17,7 +19,7 @@ namespace Vulkan
 	struct SimplePushConstantData
 	{
 		glm::mat4 transform{ 1.0f };
-		glm::mat3 normal;
+		glm::vec3 position;
 		alignas(16) glm::vec3 color;
 	};
 	
@@ -27,12 +29,12 @@ namespace Vulkan
 		world(Device& device_);
 		~world();
 
-		//void add_chunk();
+		void add_chunk(int x, int z);
 		void cull_chunk(Chunk& chunk, int x, int z);
-		//void remove_chunk(int id);
+		void remove_chunk(int x, int z);
 
 		void render(VkCommandBuffer commandBuffer, Camera& cam, VkPipelineLayout& pipeline_layout_);
-		//void update();
+		void update(glm::vec3 CamPos);
 
 	private:
 		Device& device_;
@@ -41,11 +43,9 @@ namespace Vulkan
 		int ChunkZDistance = 24;
 		TerrainGenerator generator_{8};
 		
-		typedef std::vector<Chunk> ChunkRow;
-		typedef std::vector<ChunkRow> ChunkPlane;
-		ChunkPlane chunks_;
-		Chunk BlankChunk{ UINT32_MAX, 0,0};
+		std::map<float, Chunk> ChunkMap;	
+		Chunk BlankChunk{0,0};
 
-		
+		glm::vec3 LastCamLocation;
 	};
 }

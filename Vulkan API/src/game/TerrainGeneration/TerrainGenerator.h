@@ -20,7 +20,7 @@ namespace Vulkan
 		float interpolate(float a0, float a1, float w);
 		
 		std::vector<std::pair<glm::vec2, glm::vec2>> RandomChunkBorderGradients;
-		int seed;
+		float seed;
 		int chunk_scale_;
 	};
 }

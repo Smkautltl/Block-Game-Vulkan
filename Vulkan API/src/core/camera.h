@@ -56,7 +56,7 @@ namespace Vulkan
 		float yaw_ = 0.0f;
 		float pitch_ = 0.0f;
 		float sensitvity_ = 0.05f;
-		float cam_speed_ = 0.1f;
+		float cam_speed_ = 0.01f;
 
 		float old_x_pos_{}, old_y_pos_{};
 

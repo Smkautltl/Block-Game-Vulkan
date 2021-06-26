@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 //-=-=-=-=- SPDLOG -=-=-=-=-
 #include <spdlog/spdlog.h>
 
@@ -53,7 +53,17 @@ struct VK_CORE_BENCH
 	~VK_CORE_BENCH()
 	{
 		std::chrono::duration<double> elapsed_seconds = std::chrono::high_resolution_clock::now() - start;
-		VK_CORE_INFO("{0} took {1}ms", name_, elapsed_seconds.count() * 1000)
+		auto count = elapsed_seconds.count() * 1000;
+		if (count < 1.f)
+		{
+			
+			VK_CORE_INFO("{0} took {1}ms ({2}us)", name_, std::to_string(count), std::to_string(count*1000))
+		}
+		else
+		{
+			VK_CORE_INFO("{0} took {1}ms", name_, std::to_string(count))
+		}
+		
 	}
 };
 //#define VMA_DEBUG_LOG(...) ::Log::GetVMALogger()->warn(__VA_ARGS__)

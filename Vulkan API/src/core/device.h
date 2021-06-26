@@ -19,6 +19,7 @@ namespace Vulkan
     {
         glm::vec3 position;
         glm::vec3 colour;
+        glm::vec3 normal;
 
         static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();
         static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();

@@ -3,7 +3,6 @@
 #include "../core/model.h"
 
 //-=-=-=-=- GAME -=-=-=-=-
-#include "block.h"
 #include "TerrainGeneration/TerrainGenerator.h"
 
 
@@ -53,67 +52,67 @@ namespace Vulkan
 		//Red
 		inline static std::vector<Vertex> LeftFace
 		{
-			{ {-0.5f, -0.5f, -0.5f},		{1.0f, 0.0f, 0.0f} },
-			{ {-0.5f,  0.5f,  0.5f},		{1.0f, 0.0f, 0.0f} },
-			{ {-0.5f, -0.5f,  0.5f},		{1.0f, 0.0f, 0.0f} },
-			{ {-0.5f, -0.5f, -0.5f},		{1.0f, 0.0f, 0.0f} },
-			{ {-0.5f,  0.5f, -0.5f},		{1.0f, 0.0f, 0.0f} },
-			{ {-0.5f,  0.5f,  0.5f},		{1.0f, 0.0f, 0.0f} }
+			{ {-0.5f, -0.5f, -0.5f},		{1.0f, 0.0f, 0.0f}, {-1.f,0,0} },
+			{ {-0.5f,  0.5f,  0.5f},		{1.0f, 0.0f, 0.0f}, {-1.f,0,0} },
+			{ {-0.5f, -0.5f,  0.5f},		{1.0f, 0.0f, 0.0f}, {-1.f,0,0} },
+			{ {-0.5f, -0.5f, -0.5f},		{1.0f, 0.0f, 0.0f}, {-1.f,0,0} },
+			{ {-0.5f,  0.5f, -0.5f},		{1.0f, 0.0f, 0.0f}, {-1.f,0,0} },
+			{ {-0.5f,  0.5f,  0.5f},		{1.0f, 0.0f, 0.0f}, {-1.f,0,0} }
 		};
 
 		//Green
 		inline static std::vector<Vertex> RightFace
 		{
-			{ {0.5f, -0.5f, -0.5f},		{0.0f, 1.0f, 0.0f} },
-			{ {0.5f,  0.5f,  0.5f},		{0.0f, 1.0f, 0.0f} },
-			{ {0.5f, -0.5f,  0.5f},		{0.0f, 1.0f, 0.0f} },
-			{ {0.5f, -0.5f, -0.5f},		{0.0f, 1.0f, 0.0f} },
-			{ {0.5f,  0.5f, -0.5f},		{0.0f, 1.0f, 0.0f} },
-			{ {0.5f,  0.5f,  0.5f},		{0.0f, 1.0f, 0.0f} }
+			{ {0.5f, -0.5f, -0.5f},		{0.0f, 1.0f, 0.0f}, {1.f,0,0} },
+			{ {0.5f,  0.5f,  0.5f},		{0.0f, 1.0f, 0.0f}, {1.f,0,0} },
+			{ {0.5f, -0.5f,  0.5f},		{0.0f, 1.0f, 0.0f}, {1.f,0,0} },
+			{ {0.5f, -0.5f, -0.5f},		{0.0f, 1.0f, 0.0f}, {1.f,0,0} },
+			{ {0.5f,  0.5f, -0.5f},		{0.0f, 1.0f, 0.0f}, {1.f,0,0} },
+			{ {0.5f,  0.5f,  0.5f},		{0.0f, 1.0f, 0.0f}, {1.f,0,0} }
 		};
 
 		//Blue
 		inline static std::vector<Vertex> BottomFace
 		{
-			{ {-0.5f, -0.5f, -0.5f},		{0.0f, 0.0f, 1.0f} },
-			{ { 0.5f, -0.5f,  0.5f},		{0.0f, 0.0f, 1.0f} },
-			{ {-0.5f, -0.5f,  0.5f},		{0.0f, 0.0f, 1.0f} },
-			{ {-0.5f, -0.5f, -0.5f},		{0.0f, 0.0f, 1.0f} },
-			{ { 0.5f, -0.5f, -0.5f},		{0.0f, 0.0f, 1.0f} },
-			{ { 0.5f, -0.5f,  0.5f},		{0.0f, 0.0f, 1.0f} }
+			{ {-0.5f, -0.5f, -0.5f},		{0.0f, 0.0f, 1.0f}, {0,-1.f,0} },
+			{ { 0.5f, -0.5f,  0.5f},		{0.0f, 0.0f, 1.0f}, {0,-1.f,0} },
+			{ {-0.5f, -0.5f,  0.5f},		{0.0f, 0.0f, 1.0f}, {0,-1.f,0} },
+			{ {-0.5f, -0.5f, -0.5f},		{0.0f, 0.0f, 1.0f}, {0,-1.f,0} },
+			{ { 0.5f, -0.5f, -0.5f},		{0.0f, 0.0f, 1.0f}, {0,-1.f,0} },
+			{ { 0.5f, -0.5f,  0.5f},		{0.0f, 0.0f, 1.0f}, {0,-1.f,0} }
 		};
 
 		//Yellow
 		inline static std::vector<Vertex> TopFace
 		{
-			{ {-0.5f, 0.5f, -0.5f},		{1.0f, 1.0f, 0.0f} },
-			{ { 0.5f, 0.5f,  0.5f},		{1.0f, 1.0f, 0.0f} },
-			{ {-0.5f, 0.5f,  0.5f},		{1.0f, 1.0f, 0.0f} },
-			{ {-0.5f, 0.5f, -0.5f},		{1.0f, 1.0f, 0.0f} },
-			{ { 0.5f, 0.5f, -0.5f},		{1.0f, 1.0f, 0.0f} },
-			{ { 0.5f, 0.5f,  0.5f},		{1.0f, 1.0f, 0.0f} }
+			{ {-0.5f, 0.5f, -0.5f},		{1.0f, 1.0f, 0.0f}, {0,1.f,0}  },
+			{ { 0.5f, 0.5f,  0.5f},		{1.0f, 1.0f, 0.0f}, {0,1.f,0}  },
+			{ {-0.5f, 0.5f,  0.5f},		{1.0f, 1.0f, 0.0f}, {0,1.f,0}  },
+			{ {-0.5f, 0.5f, -0.5f},		{1.0f, 1.0f, 0.0f}, {0,1.f,0}  },
+			{ { 0.5f, 0.5f, -0.5f},		{1.0f, 1.0f, 0.0f}, {0,1.f,0}  },
+			{ { 0.5f, 0.5f,  0.5f},		{1.0f, 1.0f, 0.0f}, {0,1.f,0}  }
 		};
 
 		//Turquoise
 		inline static std::vector<Vertex> BackFace
 		{
-			{ {-0.5f, -0.5f, 0.5f},		{0.0f, 1.0f, 1.0f} },
-			{ { 0.5f,  0.5f, 0.5f},		{0.0f, 1.0f, 1.0f} },
-			{ {-0.5f,  0.5f, 0.5f},		{0.0f, 1.0f, 1.0f} },
-			{ {-0.5f, -0.5f, 0.5f},		{0.0f, 1.0f, 1.0f} },
-			{ { 0.5f, -0.5f, 0.5f},		{0.0f, 1.0f, 1.0f} },
-			{ { 0.5f,  0.5f, 0.5f},		{0.0f, 1.0f, 1.0f} }
+			{ {-0.5f, -0.5f, 0.5f},		{0.0f, 1.0f, 1.0f} , {0, 0, 1.f} },
+			{ { 0.5f,  0.5f, 0.5f},		{0.0f, 1.0f, 1.0f} , {0, 0, 1.f} },
+			{ {-0.5f,  0.5f, 0.5f},		{0.0f, 1.0f, 1.0f} , {0, 0, 1.f} },
+			{ {-0.5f, -0.5f, 0.5f},		{0.0f, 1.0f, 1.0f} , {0, 0, 1.f} },
+			{ { 0.5f, -0.5f, 0.5f},		{0.0f, 1.0f, 1.0f} , {0, 0, 1.f} },
+			{ { 0.5f,  0.5f, 0.5f},		{0.0f, 1.0f, 1.0f} , {0, 0, 1.f} }
 		};
 
 		//White
 		inline static std::vector<Vertex> FrontFace
 		{
-			{ {-0.5f, -0.5f, -0.5f},		{1.0f, 1.0f, 1.0f} },
-			{ { 0.5f,  0.5f, -0.5f},		{1.0f, 1.0f, 1.0f} },
-			{ {-0.5f,  0.5f, -0.5f},		{1.0f, 1.0f, 1.0f} },
-			{ {-0.5f, -0.5f, -0.5f},		{1.0f, 1.0f, 1.0f} },
-			{ { 0.5f, -0.5f, -0.5f},		{1.0f, 1.0f, 1.0f} },
-			{ { 0.5f,  0.5f, -0.5f},		{1.0f, 1.0f, 1.0f} }
+			{ {-0.5f, -0.5f, -0.5f},		{1.0f, 1.0f, 1.0f} , {0, 0, -1.f}},
+			{ { 0.5f,  0.5f, -0.5f},		{1.0f, 1.0f, 1.0f} , {0, 0, -1.f}},
+			{ {-0.5f,  0.5f, -0.5f},		{1.0f, 1.0f, 1.0f} , {0, 0, -1.f}},
+			{ {-0.5f, -0.5f, -0.5f},		{1.0f, 1.0f, 1.0f} , {0, 0, -1.f}},
+			{ { 0.5f, -0.5f, -0.5f},		{1.0f, 1.0f, 1.0f} , {0, 0, -1.f}},
+			{ { 0.5f,  0.5f, -0.5f},		{1.0f, 1.0f, 1.0f} , {0, 0, -1.f}}
 		};
 
 	};
@@ -125,37 +124,37 @@ namespace Vulkan
 	class Chunk
 	{
 	public:
-
+		
 		Chunk();
-		Chunk(uint32_t id, int32_t x, int32_t z);
+		Chunk( int32_t x, int32_t z);
 		~Chunk()
-		{			
+		{
+			auto bench = VK_CORE_BENCH("Chunk | Destructor");
 			if (model != nullptr)
 			{
-				VK_CORE_WARN("Chunk ID:{0} | Destructor called!", id_)
 				model->destroy();
 			}
 			
 		}
 
-		void update_chunkdata(int id, int x, int z)
+		void update_chunkdata(int x, int z)
 		{
-			VK_CORE_BENCH bench{ "Setup - Chunk" };
 			blocks_ = layers(chunk_height_, rows(chunk_length_, blocks(chunk_length_,0)));
-			id_ = id;
 			x_ = x;
 			z_ = z;
+			transform_.translation = {x*16, 0, z*16};
+			empty = false;
 		}
-		uint32_t id() { return id_; }
-		//std::pair<int32_t, int32_t> xz_Coords() { return std::make_pair(x_, z_); }
-		std::shared_ptr<Model> get() { return model; }
 		bool is_model_valid() { return model != nullptr; }
+		std::shared_ptr<Model> get() { return model; }
 		
 		void generate(std::vector<std::vector<float>> blockHeights);
-		
 		void load_block_faces(Device& device, Chunk* Left, Chunk* Right, Chunk* Front, Chunk* Back);
 		
 		TransformComponent transform_{glm::vec3(0.f), glm::vec3(1.f), glm::vec3(0.f) };
+		bool empty = true;
+		int32_t x_;
+		int32_t z_;
 	
 	private:
 		const uint8_t chunk_length_ = 16;
@@ -164,10 +163,8 @@ namespace Vulkan
 		
 		layers blocks_;
 		std::shared_ptr<Model> model = nullptr;
+
 		
-		uint32_t id_;
-		int32_t x_;
-		int32_t z_;
 	};
 
 	

@@ -4,7 +4,7 @@
 
 Vulkan::TerrainGenerator::TerrainGenerator(int chunkScale) : chunk_scale_(chunkScale)
 {
-	seed = rand();
+	seed = (float)rand();
 }
 
 glm::vec2 Vulkan::TerrainGenerator::random_gradient(int ix, int iy)
@@ -38,23 +38,29 @@ std::vector<std::vector<float>> Vulkan::TerrainGenerator::getnoise(int x, int z)
 	
 	int ScaledX = x - (chunk_scale_ - xMod);
 	int ScaledZ = z - (chunk_scale_ - zMod);
-
+	auto rangeX = 16 * (chunk_scale_ - xMod);
+	auto rangeZ = 16 * (chunk_scale_ - zMod);
+	
 	if (x > 0)
 	{
 		ScaledX = x - xMod;
+		rangeX = 16 * xMod;
 	}
 	if (z > 0)
 	{
 		ScaledZ = z - zMod;
+		rangeZ = 16 * zMod;
 	}
 	
 	if (xMod == 0)
 	{
 		ScaledX = x;
+		rangeX = 0;
 	}
 	if (zMod == 0)
 	{
 		ScaledZ = z;
+		rangeZ = 0;
 	}
 	
 	glm::vec2 ChunkGrad(-5, -5), ChunkGradX(-5, -5), ChunkGradZ(-5, -5), ChunkGradXZ(-5, -5);
@@ -110,27 +116,6 @@ std::vector<std::vector<float>> Vulkan::TerrainGenerator::getnoise(int x, int z)
 	}
 
 	std::vector<std::vector<float>> blockHeights(16, std::vector(16, 0.0f));
-
-	auto rangeX = 16 * (chunk_scale_ - xMod);
-	auto rangeZ = 16 * (chunk_scale_ - zMod);
-
-	if(x > 0)
-	{
-		rangeX = 16 * xMod;
-	}
-	if(z > 0)
-	{
-		rangeZ = 16 * zMod;
-	}
-	
-	if (xMod == 0)
-	{
-		rangeX = 0;
-	}
-	if (zMod == 0)
-	{
-		rangeZ = 0;
-	}
 	
 	for (auto blockZ = rangeZ; blockZ < rangeZ + 16; blockZ++)
 	{
