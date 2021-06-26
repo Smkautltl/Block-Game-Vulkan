@@ -38,14 +38,13 @@ namespace Vulkan
 		while (!window_.should_close())
 		{
 			glfwPollEvents();
-			VK_CORE_INFO("-=-=-=-=-=- NEW FRAME -=-=-=-=-=-")
-
+			
 			//Begins the rendering of the frame
 			if (auto commandbuffer = renderer_.begin_frame())
 			{
 				renderer_.begin_swap_chain_render_pass(commandbuffer);
 
-				simpleRenderSystem.render_game_objects(commandbuffer, cam);
+				simpleRenderSystem.render_game_objects(commandbuffer, cam, world_);
 
 				renderer_.end_swap_chain_render_pass(commandbuffer);
 				renderer_.end_frame();
@@ -53,14 +52,7 @@ namespace Vulkan
 		}
 
 		realTimeThread.join();
-		vkDeviceWaitIdle(device_.get_device());		
-	}
-
-
-	
-	void App::load_game_objects()
-	{
-		
+		vkDeviceWaitIdle(device_.get_device());
 	}
 
 	void App::realtime_functions()
@@ -70,13 +62,18 @@ namespace Vulkan
 		
 		while (!window_.should_close())
 		{
+			auto bench = VK_CORE_BENCH("Realtime Functions");
 			elapsed_ms = std::chrono::high_resolution_clock::now() - lasttime;
 			if ((elapsed_ms.count() * 1000) >= 1.0)
-			{
+			{		
 				glfwPollEvents();
+				
+				world_.update(cam.get_camera_pos());
+				
 				cam.update_camera_pos(window_.key, window_.scancode, window_.action, window_.mods);
 				cam.update_camera_rot(window_.xpos, window_.ypos);
 				cam.recalculate_proj_matrix(70.f, window_.get_extent().width, window_.get_extent().height);
+				
 				lasttime = std::chrono::high_resolution_clock::now();
 			}	
 		}

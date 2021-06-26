@@ -50,6 +50,7 @@ namespace Vulkan
 
 	void Chunk::load_block_faces(Device& device, Chunk* Left, Chunk* Right, Chunk* Front, Chunk* Back)
 	{
+		ready = false;
 		if (blocks_.empty())
 		{
 			return;
@@ -69,9 +70,9 @@ namespace Vulkan
 					if(blocks_[y][z][x] != 0)
 					{
 						//Left Face
-						if (x == 0 && (Left->empty || Left->blocks_[y][z][15] == 0))
+						if (x == 0 && (Left->empty ||Left->blocks_[y][z][15] == 0))
 							facevertices.insert(facevertices.end(), cube::LeftFace.begin(), cube::LeftFace.end());
-						else if (x - 1 < 0)
+						else if ((x - 1 < 0))
 							nan = 0;
 						else if (blocks_[y][z][x - 1] == 0)
 							facevertices.insert(facevertices.end(), cube::LeftFace.begin(), cube::LeftFace.end());
@@ -79,7 +80,7 @@ namespace Vulkan
 						//Right Face
 						if (x == 15 && (Right->empty || Right->blocks_[y][z][0] == 0))
 							facevertices.insert(facevertices.end(), cube::RightFace.begin(), cube::RightFace.end());
-						else if (x + 1 > 15)
+						else if ((x + 1 > 15))
 							nan = 0;
 						else if (blocks_[y][z][x + 1] == 0)
 							facevertices.insert(facevertices.end(), cube::RightFace.begin(), cube::RightFace.end());
@@ -95,9 +96,9 @@ namespace Vulkan
 							facevertices.insert(facevertices.end(), cube::BottomFace.begin(), cube::BottomFace.end());
 
 						//Front Face
-						if ((z == 0 && (Front->empty || Front->blocks_[y][15][x] == 0)))
+						if (z == 0 && (Front->empty || Front->blocks_[y][15][x] == 0))
 							facevertices.insert(facevertices.end(), cube::FrontFace.begin(), cube::FrontFace.end());
-						else if (z - 1 < 0)
+						else if ((z - 1 < 0))
 							nan = 0;
 						else if (blocks_[y][z - 1][x] == 0)
 							facevertices.insert(facevertices.end(), cube::FrontFace.begin(), cube::FrontFace.end());
@@ -105,7 +106,7 @@ namespace Vulkan
 						//Back Face
 						if (z == 15 && (Back->empty || Back->blocks_[y][0][x] == 0))
 							facevertices.insert(facevertices.end(), cube::BackFace.begin(), cube::BackFace.end());
-						else if (z + 1 > 15)
+						else if ((z + 1 > 15))
 							nan = 0;
 						else if (blocks_[y][z + 1][x] == 0)
 							facevertices.insert(facevertices.end(), cube::BackFace.begin(), cube::BackFace.end());
@@ -162,7 +163,13 @@ namespace Vulkan
 				}//X
 			}//Z
 		}//Y
+
+		if (model != nullptr)
+		{
+			model->destroy();
+		}
 		
 		model = std::make_unique<Model>(0, device, vertices);
+		ready = true;
 	}//Load block faces
 }

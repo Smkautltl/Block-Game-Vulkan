@@ -153,6 +153,7 @@ namespace Vulkan
 		
 		TransformComponent transform_{glm::vec3(0.f), glm::vec3(1.f), glm::vec3(0.f) };
 		bool empty = true;
+		bool ready = false;
 		int32_t x_;
 		int32_t z_;
 	

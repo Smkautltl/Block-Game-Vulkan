@@ -43,7 +43,9 @@ namespace Vulkan
 		int ChunkZDistance = 24;
 		TerrainGenerator generator_{8};
 		
-		std::map<float, Chunk> ChunkMap;	
+		std::map<float, Chunk> chunk_map_;
+		std::vector<float> to_be_deleted_;
+		std::vector<glm::vec2> to_be_added_;
 		Chunk BlankChunk{0,0};
 
 		glm::vec3 LastCamLocation;

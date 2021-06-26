@@ -61,12 +61,12 @@ namespace Vulkan
 		pipeline_ = std::make_unique<pipeline>(device_, "Shaders/vert.spv", "Shaders/frag.spv", pipeline_config);
 	}
 
-	void SimpleRenderSystem::render_game_objects(VkCommandBuffer commandbuffer, Camera& cam)
+	void SimpleRenderSystem::render_game_objects(VkCommandBuffer commandbuffer, Camera& cam, world& world)
 	{
 
 		pipeline_->bind(commandbuffer);
 
-		world_.render(commandbuffer, cam, pipeline_layout_);
+		world.render(commandbuffer, cam, pipeline_layout_);
 	}
 
 }

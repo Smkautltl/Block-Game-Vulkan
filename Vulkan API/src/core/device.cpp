@@ -25,7 +25,7 @@ namespace Vulkan
             break;
 			
 		case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
-            VK_CORE_ERROR(pCallbackData->pMessage)
+            //VK_CORE_ERROR(pCallbackData->pMessage)
             break;
 			
 		case VK_DEBUG_UTILS_MESSAGE_SEVERITY_FLAG_BITS_MAX_ENUM_EXT:
