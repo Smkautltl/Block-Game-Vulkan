@@ -38,4 +38,9 @@
 
 /.vs
 
-*ilk
+# Visual Studio files
+*.ilk
+*.idb
+*.log
+*.tlog
+*.pdb
