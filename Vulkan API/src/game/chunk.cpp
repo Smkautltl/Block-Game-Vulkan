@@ -5,12 +5,14 @@
 
 namespace Vulkan
 {
-	Chunk::Chunk() {}
+	Chunk::Chunk()
+	{
+	}
+
 	Chunk::Chunk(int32_t x, int32_t z) : x_(x), z_(z){}
 
 	void Chunk::generate(std::vector<std::vector<float>> blockHeights)
 	{	
-		uint16_t id = 0;
 		uint8_t blocktype = 0;
 
 		for (uint32_t z = 0; z < chunk_length_; z++)
@@ -18,7 +20,7 @@ namespace Vulkan
 			for (uint32_t x = 0; x < chunk_length_; x++)
 			{
 				uint32_t terrianHeight = (uint32_t)(40 * blockHeights[z][x]) + 70;
-				for (uint32_t y = 0; y < chunk_height_; y++, id++, blocktype = 0)
+				for (uint32_t y = 0; y < chunk_height_; y++, blocktype = 0)
 				{	
 					if (y <= (terrianHeight-7))
 					{

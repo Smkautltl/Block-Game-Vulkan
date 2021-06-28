@@ -116,10 +116,6 @@ namespace Vulkan
 		};
 
 	};
-
-	typedef std::vector<uint8_t> blocks;
-	typedef std::vector<blocks> rows;
-	typedef std::vector<rows> layers;
 	
 	class Chunk
 	{
@@ -129,21 +125,20 @@ namespace Vulkan
 		Chunk( int32_t x, int32_t z);
 		~Chunk()
 		{
-			auto bench = VK_CORE_BENCH("Chunk | Destructor");
 			if (model != nullptr)
 			{
 				model->destroy();
 			}
-			
 		}
 
-		void update_chunkdata(int x, int z)
+		void update_chunkdata(int x, int z, std::vector<std::vector<float>> blockHeights)
 		{
-			blocks_ = layers(chunk_height_, rows(chunk_length_, blocks(chunk_length_,0)));
+			blocks_ = std::vector(chunk_height_, std::vector(chunk_length_, std::vector<UINT8>(chunk_length_,0)));
 			x_ = x;
 			z_ = z;
 			transform_.translation = {x*16, 0, z*16};
 			empty = false;
+			generate(blockHeights);
 		}
 		bool is_model_valid() { return model != nullptr; }
 		std::shared_ptr<Model> get() { return model; }
@@ -156,16 +151,16 @@ namespace Vulkan
 		bool ready = false;
 		int32_t x_;
 		int32_t z_;
+
+		std::mutex lock;
 	
 	private:
 		const uint8_t chunk_length_ = 16;
 		const uint8_t chunk_height_ = 255;
 		//const uint16_t chunk_volume_ = chunk_length_ * chunk_length_  * chunk_height_;
 		
-		layers blocks_;
+		std::vector<std::vector<std::vector<UINT8>>> blocks_;
 		std::shared_ptr<Model> model = nullptr;
-
-		
 	};
 
 	

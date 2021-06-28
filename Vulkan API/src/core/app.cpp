@@ -62,7 +62,7 @@ namespace Vulkan
 		
 		while (!window_.should_close())
 		{
-			auto bench = VK_CORE_BENCH("Realtime Functions");
+			//auto bench = VK_CORE_BENCH("Realtime Functions");
 			elapsed_ms = std::chrono::high_resolution_clock::now() - lasttime;
 			if ((elapsed_ms.count() * 1000) >= 1.0)
 			{		

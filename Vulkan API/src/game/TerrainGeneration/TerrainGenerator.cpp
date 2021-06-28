@@ -4,12 +4,13 @@
 
 Vulkan::TerrainGenerator::TerrainGenerator(int chunkScale) : chunk_scale_(chunkScale)
 {
-	seed = (float)rand();
+	seed = (rand() % 90000000 + 10000000);
+	srand(seed);
 }
 
 glm::vec2 Vulkan::TerrainGenerator::random_gradient(int ix, int iy)
 {
-	float random = 2920.f * sin(ix * 21942.f + iy * seed + 8912.f) * cos(ix * 23157.f * iy * 217832.f + 9758.f);
+	float random = 2920.f * sin((float)ix * 21942.f + (float)iy * (float)(rand() + ix * iy) + 8912.f) * cos((float)ix * 23157.f * (float)iy * 217832.f + 9758.f);
 	return  { cos(random), sin(random) };
 }
 
@@ -26,7 +27,6 @@ std::vector<std::vector<float>> Vulkan::TerrainGenerator::getnoise(int x, int z)
 	{
 		zMod = (-z) % chunk_scale_;
 	}
-	
 	if (xMod < 0)
 	{
 		xMod = -xMod;
@@ -51,7 +51,6 @@ std::vector<std::vector<float>> Vulkan::TerrainGenerator::getnoise(int x, int z)
 		ScaledZ = z - zMod;
 		rangeZ = 16 * zMod;
 	}
-	
 	if (xMod == 0)
 	{
 		ScaledX = x;

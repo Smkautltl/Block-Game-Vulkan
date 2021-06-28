@@ -20,7 +20,7 @@ namespace Vulkan
 	{
 		glm::mat4 transform{ 1.0f };
 		glm::vec3 position;
-		alignas(16) glm::vec3 color;
+		//alignas(16) glm::vec3 color;
 	};
 	
 	class world
@@ -39,15 +39,15 @@ namespace Vulkan
 	private:
 		Device& device_;
 
-		int ChunkXDistance = 24;
-		int ChunkZDistance = 24;
+		int ChunkXDistance = 16;
+		int ChunkZDistance = 16;
 		TerrainGenerator generator_{8};
 		
 		std::map<float, Chunk> chunk_map_;
 		std::vector<float> to_be_deleted_;
-		std::vector<glm::vec2> to_be_added_;
+		std::vector<glm::vec2> to_be_culled_;
 		Chunk BlankChunk{0,0};
 
-		glm::vec3 LastCamLocation;
+		glm::vec3 LastCamLocation{0.f};
 	};
 }
