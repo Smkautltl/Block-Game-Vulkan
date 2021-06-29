@@ -4,19 +4,18 @@
 
 Vulkan::world::world(Device& device) : device_(device)
 {
+
 	VK_CORE_WARN("Chunks are being generated...")
-	
-	{//Generate block data for each of the chunks
-		std::vector<std::future<void>> generate;
-		for (auto z = -ChunkZDistance; z < ChunkZDistance; z++)
+	auto bench = VK_CORE_BENCH("Completed! It");
+	//Generate block data for each of the chunks
+	for (auto z = -ChunkZDistance; z < ChunkZDistance; z++)
+	{
+		for (auto x = -ChunkXDistance; x < ChunkXDistance; x++)
 		{
-			for (auto x = -ChunkXDistance; x < ChunkXDistance; x++)
-			{
-				chunk_map_[x * 1.005f + z].update_chunkdata(x, z, generator_.getnoise(x, z));
-			}
+			chunk_map_[x * 1.005f + z].update_chunkdata(x, z, generator_.getnoise(x, z));
 		}
 	}
-
+	
 	{//Culling the faces of the blocks within the the chunk
 		std::vector<std::future<void>> culling;
 		for (auto& chunk : chunk_map_)
@@ -27,7 +26,6 @@ Vulkan::world::world(Device& device) : device_(device)
 			}));
 		}
 	}
-	VK_CORE_WARN("Complete!")
 }
 
 Vulkan::world::~world()

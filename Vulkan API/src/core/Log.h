@@ -57,11 +57,11 @@ struct VK_CORE_BENCH
 		if (count < 1.f)
 		{
 			
-			VK_CORE_INFO("{0} took {1}ms ({2}us)", name_, std::to_string(count), std::to_string(count*1000))
+			VK_CORE_WARN("{0} took {1}ms ({2}us)", name_, std::to_string(count), std::to_string(count*1000))
 		}
 		else
 		{
-			VK_CORE_INFO("{0} took {1}ms", name_, std::to_string(count))
+			VK_CORE_WARN("{0} took {1}ms", name_, std::to_string(count))
 		}
 		
 	}

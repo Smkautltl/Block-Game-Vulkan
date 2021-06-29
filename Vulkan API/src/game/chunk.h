@@ -133,7 +133,7 @@ namespace Vulkan
 
 		void update_chunkdata(int x, int z, std::vector<std::vector<float>> blockHeights)
 		{
-			blocks_ = std::vector(chunk_height_, std::vector(chunk_length_, std::vector<UINT8>(chunk_length_,0)));
+			blocks_ = std::vector((uint16_t)chunk_height_ * (chunk_length_ * chunk_length_), (uint8_t)10);
 			x_ = x;
 			z_ = z;
 			transform_.translation = {x*16, 0, z*16};
@@ -153,14 +153,17 @@ namespace Vulkan
 		int32_t z_;
 
 		std::mutex lock;
-	
-	private:
+
 		const uint8_t chunk_length_ = 16;
 		const uint8_t chunk_height_ = 255;
 		//const uint16_t chunk_volume_ = chunk_length_ * chunk_length_  * chunk_height_;
-		
-		std::vector<std::vector<std::vector<UINT8>>> blocks_;
+
+		//std::vector<std::vector<std::vector<UINT8>>> blocks_;
+		std::vector<uint8_t> blocks_;
 		std::shared_ptr<Model> model = nullptr;
+	
+	private:
+		
 	};
 
 	
