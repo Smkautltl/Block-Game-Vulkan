@@ -38,5 +38,6 @@ namespace Vulkan
 		std::vector<GameObject> game_objects_;
 		Camera cam{70.f, WIDTH, HEIGHT, 0.1f, 1000.f};
 		world world_{device_};
+		bool updateWorld = true;
 	};
 }

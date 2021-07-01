@@ -456,6 +456,7 @@ namespace Vulkan
 
     void Device::setup_vma_allocator()
     {
+        std::lock_guard<std::mutex> lock(allocMutex);
         VmaAllocatorCreateInfo allocinfo{};
         allocinfo.physicalDevice = physical_device_;
         allocinfo.device = device_;
@@ -465,10 +466,12 @@ namespace Vulkan
 
     void Device::destroy_buffer(AllocatedBuffer buffer)
     {
+        std::lock_guard<std::mutex> lock(allocMutex);
 		vmaDestroyBuffer(allocator, buffer.buffer_, buffer.allocation_); 
     }
     void Device::destroy_image(AllocatedImage image)
     {
+        std::lock_guard<std::mutex> lock(allocMutex);
         vmaDestroyImage(allocator, image._image, image._allocation);
     }
 
@@ -506,6 +509,7 @@ namespace Vulkan
     
     void Device::create_buffer(VkDeviceSize size, VkBufferUsageFlags usage, AllocatedBuffer &buffer, const std::vector<Vertex>& vertices)
 	{
+        std::lock_guard<std::mutex> lock(allocMutex);
         VkBufferCreateInfo bufferInfo{};
         bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
         bufferInfo.size = size;	
@@ -527,6 +531,7 @@ namespace Vulkan
 	}
 	AllocatedBuffer Device::create_buffer(size_t allocSize, VkBufferUsageFlags usage, VmaMemoryUsage memUsage, VkDeviceSize imageSize, void* pixels)
 	{
+        std::lock_guard<std::mutex> lock(allocMutex);
         VkBufferCreateInfo bufferInfo{};
         bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
         bufferInfo.size = allocSize;
@@ -644,6 +649,7 @@ namespace Vulkan
 
 	void Device::create_image(VkImageCreateInfo& imgInfo, VmaMemoryUsage memUsage, AllocatedImage& imageAlloc)
 	{
+        std::lock_guard<std::mutex> lock(allocMutex);
         VmaAllocationCreateInfo dimgAllocInfo{};
 			dimgAllocInfo.usage = memUsage;
 

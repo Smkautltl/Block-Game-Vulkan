@@ -45,6 +45,8 @@ namespace Vulkan
 		
 		std::map<float, Chunk> chunk_map_;
 		std::vector<float> to_be_deleted_;
+		std::chrono::duration<double> wait = std::chrono::duration<double>(1);
+		
 		std::vector<glm::vec2> to_be_culled_;
 		Chunk BlankChunk{0,0};
 

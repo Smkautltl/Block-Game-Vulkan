@@ -31,8 +31,15 @@ namespace Vulkan
 	void App::run()
 	{
 		SimpleRenderSystem simpleRenderSystem{ device_, renderer_.get_swap_chain_render_pass() };
-		auto func = [this] { realtime_functions(); };
-		std::thread realTimeThread (func);
+		std::thread realTimeThread ([this] { realtime_functions(); });
+		std::thread worldThread ([this]
+		{
+				while (!window_.should_close())
+				{
+					if (updateWorld)
+						world_.update(cam.get_camera_pos());
+				}	
+		});
 		
 		//Keeps the window open until we need it to close
 		while (!window_.should_close())
@@ -51,6 +58,7 @@ namespace Vulkan
 			}
 		}
 
+		worldThread.join();
 		realTimeThread.join();
 		vkDeviceWaitIdle(device_.get_device());
 	}
@@ -67,8 +75,14 @@ namespace Vulkan
 			if ((elapsed_ms.count() * 1000) >= 1.0)
 			{		
 				glfwPollEvents();
-				
-				world_.update(cam.get_camera_pos());
+				if (window_.key == GLFW_KEY_F1 && window_.action == GLFW_PRESS && !updateWorld)
+				{
+					updateWorld = true;
+				}
+				else if (window_.key == GLFW_KEY_F1 && window_.action == GLFW_PRESS && updateWorld)
+				{
+					updateWorld = false;
+				}
 				
 				cam.update_camera_pos(window_.key, window_.scancode, window_.action, window_.mods);
 				cam.update_camera_rot(window_.xpos, window_.ypos);

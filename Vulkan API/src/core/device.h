@@ -120,6 +120,7 @@ namespace Vulkan
     public:
         VkPhysicalDeviceProperties properties{};
         VmaAllocator allocator;
+        std::mutex allocMutex;
     
     private:
         VkInstance instance_{};

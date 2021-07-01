@@ -131,17 +131,17 @@ namespace Vulkan
 			}
 		}
 
-		void update_chunkdata(int x, int z, std::vector<std::vector<float>> blockHeights)
+		void update_chunk_data(int x, int z, std::vector<std::vector<float>> blockHeights)
 		{
-			blocks_ = std::vector((uint16_t)chunk_height_ * (chunk_length_ * chunk_length_), (uint8_t)10);
+			blocks_ = std::vector(chunk_height_ * (chunk_length_ * chunk_length_), (uint8_t)10);
 			x_ = x;
 			z_ = z;
 			transform_.translation = {x*16, 0, z*16};
 			empty = false;
 			generate(blockHeights);
 		}
-		bool is_model_valid() { return model != nullptr; }
-		std::shared_ptr<Model> get() { return model; }
+		bool is_model_valid() const { return model != nullptr; }
+		std::shared_ptr<Model> get() const { return model; }
 		
 		void generate(std::vector<std::vector<float>> blockHeights);
 		void load_block_faces(Device& device, Chunk* Left, Chunk* Right, Chunk* Front, Chunk* Back);
@@ -152,18 +152,17 @@ namespace Vulkan
 		int32_t x_;
 		int32_t z_;
 
-		std::mutex lock;
-
-		const uint8_t chunk_length_ = 16;
-		const uint8_t chunk_height_ = 255;
-		//const uint16_t chunk_volume_ = chunk_length_ * chunk_length_  * chunk_height_;
-
-		//std::vector<std::vector<std::vector<UINT8>>> blocks_;
-		std::vector<uint8_t> blocks_;
-		std::shared_ptr<Model> model = nullptr;
+		std::mutex mutex;
+		std::condition_variable being_used;
 	
 	private:
-		
+		const uint8_t chunk_length_ = 16;
+		const uint8_t chunk_height_ = 255;
+
+		///To get the correct block use [x + chunk_length_ * (y + chunk_height_ * z)];
+		///For loop order Y >> Z >> X
+		std::vector<uint8_t> blocks_;
+		std::shared_ptr<Model> model = nullptr;
 	};
 
 	
