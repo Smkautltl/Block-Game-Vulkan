@@ -25,20 +25,15 @@ bool Vulkan::Texture::load_image_from_file(const char* filename)
 	stagingBuffer = device_.create_buffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY, imageSize, pixels);
 	stbi_image_free(pixels);
 
-	VkExtent3D imageExtent;
-		imageExtent.width = texWidth;
-		imageExtent.height = texHeight;
-		imageExtent.depth = 1;
-
 	VkImageCreateInfo dImgInfo;
 		dImgInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 
 		dImgInfo.imageType = VK_IMAGE_TYPE_2D;
 
 		dImgInfo.format = VK_FORMAT_R8G8B8A8_SRGB;
-		dImgInfo.extent.width = imageExtent.width;
-		dImgInfo.extent.height = imageExtent.height;
-		dImgInfo.extent.depth = imageExtent.depth;
+		dImgInfo.extent.width = texWidth;
+		dImgInfo.extent.height = texHeight;
+		dImgInfo.extent.depth = 1;
 
 		dImgInfo.mipLevels = 1;
 		dImgInfo.arrayLayers = 1;
@@ -85,6 +80,6 @@ void Vulkan::Texture::create_texture_sampler()
 
 		if(vkCreateSampler(device_.get_device(), &samplerInfo, nullptr, &textureSampler) != VK_SUCCESS)
 		{
-			VK_CORE_RUNTIME("Failed to create Texture sampler!");
+			VK_CORE_RUNTIME("Failed to create Texture sampler!")
 		}
 }

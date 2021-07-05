@@ -1,6 +1,7 @@
 #pragma once
 //-=-=-=-=- STD -=-=-=-=-
 #include <vector>
+#include <map>
 
 //-=-=-=-=- VULKAN -=-=-=-=-
 #include <vulkan/vulkan_core.h>
@@ -9,8 +10,6 @@
 #include "../core/camera.h"
 
 //-=-=-=-=- GAME -=-=-=-=-
-#include <map>
-
 #include "chunk.h"
 #include "TerrainGeneration/TerrainGenerator.h"
 
@@ -41,7 +40,7 @@ namespace Vulkan
 
 		int ChunkXDistance = 16;
 		int ChunkZDistance = 16;
-		TerrainGenerator generator_{8};
+		TerrainGenerator generator_{4};
 		
 		std::map<float, Chunk> chunk_map_;
 		std::vector<float> to_be_deleted_;

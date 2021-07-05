@@ -101,7 +101,7 @@
     <ClInclude Include="src\core\camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\game\block.h">
+    <ClInclude Include="src\game\blockData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\game\chunk.h">

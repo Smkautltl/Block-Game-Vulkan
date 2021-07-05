@@ -13,7 +13,7 @@ namespace Vulkan
 	public:
 		//Takes in a value for how many chunks should be used in the getNoise generation
 		TerrainGenerator(int chunkScale);
-		std::vector<std::vector<float>> getnoise(int x, int z);
+		std::vector<float> getnoise(int x, int z);
 
 	private:
 		glm::vec2 random_gradient(int ix, int iy);

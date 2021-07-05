@@ -70,7 +70,6 @@ namespace Vulkan
 		
 		while (!window_.should_close())
 		{
-			//auto bench = VK_CORE_BENCH("Realtime Functions");
 			elapsed_ms = std::chrono::high_resolution_clock::now() - lasttime;
 			if ((elapsed_ms.count() * 1000) >= 1.0)
 			{		
@@ -78,10 +77,12 @@ namespace Vulkan
 				if (window_.key == GLFW_KEY_F1 && window_.action == GLFW_PRESS && !updateWorld)
 				{
 					updateWorld = true;
+					VK_CORE_TRACE("Update World Enabled!")
 				}
 				else if (window_.key == GLFW_KEY_F1 && window_.action == GLFW_PRESS && updateWorld)
 				{
 					updateWorld = false;
+					VK_CORE_TRACE("Update World Disabled!")
 				}
 				
 				cam.update_camera_pos(window_.key, window_.scancode, window_.action, window_.mods);

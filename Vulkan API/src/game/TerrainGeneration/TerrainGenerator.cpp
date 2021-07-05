@@ -14,7 +14,7 @@ glm::vec2 Vulkan::TerrainGenerator::random_gradient(int ix, int iy)
 	return  { cos(random), sin(random) };
 }
 
-std::vector<std::vector<float>> Vulkan::TerrainGenerator::getnoise(int x, int z)
+std::vector<float> Vulkan::TerrainGenerator::getnoise(int x, int z)
 {
 	int xMod = (x) % chunk_scale_;
 	int zMod = (z) % chunk_scale_;
@@ -114,7 +114,7 @@ std::vector<std::vector<float>> Vulkan::TerrainGenerator::getnoise(int x, int z)
 		RandomChunkBorderGradients.push_back(std::make_pair(glm::vec2{ ScaledX + chunk_scale_, ScaledZ + chunk_scale_ }, ChunkGradXZ));
 	}
 
-	std::vector<std::vector<float>> blockHeights(16, std::vector(16, 0.0f));
+	std::vector<float> blockHeights(16*16, 0.0f);
 	
 	for (auto blockZ = rangeZ; blockZ < rangeZ + 16; blockZ++)
 	{
@@ -131,7 +131,7 @@ std::vector<std::vector<float>> Vulkan::TerrainGenerator::getnoise(int x, int z)
 			float lerp1 = interpolate(glm::dot(dist, ChunkGrad), glm::dot(distX, ChunkGradX), xPercent);
 			float lerp2 = interpolate(glm::dot(distZ, ChunkGradZ), glm::dot(distXZ, ChunkGradXZ), xPercent);
 
-			blockHeights[blockZ - rangeZ][blockX- rangeX] = interpolate(lerp1, lerp2, zPercent);
+			blockHeights[(blockZ - rangeZ) * 16 + (blockX- rangeX)] = interpolate(lerp1, lerp2, zPercent);
 		}
 	}
 

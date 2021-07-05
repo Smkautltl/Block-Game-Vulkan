@@ -186,7 +186,7 @@
     <ClInclude Include="src\core\model.h" />
     <ClInclude Include="src\ecs\entityManager.h" />
     <ClInclude Include="src\game\chunk.h" />
-    <ClInclude Include="src\game\block.h" />
+    <ClInclude Include="src\game\blockData.h" />
     <ClInclude Include="src\game\world.h" />
     <ClInclude Include="src\core\texture.h" />
     <ClInclude Include="src\game\TerrainGeneration\TerrainGenerator.h" />

@@ -616,7 +616,7 @@ namespace Vulkan
 
         region.imageOffset = {0, 0, 0};
         region.imageExtent = {width, height, 1};
-
+		
         vkCmdCopyBufferToImage(commandBuffer, buffer, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
     	end_single_time_commands(commandBuffer);
 	}
@@ -653,15 +653,15 @@ namespace Vulkan
         VmaAllocationCreateInfo dimgAllocInfo{};
 			dimgAllocInfo.usage = memUsage;
 
-        VkMemoryRequirements memRequirements{};
-        vkGetImageMemoryRequirements(device_, imageAlloc._image, &memRequirements);
+        //VkMemoryRequirements memRequirements;
+        //vkGetImageMemoryRequirements(device_, imageAlloc._image, &memRequirements);
+		//
+        //VmaAllocationInfo AllocInfo{};
+		//	AllocInfo.size = memRequirements.size;
+        //    AllocInfo.memoryType = find_memory_type(memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 		
-        VmaAllocationInfo AllocInfo{};
-			AllocInfo.size = memRequirements.size;
-            AllocInfo.memoryType = find_memory_type(memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-		
-        vmaCreateImage(allocator, &imgInfo, &dimgAllocInfo, &imageAlloc._image, &imageAlloc._allocation, &AllocInfo);
-        vmaBindImageMemory(allocator, imageAlloc._allocation, imageAlloc._image);
+        vmaCreateImage(allocator, &imgInfo, &dimgAllocInfo, &imageAlloc._image, &imageAlloc._allocation, nullptr);
+        //vmaBindImageMemory(allocator, imageAlloc._allocation, imageAlloc._image);
 	}
     void Device::transition_image_layout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout)
 	{

@@ -12,13 +12,12 @@ layout(push_constant) uniform Push
 {
 	mat4 transform;
 	vec3 position;
-	vec3 colour;
 } push;
 
 void main()
 {
 	gl_Position = push.transform * vec4(position, 1.0);
 	fragColour = colour;
-	fragposition = position;
+	fragposition = position + push.position;
 	fragNormal = normal;
 }

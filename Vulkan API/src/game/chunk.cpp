@@ -1,52 +1,45 @@
 #include "chunk.h"
 
-//-=-=-=-=- STD -=-=-=-=-
-#include <filesystem>
-
 namespace Vulkan
 {
-	Chunk::Chunk()
-	{
-		x_ = 0;
-		z_ = 0;
-	}
-
+	Chunk::Chunk() : x_(0), z_(0){}
 	Chunk::Chunk(int32_t x, int32_t z) : x_(x), z_(z){}
 
-	void Chunk::generate(std::vector<std::vector<float>> blockHeights)
-	{	
-		uint8_t blocktype = 0;
-		uint8_t terrainHeight;
-		for (uint32_t y = 0; y < chunk_height_; y++)
+	void Chunk::generate(std::vector<float> blockHeights)
+	{
+		uint8_t blockType = 0;
+		uint8_t terrainHeight = 0;
+		for (uint8_t y = 0; y < chunk_height_; y++)
 		{
-			for (uint32_t z = 0; z < chunk_length_; z++)
+			for (uint8_t z = 0; z < chunk_length_; z++)
 			{
-				for (uint32_t x = 0; x < chunk_length_; x++, blocktype = 0)
+				for (uint8_t x = 0; x < chunk_length_; x++, blockType = 0)
 				{
-					terrainHeight = (uint8_t)(40 * blockHeights[z][x]) + 70;
+					terrainHeight = (uint8_t)(40 * blockHeights[z * 16 + x]) + 70;
 					if (y <= (terrainHeight -7))
 					{
-						blocktype = 3;
+						blockType = BlockType::Stone;
 					}
 					else if ((terrainHeight -7) < y && y <= (terrainHeight -2))
 					{
-						blocktype = 2;
+						blockType = BlockType::Dirt;
 					}
 					else if (y <= terrainHeight)
 					{
-						blocktype = 1;
+						blockType = BlockType::Grass;
 					}
 
-					if(y < 60 && blocktype == 0)
+					if(y < 60 && blockType == 0)
 					{
-						blocktype = 4;
+						blockType = BlockType::Water;
 					}
-					if (y <= 60 && blocktype == 1)
+					
+					if((y <= 60 && blockType == BlockType::Grass) || (y <= 60 && blockType == BlockType::Dirt))
 					{
-						blocktype = 5;
+						blockType = BlockType::Sand;
 					}
 
-					blocks_[x + chunk_length_ * (y + chunk_height_ * z)] = blocktype;
+					blocks_[x + chunk_length_ * (y + chunk_height_ * z)] = blockType;
 				}
 			}
 		}
@@ -55,14 +48,9 @@ namespace Vulkan
 	void Chunk::load_block_faces(Device& device, Chunk* Left, Chunk* Right, Chunk* Front, Chunk* Back)
 	{
 		ready = false;
-		if (blocks_.empty())
-		{
-			return;
-		}
-		
+
 		std::vector<Vertex> vertices;
-		std::vector<Vertex> facevertices;
-		uint8_t nan;
+		std::vector<Vertex> faceVertices;
 		
 		for (uint8_t y = 0; y < chunk_height_; y++)
 		{
@@ -70,70 +58,116 @@ namespace Vulkan
 			{
 				for (uint8_t x = 0; x < chunk_length_; x++)
 				{
-					//Add faces that need to be rendered
-					if(blocks_[x + chunk_length_ * (y + chunk_height_ * z)] != 0)
+					if(blocks_[x + chunk_length_ * (y + chunk_height_ * z)] != BlockType::Air)
 					{
-					//-=-=-=-=- Left Face -=-=-=-=-
-						bool Condition1 = x == 0;
-						bool Condition2 = Left->empty || Left->blocks_[15 + chunk_length_ * (y + chunk_height_ * z)] == 0;
-						bool Condition3 = false;
-						if (!(x - 1 < 0))
-							Condition3 = blocks_[(x - 1) + chunk_length_ * (y + chunk_height_ * z)] == 0;
-						
-						if ((Condition1 && Condition2) || Condition3)
-							facevertices.insert(facevertices.end(), cube::LeftFace.begin(), cube::LeftFace.end());
-						
-					//-=-=-=-=- Right Face -=-=-=-=
-						Condition1 = x == 15;
-						Condition2 = Right->empty || Right->blocks_[0 + chunk_length_ * (y + chunk_height_ * z)] == 0;
-						Condition3 = false;
-						if (!(x + 1 > 15))
-							Condition3 = blocks_[(x + 1) + chunk_length_ * (y + chunk_height_ * z)] == 0;
-						
-						if ((Condition1 && Condition2) || Condition3)
-							facevertices.insert(facevertices.end(), cube::RightFace.begin(), cube::RightFace.end());
+						//Add faces that need to be rendered
+						bool Condition1;
+						bool Condition2;
+						bool Condition3;
 
-					//-=-=-=-=- Top Face -=-=-=-=-
-						if (!(y + 1 == chunk_height_))
-							if(blocks_[x + chunk_length_ * ((y + 1) + chunk_height_ * z)] == 0)
-								facevertices.insert(facevertices.end(), cube::TopFace.begin(), cube::TopFace.end());	
+						//-=-=-=-=- Left Face -=-=-=-=-
+						{
+							Condition1 = x == 0;
+							Condition2 = Left->empty || Left->blocks_[15 + chunk_length_ * (y + chunk_height_ * z)] == BlockType::Air;
+							Condition3 = false;
+							
+							if (!(x - 1 < 0))
+								Condition3 = blocks_[(x - 1) + chunk_length_ * (y + chunk_height_ * z)] == BlockType::Air;
+
+							if ((Condition1 && Condition2) || Condition3)
+								faceVertices.insert(faceVertices.end(), cube::LeftFace.begin(), cube::LeftFace.end());
+						}
 						
-					//-=-=-=-=- Bottom Face -=-=-=-=-
-						if (y == 0 || blocks_[x + chunk_length_ * ((y-1) + chunk_height_ * z)] == 0)
-							facevertices.insert(facevertices.end(), cube::BottomFace.begin(), cube::BottomFace.end());
-						
-					//-=-=-=-=- Front Face -=-=-=-=-
-						Condition1 = z == 0;
-						Condition2 = Front->empty || Front->blocks_[x + chunk_length_ * (y + chunk_height_ * 15)] == 0;
-						Condition3 = false;
-						if (!(z - 1 < 0))
-							Condition3 = blocks_[x + chunk_length_ * (y + chunk_height_ * (z - 1))] == 0;
-						
-						if ((Condition1 && Condition2) || Condition3)
-							facevertices.insert(facevertices.end(), cube::FrontFace.begin(), cube::FrontFace.end());
-					
-					//-=-=-=-=- Back Face -=-=-=-=-=-
-						Condition1 = z == 15;
-						Condition2 = Back->empty || Back->blocks_[x + chunk_length_ * (y + chunk_height_ * 0)] == 0;
-						Condition3 = false;
-						if (!(z + 1 > 15))
-							Condition3 = blocks_[x + chunk_length_ * (y + chunk_height_ * (z + 1))] == 0;
-						
-						if ((Condition1 && Condition2) || Condition3)
-							facevertices.insert(facevertices.end(), cube::BackFace.begin(), cube::BackFace.end());
+						//-=-=-=-=- Right Face -=-=-=-=-
+						{
+							Condition1 = x == 15;
+							Condition2 = Right->empty || Right->blocks_[0 + chunk_length_ * (y + chunk_height_ * z)] == BlockType::Air;
+							Condition3 = false;
+							
+							if (!(x + 1 > 15))
+								Condition3 = blocks_[(x + 1) + chunk_length_ * (y + chunk_height_ * z)] == BlockType::Air;
+
+							if ((Condition1 && Condition2) || Condition3)
+								faceVertices.insert(faceVertices.end(), cube::RightFace.begin(), cube::RightFace.end());
+						}
+
+						//-=-=-=-=- Top Face -=-=-=-=-
+						{
+							if (!(y + 1 == chunk_height_))
+								if (blocks_[x + chunk_length_ * ((y + 1) + chunk_height_ * z)] == BlockType::Air)
+									faceVertices.insert(faceVertices.end(), cube::TopFace.begin(), cube::TopFace.end());
+						}
+
+						//-=-=-=-=- Bottom Face -=-=-=-=-
+						{
+							if (y == 0 || blocks_[x + chunk_length_ * ((y - 1) + chunk_height_ * z)] == BlockType::Air)
+								faceVertices.insert(faceVertices.end(), cube::BottomFace.begin(), cube::BottomFace.end());
+						}
+
+						//-=-=-=-=- Front Face -=-=-=-=-
+						{
+							Condition1 = z == 0;
+							Condition2 = Front->empty || Front->blocks_[x + chunk_length_ * (y + chunk_height_ * 15)] == BlockType::Air;
+							Condition3 = false;
+							
+							if (!(z - 1 < 0))
+								Condition3 = blocks_[x + chunk_length_ * (y + chunk_height_ * (z - 1))] == BlockType::Air;
+
+							if ((Condition1 && Condition2) || Condition3)
+								faceVertices.insert(faceVertices.end(), cube::FrontFace.begin(), cube::FrontFace.end());
+						}
+
+						//-=-=-=-=- Back Face -=-=-=-=-
+						{
+							Condition1 = z == 15;
+							Condition2 = Back->empty || Back->blocks_[x + chunk_length_ * (y + chunk_height_ * 0)] == BlockType::Air;
+							Condition3 = false;
+							
+							if (!(z + 1 > 15))
+								Condition3 = blocks_[x + chunk_length_ * (y + chunk_height_ * (z + 1))] == BlockType::Air;
+
+							if ((Condition1 && Condition2) || Condition3)
+								faceVertices.insert(faceVertices.end(), cube::BackFace.begin(), cube::BackFace.end());
+						}
 						
 						//Move faces to correct location within the chunk
-						if (!facevertices.empty())
+						if (!faceVertices.empty())
 						{
-							for (auto& vertex : facevertices)
+							for (auto& vertex : faceVertices)
 							{
 								vertex.position.x += x;
 								vertex.position.y += y;
 								vertex.position.z += z;
-								vertices.push_back(vertex);
+								
+								switch (blocks_[x + chunk_length_ * (y + chunk_height_ * z)])
+								{
+								case BlockType::Dirt:
+									vertex.colour = glm::vec3(0.4f, 0.27f, 0.0f);
+									break;
+									
+								case BlockType::Stone:
+									vertex.colour = glm::vec3(0.25f);
+									break;
+									
+								case BlockType::Grass:
+									vertex.colour = glm::vec3(0.13f, 0.4f, 0.0f);
+									break;
+									
+								case BlockType::Water:
+									vertex.colour = glm::vec3(0.0f, 0.33f, 0.4f);
+									break;
+									
+								case BlockType::Sand:
+									vertex.colour = glm::vec3(0.8f, 0.8f, 0.0f);
+									break;
+								default: break;
+								}
+								
+								vertices.emplace_back(vertex);
 							}
-							facevertices.clear();
-						}		
+							faceVertices.clear();
+						}
+						
 					}//Is block Air?
 				}//X
 			}//Z

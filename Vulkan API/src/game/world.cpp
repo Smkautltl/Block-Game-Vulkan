@@ -1,11 +1,10 @@
 #include "world.h"
-
 #include <future>
 
 Vulkan::world::world(Device& device) : device_(device)
-{
+{	
 	VK_CORE_WARN("Chunks are being generated...")
-	auto bench = VK_CORE_BENCH("Completed! It");
+	auto bench = VK_CORE_BENCH("Chunk generation");
 	//Generate block data for each of the chunks
 	for (auto z = -ChunkZDistance; z < ChunkZDistance; z++)
 	{
@@ -23,7 +22,6 @@ Vulkan::world::world(Device& device) : device_(device)
 		}
 	}
 }
-
 Vulkan::world::~world()
 {
 	VK_CORE_WARN("World destructor called!")
@@ -33,7 +31,6 @@ void Vulkan::world::add_chunk(int x, int z)
 {
 	chunk_map_[x * 1.005f + z].update_chunk_data(x, z, generator_.getnoise(x, z));
 }
-
 void Vulkan::world::cull_chunk(Chunk& chunk, int x, int z)
 {
 	Chunk* left = &BlankChunk;
@@ -60,7 +57,6 @@ void Vulkan::world::cull_chunk(Chunk& chunk, int x, int z)
 	
 	chunk.load_block_faces(device_, left, right, front, back);
 }
-
 void Vulkan::world::remove_chunk(int x, int z)
 {
 	chunk_map_.erase((float)x * 1.005f + z);
@@ -68,8 +64,6 @@ void Vulkan::world::remove_chunk(int x, int z)
 
 void Vulkan::world::render(VkCommandBuffer commandBuffer, Camera& cam, VkPipelineLayout& pipeline_layout_)
 {
-	//TODO: Stop stuttering on chunk creation and deletion
-	
 	auto projView = cam.get_proj_matrix() * cam.get_view_matrix();
 	for (auto& chunk : chunk_map_)//TODO: Reduce number of draw calls (?)
 	{

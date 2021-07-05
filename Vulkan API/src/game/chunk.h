@@ -4,7 +4,7 @@
 
 //-=-=-=-=- GAME -=-=-=-=-
 #include "TerrainGeneration/TerrainGenerator.h"
-
+#include "blockData.h"
 
 namespace Vulkan
 {
@@ -131,7 +131,7 @@ namespace Vulkan
 			}
 		}
 
-		void update_chunk_data(int x, int z, std::vector<std::vector<float>> blockHeights)
+		void update_chunk_data(int x, int z, std::vector<float> blockHeights)
 		{
 			blocks_ = std::vector(chunk_height_ * (chunk_length_ * chunk_length_), (uint8_t)10);
 			x_ = x;
@@ -143,7 +143,7 @@ namespace Vulkan
 		bool is_model_valid() const { return model != nullptr; }
 		std::shared_ptr<Model> get() const { return model; }
 		
-		void generate(std::vector<std::vector<float>> blockHeights);
+		void generate(std::vector<float> blockHeights);
 		void load_block_faces(Device& device, Chunk* Left, Chunk* Right, Chunk* Front, Chunk* Back);
 		
 		TransformComponent transform_{glm::vec3(0.f), glm::vec3(1.f), glm::vec3(0.f) };
