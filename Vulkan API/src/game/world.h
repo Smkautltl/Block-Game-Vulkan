@@ -43,6 +43,7 @@ namespace Vulkan
 		TerrainGenerator generator_{4};
 		
 		std::map<float, Chunk> chunk_map_;
+		const float unique_chunk_offset_ = 1.005f;
 		std::vector<float> to_be_deleted_;
 		std::chrono::duration<double> wait = std::chrono::duration<double>(1);
 		

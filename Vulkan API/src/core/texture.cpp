@@ -1,5 +1,5 @@
 #define STB_IMAGE_IMPLEMENTATION
-#include "Texture.h"
+#include "texture.h"
 
 Vulkan::Texture::~Texture()
 {
@@ -39,7 +39,7 @@ bool Vulkan::Texture::load_image_from_file(const char* filename)
 		dImgInfo.arrayLayers = 1;
 		dImgInfo.samples = VK_SAMPLE_COUNT_1_BIT;
 		dImgInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-		dImgInfo.usage = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+		dImgInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 
 		dImgInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 

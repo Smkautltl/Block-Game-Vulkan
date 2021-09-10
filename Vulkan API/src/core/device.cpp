@@ -652,16 +652,9 @@ namespace Vulkan
         std::lock_guard<std::mutex> lock(allocMutex);
         VmaAllocationCreateInfo dimgAllocInfo{};
 			dimgAllocInfo.usage = memUsage;
-
-        //VkMemoryRequirements memRequirements;
-        //vkGetImageMemoryRequirements(device_, imageAlloc._image, &memRequirements);
-		//
-        //VmaAllocationInfo AllocInfo{};
-		//	AllocInfo.size = memRequirements.size;
-        //    AllocInfo.memoryType = find_memory_type(memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 		
         vmaCreateImage(allocator, &imgInfo, &dimgAllocInfo, &imageAlloc._image, &imageAlloc._allocation, nullptr);
-        //vmaBindImageMemory(allocator, imageAlloc._allocation, imageAlloc._image);
+
 	}
     void Device::transition_image_layout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout)
 	{

@@ -10,7 +10,7 @@ Vulkan::world::world(Device& device) : device_(device)
 	{
 		for (auto x = -ChunkXDistance; x < ChunkXDistance; x++)
 		{
-			chunk_map_[x * 1.005f + z].update_chunk_data(x, z, generator_.getnoise(x, z));
+			chunk_map_[x * unique_chunk_offset_ + z].update_chunk_data(x, z, generator_.getnoise(x, z));
 		}
 	}
 	
@@ -29,7 +29,7 @@ Vulkan::world::~world()
 
 void Vulkan::world::add_chunk(int x, int z)
 {
-	chunk_map_[x * 1.005f + z].update_chunk_data(x, z, generator_.getnoise(x, z));
+	chunk_map_[x * unique_chunk_offset_ + z].update_chunk_data(x, z, generator_.getnoise(x, z));
 }
 void Vulkan::world::cull_chunk(Chunk& chunk, int x, int z)
 {
@@ -38,28 +38,28 @@ void Vulkan::world::cull_chunk(Chunk& chunk, int x, int z)
 	Chunk* front = &BlankChunk;
 	Chunk* back = &BlankChunk;
 
-	if (chunk_map_.find((float)(x-1) * 1.005f + z) != chunk_map_.end())
+	if (chunk_map_.find((float)(x-1) * unique_chunk_offset_ + z) != chunk_map_.end())
 	{
-		left = &chunk_map_[(float)(x - 1) * 1.005f + (float)z];
+		left = &chunk_map_[(float)(x - 1) * unique_chunk_offset_ + (float)z];
 	}
-	if (chunk_map_.find((float)(x + 1) * 1.005f + z) != chunk_map_.end())
+	if (chunk_map_.find((float)(x + 1) * unique_chunk_offset_ + z) != chunk_map_.end())
 	{
-		right = &chunk_map_[(float)(x + 1) * 1.005f + z];
+		right = &chunk_map_[(float)(x + 1) * unique_chunk_offset_ + z];
 	}
-	if (chunk_map_.find((float)x * 1.005f + (float)(z - 1)) != chunk_map_.end())
+	if (chunk_map_.find((float)x * unique_chunk_offset_ + (float)(z - 1)) != chunk_map_.end())
 	{
-		front = &chunk_map_[(float)x * 1.005f + (float)(z - 1)];
+		front = &chunk_map_[(float)x * unique_chunk_offset_ + (float)(z - 1)];
 	}
-	if (chunk_map_.find((float)x * 1.005f + (float)(z + 1)) != chunk_map_.end())
+	if (chunk_map_.find((float)x * unique_chunk_offset_ + (float)(z + 1)) != chunk_map_.end())
 	{
-		back = &chunk_map_[(float)x * 1.005f + (float)(z + 1)];
+		back = &chunk_map_[(float)x * unique_chunk_offset_ + (float)(z + 1)];
 	}
 	
 	chunk.load_block_faces(device_, left, right, front, back);
 }
 void Vulkan::world::remove_chunk(int x, int z)
 {
-	chunk_map_.erase((float)x * 1.005f + z);
+	chunk_map_.erase((float)x * unique_chunk_offset_ + z);
 }
 
 void Vulkan::world::render(VkCommandBuffer commandBuffer, Camera& cam, VkPipelineLayout& pipeline_layout_)
@@ -102,24 +102,19 @@ void Vulkan::world::update(glm::vec3 CamPos)
 			add_chunk(AddX, Z);
 			to_be_culled_.emplace_back(AddX, Z);
 
-			if (chunk_map_.find((AddX + 1) * 1.005f + Z) != chunk_map_.end())
-			{
+			if (chunk_map_.find((AddX + 1) * unique_chunk_offset_ + Z) != chunk_map_.end())
 				to_be_culled_.emplace_back((AddX + 1), Z);
-			}
-			if (chunk_map_.find((AddX - 1) * 1.005f + Z) != chunk_map_.end())
-			{
+			
+			if (chunk_map_.find((AddX - 1) * unique_chunk_offset_ + Z) != chunk_map_.end())
 				to_be_culled_.emplace_back((AddX - 1), Z);
-			}
-			if (chunk_map_.find(AddX * 1.005f + (Z + 1)) != chunk_map_.end())
-			{
+			
+			if (chunk_map_.find(AddX * unique_chunk_offset_ + (Z + 1)) != chunk_map_.end())
 				to_be_culled_.emplace_back(AddX, (Z + 1));
-			}
-			if (chunk_map_.find(AddX * 1.005f + (Z - 1)) != chunk_map_.end())
-			{
+			
+			if (chunk_map_.find(AddX * unique_chunk_offset_ + (Z - 1)) != chunk_map_.end())
 				to_be_culled_.emplace_back(AddX, (Z - 1));
-			}
 
-			to_be_deleted_.push_back(RemoveX * 1.005f + Z);
+			to_be_deleted_.push_back(RemoveX * unique_chunk_offset_ + Z);
 		}
 
 		auto end = to_be_culled_.end();
@@ -139,24 +134,24 @@ void Vulkan::world::update(glm::vec3 CamPos)
 			add_chunk(X, AddZ);
 			to_be_culled_.emplace_back(X, AddZ);
 
-			if (chunk_map_.find((X + 1) * 1.005f + AddZ) != chunk_map_.end())
+			if (chunk_map_.find((X + 1) * unique_chunk_offset_ + AddZ) != chunk_map_.end())
 			{
 				to_be_culled_.emplace_back((X + 1), AddZ);			
 			}
-			if (chunk_map_.find((X - 1) * 1.005f + AddZ) != chunk_map_.end())
+			if (chunk_map_.find((X - 1) * unique_chunk_offset_ + AddZ) != chunk_map_.end())
 			{
 				to_be_culled_.emplace_back((X - 1), AddZ);	
 			}
-			if (chunk_map_.find(X * 1.005f + (AddZ + 1)) != chunk_map_.end())
+			if (chunk_map_.find(X * unique_chunk_offset_ + (AddZ + 1)) != chunk_map_.end())
 			{
 				to_be_culled_.emplace_back(X, (AddZ + 1));	
 			}
-			if (chunk_map_.find(X * 1.005f + (AddZ - 1)) != chunk_map_.end())
+			if (chunk_map_.find(X * unique_chunk_offset_ + (AddZ - 1)) != chunk_map_.end())
 			{
 				to_be_culled_.emplace_back(X, (AddZ - 1));	
 			}
 
-			to_be_deleted_.push_back(X * 1.005f + RemoveZ);
+			to_be_deleted_.push_back(X * unique_chunk_offset_ + RemoveZ);
 		}
 		
 		auto end = to_be_culled_.end();
@@ -177,8 +172,8 @@ void Vulkan::world::update(glm::vec3 CamPos)
 		{
 			CullChunksThreads.emplace_back([=]() {
 
-				std::lock_guard<std::mutex> lock(chunk_map_[chunk.x * 1.005f + chunk.y].mutex);
-				cull_chunk(chunk_map_[chunk.x * 1.005f + chunk.y], chunk.x, chunk.y);
+				std::lock_guard<std::mutex> lock(chunk_map_[chunk.x * unique_chunk_offset_ + chunk.y].mutex);
+				cull_chunk(chunk_map_[chunk.x * unique_chunk_offset_ + chunk.y], chunk.x, chunk.y);
 				});
 			count++;
 		}

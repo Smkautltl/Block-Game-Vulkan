@@ -118,13 +118,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shader\shader.vert" />
-    <None Include="src\shader\shader.frag" />
     <None Include="src\FieldsRefMap.cd" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="src\shader\compile.bat">
-      <Filter>Source Files</Filter>
-    </CustomBuild>
+    <CustomBuild Include="src\shader\shader.frag" />
+    <CustomBuild Include="src\shader\shader.vert" />
   </ItemGroup>
 </Project>

@@ -130,6 +130,10 @@
     <PreBuildEvent>
       <Command>call "$(ProjectDir)src\shader\compile.bat"</Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy /Y "$(ProjectDir)src\shader\vert.spv" "$(SolutionDir)$(Platform)\$(Configuration)\Shaders"
+copy /Y "$(ProjectDir)src\shader\frag.spv" "$(SolutionDir)$(Platform)\$(Configuration)\Shaders"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -153,6 +157,10 @@
     <PreBuildEvent>
       <Command>call "$(ProjectDir)src\shader\compile.bat"</Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy /Y "$(ProjectDir)src\shader\vert.spv" "$(SolutionDir)$(Platform)\$(Configuration)\Shaders"
+copy /Y "$(ProjectDir)src\shader\frag.spv" "$(SolutionDir)$(Platform)\$(Configuration)\Shaders"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\core\camera.cpp" />
@@ -193,16 +201,23 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="src\FieldsRefMap.cd" />
-    <None Include="src\shader\shader.frag">
+    <CustomBuild Include="src\shader\shader.frag">
       <FileType>Document</FileType>
-    </None>
-    <None Include="src\shader\shader.vert">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VULKAN_SDK)/bin32/glslc.exe "$(ProjectDir)src/shader/shader.frag" -o "$(ProjectDir)src/shader/frag.spv"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">frag.spv</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VULKAN_SDK)/bin32/glslc.exe "$(ProjectDir)src/shader/shader.frag" -o "$(ProjectDir)src/shader/frag.spv"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">frag.spv</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </CustomBuild>
+    <CustomBuild Include="src\shader\shader.vert">
       <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="src\shader\compile.bat">
-      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VULKAN_SDK)/bin32/glslc.exe "$(ProjectDir)src/shader/shader.vert" -o "$(ProjectDir)src/shader/vert.spv"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vert.spv</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VULKAN_SDK)/bin32/glslc.exe "$(ProjectDir)src/shader/shader.vert" -o "$(ProjectDir)src/shader/vert.spv"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vert.spv</Outputs>
     </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

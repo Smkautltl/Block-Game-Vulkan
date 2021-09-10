@@ -13,7 +13,7 @@ layout(push_constant) uniform Push
 } push;
 
 const vec3 lightPos = vec3(10.0, 150.0, -3.0);
-const vec3 lightColor = vec3(1.0, 1.0, 1.0);
+const vec3 lightColor = vec3(1.0, 0.0, 0.0);
 const float lightPower = 100.0;
 const vec3 diffuseColor = vec3(0.5, 0.0, 0.0);
 const vec3 specColor = vec3(1.0, 1.0, 1.0);
