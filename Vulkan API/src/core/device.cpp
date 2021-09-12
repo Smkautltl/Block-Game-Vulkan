@@ -529,7 +529,7 @@ namespace Vulkan
         memcpy(data, vertices.data(), static_cast<size_t>(size));
         vmaUnmapMemory(allocator, buffer.allocation_);
 	}
-	AllocatedBuffer Device::create_buffer(size_t allocSize, VkBufferUsageFlags usage, VmaMemoryUsage memUsage, VkDeviceSize imageSize, void* pixels)
+	AllocatedBuffer Device::create_buffer(size_t allocSize, VkBufferUsageFlags usage, VmaMemoryUsage memUsage, void* pixels)
 	{
         std::lock_guard<std::mutex> lock(allocMutex);
         VkBufferCreateInfo bufferInfo{};
@@ -540,7 +540,7 @@ namespace Vulkan
         VmaAllocationCreateInfo vmaallocInfo{};
         vmaallocInfo.usage = memUsage;
 
-        AllocatedBuffer newBuffer;
+        AllocatedBuffer newBuffer{};
 		
         if (vmaCreateBuffer(allocator, &bufferInfo, &vmaallocInfo, &newBuffer.buffer_, &newBuffer.allocation_, nullptr) != VK_SUCCESS)
         {
@@ -549,7 +549,7 @@ namespace Vulkan
 
         void* data;
         vmaMapMemory(allocator, newBuffer.allocation_, &data);
-        memcpy(data, pixels, static_cast<size_t>(imageSize));
+        memcpy(data, pixels, allocSize);
         vmaUnmapMemory(allocator, newBuffer.allocation_);
 		
         return newBuffer;
@@ -650,6 +650,11 @@ namespace Vulkan
 	void Device::create_image(VkImageCreateInfo& imgInfo, VmaMemoryUsage memUsage, AllocatedImage& imageAlloc)
 	{
         std::lock_guard<std::mutex> lock(allocMutex);
+
+		//if(vkCreateImage(device_, &imgInfo, nullptr, &imageAlloc._image) != VK_SUCCESS)
+		//{
+        //    VK_CORE_RUNTIME("Failed to create image!");
+		//}
         VmaAllocationCreateInfo dimgAllocInfo{};
 			dimgAllocInfo.usage = memUsage;
 		

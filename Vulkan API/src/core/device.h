@@ -83,7 +83,7 @@ namespace Vulkan
     
         // Buffer Helper Functions
         void create_buffer(VkDeviceSize size, VkBufferUsageFlags usage, AllocatedBuffer& buffer, const std::vector<Vertex>& vertices);
-        AllocatedBuffer create_buffer(size_t allocSize, VkBufferUsageFlags usage, VmaMemoryUsage memUsage, VkDeviceSize imageSize, void* pixels);
+        AllocatedBuffer create_buffer(size_t allocSize, VkBufferUsageFlags usage, VmaMemoryUsage memUsage, void* pixels);
         void destroy_buffer(AllocatedBuffer buffer);
         VkCommandBuffer begin_single_time_commands();
         void end_single_time_commands(VkCommandBuffer commandBuffer);

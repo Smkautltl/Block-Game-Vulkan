@@ -21,13 +21,13 @@ bool Vulkan::Texture::load_image_from_file(const char* filename)
 	}
 
 	VkDeviceSize imageSize = (texWidth * texHeight * 4);
-
-	stagingBuffer = device_.create_buffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY, imageSize, pixels);
+	void* pixel_ptr = pixels;
+	
+	stagingBuffer = device_.create_buffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY, pixel_ptr);
 	stbi_image_free(pixels);
 
-	VkImageCreateInfo dImgInfo;
+	VkImageCreateInfo dImgInfo{};
 		dImgInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-
 		dImgInfo.imageType = VK_IMAGE_TYPE_2D;
 
 		dImgInfo.format = VK_FORMAT_R8G8B8A8_SRGB;
@@ -41,9 +41,10 @@ bool Vulkan::Texture::load_image_from_file(const char* filename)
 		dImgInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
 		dImgInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 
-		dImgInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+		//dImgInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
 	device_.create_image(dImgInfo, VMA_MEMORY_USAGE_GPU_ONLY, newImage);
+	
 	device_.transition_image_layout(newImage._image, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 	device_.copy_buffer_to_image(stagingBuffer.buffer_, newImage._image, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 

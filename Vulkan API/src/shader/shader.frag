@@ -23,7 +23,7 @@ const float screenGamma = 2.2;
 void main()
 {
   vec3 ambientcolour = fragcolour * 0.1; 
-  vec3 normal = fragNormal;//normalize(fragNormal);
+  vec3 normal = fragNormal;
   vec3 lightDir = lightPos - fragposition;
   float distance = length(lightDir);
   distance = distance * distance;
