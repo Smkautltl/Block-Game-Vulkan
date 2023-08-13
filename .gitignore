@@ -44,3 +44,5 @@
 *.log
 *.tlog
 *.pdb
+
+/Includes/
