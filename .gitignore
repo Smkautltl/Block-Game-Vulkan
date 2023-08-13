@@ -45,5 +45,7 @@
 *.tlog
 *.pdb
 
+#Directories
 /Includes/
 /x64/
+
