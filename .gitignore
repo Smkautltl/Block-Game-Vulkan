@@ -44,3 +44,6 @@
 *.log
 *.tlog
 *.pdb
+
+/Includes/
+/x64/
